@@ -1,0 +1,167 @@
+import Mascota from "../models/Mascota.js";
+// import Usuario from "../models/Usuario.js";
+
+class MascotaService {
+  static objMascota = new Mascota();
+  // static objUsuario = new Usuario();
+
+  static async getAllMascotas() {
+    try {
+      // Llamamos el método listar
+      const mascotas = await this.objMascota.getAll();
+
+      // Validamos si no hay tipos de productos
+      if (!mascotas || mascotas.length === 0)
+        return {
+          error: true,
+          code: 404,
+          message: "No hay mascotas registradas",
+        };
+
+      // Retornamos las tipos de productos obtenidas
+      return {
+        error: false,
+        code: 200,
+        message: "Mascotas obtenidas correctamente",
+        data: mascotas,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      console.log(error);
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async getMascotaById(id) {
+    try {
+      // Llamamos el método consultar por ID
+      const mascota = await this.objMascota.getById(id);
+      // Validamos si no hay mascota
+      if (!mascota)
+        return {
+          error: true,
+          code: 404,
+          message: "Mascota no encontrada",
+        };
+
+      // Retornamos la mascota obtenida
+      return {
+        error: false,
+        code: 200,
+        message: "Mascota obtenida correctamente",
+        data: mascota,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async createMascota(mascota) {
+    try {
+      // Llamamos el método crear
+      const mascotaCreado = await this.objMascota.create(
+        mascota
+      );
+      // Validamos si no se pudo crear el tipo de producto
+      if (mascotaCreado === null)
+        return {
+          error: true,
+          code: 400,
+          message: "Error al crear la mascota",
+        };
+
+      // Retornamos el tipo de producto creado
+      return {
+        error: false,
+        code: 201,
+        message: "Mascota creada correctamente",
+        data: mascotaCreado,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async updateMascota(id, mascota) {
+    try {
+      // Llamamos el método consultar por ID
+      const existente = await this.objMascota.getById(id);
+      // Validamos si el tipo de producto existe
+      if (!existente) {
+        return {
+          error: true,
+          code: 404,
+          message: "Mascota no encontrada",
+        };
+      }
+
+      // Llamamos el método actualizar
+      const mascotaActualizado = await this.objMascota.update(
+        id,
+        mascota
+      );
+      // Validamos si no se pudo actualizar el tipo de producto
+      if (mascotaActualizado === null)
+        return {
+          error: true,
+          code: 400,
+          message: "Error al actualizar la mascota",
+        };
+
+      // Retornamos el tipo de producto actualizado
+      return {
+        error: false,
+        code: 200,
+        message: "Mascota actualizada correctamente",
+        data: mascotaActualizado,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async deleteMascota(id) {
+    try {
+      // Llamamos el método consultar por ID
+      const mascota = await this.objMascota.getById(id);
+      // Validamos si el tipo de producto existe
+      if (!mascota)
+        return {
+          error: true,
+          code: 404,
+          message: "Mascota no encontrada",
+        };
+
+      // const usuariosTipo = await this.objUsuario.getAllByMascotaId(id);
+      // Validamos si no hay usuarios
+      // if (usuariosTipo && usuariosTipo.length > 0) {
+      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
+      // }
+
+      // Llamamos el método eliminar
+      const mascotaEliminado = await this.objMascota.delete(id);
+      // Validamos si no se pudo eliminar el tipo de producto
+      if (!mascotaEliminado)
+        return {
+          error: true,
+          code: 400,
+          message: "Error al eliminar la mascota",
+        };
+
+      // Retornamos el tipo de producto eliminado
+      return {
+        error: false,
+        code: 200,
+        message: "Mascota eliminada correctamente",
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+}
+
+export default MascotaService;

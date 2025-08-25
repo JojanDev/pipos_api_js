@@ -16,6 +16,19 @@ import tiposDocumentos from "./tiposDocumentosRoutes.js"; // Rutas para la entid
 import especies from "./especiesRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import tiposProductos from "./tiposProductosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import infosMedicamentos from "./infosMedicamentosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import mascotas from "./mascotasRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import antecedentes from "./antecedentesRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import tratamientos from "./tratamientosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import medicamentosTratamientos from "./medicamentosTratamientosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import razas from "./razasRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import ventas from "./ventasRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import detallesVentas from "./detallesVentasRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import roles from "./rolesRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import permisos from "./permisosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import permisosRoles from "./permisosRolesRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import usuarios from "./usuariosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import rolesUsuarios from "./rolesUsuariosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import medicamentos from "./medicamentosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 // import permisosRoles from './permisosRolesRoutes.js'; // Rutas para la entidad 'permisos de roles'
 // import permisos from './permisosRoutes.js'; // Rutas para la entidad 'permisos'
 // import roles from './rolesRoutes.js'; // Rutas para la entidad 'roles'
@@ -40,6 +53,19 @@ const rutas = [
   { path: "/especies", router: especies }, // Ruta para manejar tipos de documentos
   { path: "/tipos-productos", router: tiposProductos }, // Ruta para manejar tipos de documentos
   { path: "/infos-medicamentos", router: infosMedicamentos }, // Ruta para manejar tipos de documentos
+  { path: "/mascotas", router: mascotas }, // Ruta para manejar tipos de documentos
+  { path: "/antecedentes", router: antecedentes }, // Ruta para manejar tipos de documentos
+  { path: "/tratamientos", router: tratamientos }, // Ruta para manejar tipos de documentos
+  { path: "/medicamentos-tratamientos", router: medicamentosTratamientos }, // Ruta para manejar tipos de documentos
+  { path: "/razas", router: razas }, // Ruta para manejar tipos de documentos
+  { path: "/ventas", router: ventas }, // Ruta para manejar tipos de documentos
+  { path: "/detalles-ventas", router: detallesVentas }, // Ruta para manejar tipos de documentos
+  { path: "/roles", router: roles }, // Ruta para manejar tipos de documentos
+  { path: "/permisos", router: permisos }, // Ruta para manejar tipos de documentos
+  { path: "/permisos-roles", router: permisosRoles }, // Ruta para manejar tipos de documentos
+  { path: "/usuarios", router: usuarios }, // Ruta para manejar tipos de documentos
+  { path: "/roles-usuarios", router: rolesUsuarios }, // Ruta para manejar tipos de documentos
+  { path: "/medicamentos", router: medicamentos }, // Ruta para manejar tipos de documentos
   // { path: '/permisos-roles', router: permisosRoles }, // Ruta para manejar permisos de roles
   // { path: '/permisos', router: permisos }, // Ruta para manejar permisos
   // { path: '/roles', router: roles }, // Ruta para manejar roles
