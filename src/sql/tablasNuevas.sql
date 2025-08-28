@@ -1,211 +1,187 @@
--- ============================================
--- ESTRUCTURA DE BASE DE DATOS - VETERINARIA PIPOS
--- ============================================
-drop database if exists veterinaria_pipos;
-create database veterinaria_pipos;
-USE veterinaria_pipos;
+	-- ============================================
+	-- CREACIÓN DE BASE DE DATOS ORDENADA
+	-- ============================================
+	DROP DATABASE IF EXISTS veterinaria_pipos;
+	CREATE DATABASE veterinaria_pipos;
+	USE veterinaria_pipos;
 
-DROP TABLE IF EXISTS elementos_ventas;
-DROP TABLE IF EXISTS ventas;
-DROP TABLE IF EXISTS servicios;
-DROP TABLE IF EXISTS medicamentos_tratamientos;
-DROP TABLE IF EXISTS medicamentos;
-DROP TABLE IF EXISTS info_medicamentos;
-DROP TABLE IF EXISTS productos;
-DROP TABLE IF EXISTS tipos_productos;
-DROP TABLE IF EXISTS tratamientos;
-DROP TABLE IF EXISTS antecedentes;
-DROP TABLE IF EXISTS mascotas;
-DROP TABLE IF EXISTS razas;
-DROP TABLE IF EXISTS especies;
-DROP TABLE IF EXISTS usuarios;
-DROP TABLE IF EXISTS roles;
-DROP TABLE IF EXISTS roles_usuarios;
-DROP TABLE IF EXISTS permisos;
-DROP TABLE IF EXISTS permisos_roles;
-DROP TABLE IF EXISTS tipos_documentos;
-DROP TABLE IF EXISTS elementos;
-DROP TABLE IF EXISTS credenciales;
+	-- Tablas independientes primero
+	CREATE TABLE tipos_documentos (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		nombre VARCHAR(255) NOT NULL
+	);
 
--- Tabla de tipos de documento
-CREATE TABLE tipos_documentos (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	nombre VARCHAR(255) NOT NULL
-);
+	CREATE TABLE roles(
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		nombre varchar(255) NOT NULL
+	);
 
--- Información personal de clientes y empleados
-CREATE TABLE usuarios (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	id_tipo_documento INT NOT NULL,
-	numero_documento VARCHAR(50) NOT NULL,
-	nombre VARCHAR(255) NOT NULL,
-	telefono VARCHAR(20) NOT NULL,
-	correo VARCHAR(255),
-	direccion VARCHAR(255) NOT NULL,
-	FOREIGN KEY (id_tipo_documento) REFERENCES tipos_documentos(id)
-);
+	CREATE TABLE permisos (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		nombre VARCHAR(255) NOT NULL
+	);
 
--- Tabla de roles del sistema
-CREATE TABLE roles(
-	id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre varchar(255) NOT NULL
-);
+	CREATE TABLE especies (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		nombre VARCHAR(255) NOT NULL
+	);
 
-CREATE TABLE roles_usuarios(
-	id INT AUTO_INCREMENT PRIMARY KEY,
-    id_rol INT NOT NULL,
-    FOREIGN KEY (id_rol) REFERENCES roles(id),
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
-);
+	CREATE TABLE tipos_productos(
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		nombre varchar(50) NOT NULL
+	);
 
--- Personal de la veterinaria
-CREATE TABLE credenciales (
-	id_usuario INT NOT NULL PRIMARY KEY,
-	usuario VARCHAR(100) UNIQUE NOT NULL,
-	contrasena VARCHAR(255) NOT NULL,
-    #activo boolean default true,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
-);
+	CREATE TABLE info_medicamentos (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		nombre VARCHAR(255) NOT NULL,              
+		uso_general VARCHAR(255),                  
+		via_administracion VARCHAR(100),           
+		presentacion VARCHAR(100),                 
+		informacion_adicional TEXT                 
+	);
 
--- Especies de animales
-CREATE TABLE especies (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	nombre VARCHAR(255) NOT NULL
-);
+	CREATE TABLE elementos(
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		tipo ENUM('medicamento','producto','servicio') NOT NULL,
+		nombre VARCHAR(255) NOT NULL,
+		descripcion TEXT,
+		precio DECIMAL(10,2)
+	);
 
--- Razas por especie
-CREATE TABLE razas (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	nombre VARCHAR(255) NOT NULL,
-	id_especie INT NOT NULL,
-	FOREIGN KEY (id_especie) REFERENCES especies(id)
-);
+	-- Dependientes de las anteriores
+	CREATE TABLE usuarios (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		tipo_documento_id INT NOT NULL,
+		numero_documento VARCHAR(50) NOT NULL,
+		nombre VARCHAR(255) NOT NULL,
+		telefono VARCHAR(20) NOT NULL,
+		correo VARCHAR(255),
+		direccion VARCHAR(255) NOT NULL,
+		FOREIGN KEY (tipo_documento_id) REFERENCES tipos_documentos(id)
+	);
 
--- Mascotas de los clientes
-CREATE TABLE mascotas (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	id_usuario INT NOT NULL,
-	nombre VARCHAR(255) NOT NULL,
-	id_raza INT NOT NULL,
-	edad_semanas INT,
-	sexo ENUM('macho', 'hembra', 'desconocido') NOT NULL,
-	estado_vital BOOLEAN DEFAULT TRUE,
-	FOREIGN KEY (id_usuario) REFERENCES usuarios(id),
-	FOREIGN KEY (id_raza) REFERENCES razas(id)
-);
+	CREATE TABLE roles_usuarios(
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		rol_id INT NOT NULL,
+		usuario_id INT NOT NULL,
+		FOREIGN KEY (rol_id) REFERENCES roles(id),
+		FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+	);
 
--- Antecedentes médicos de mascotas
-CREATE TABLE antecedentes (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	id_mascota INT NOT NULL,
-    titulo varchar(100) NOT NULL,
-	diagnostico TEXT NOT NULL,
-	fecha_creado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,	
-    activo boolean default true,
-	FOREIGN KEY (id_mascota) REFERENCES mascotas(id)
-);	
+	CREATE TABLE credenciales (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		usuario_id INT NOT NULL UNIQUE,
+		usuario VARCHAR(100) UNIQUE NOT NULL,
+		contrasena VARCHAR(255) NOT NULL,
+		FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+	);
 
--- Tratamientos de los antecedentes
-CREATE TABLE tratamientos(
-	id INT AUTO_INCREMENT PRIMARY KEY,
-    id_antecedente INT NOT NULL,
-    id_usuario INT NOT NULL,
-    titulo varchar(100) NOT NULL,
-    descripcion TEXT NOT NULL,
-    fecha_creado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    activo boolean default true,
-    FOREIGN KEY (id_antecedente) REFERENCES antecedentes(id),
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
-);
 
--- Tipos de productos
-CREATE TABLE tipos_productos(
-	id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre varchar(50) NOT NULL
-);
+	CREATE TABLE permisos_roles (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		permiso_id INT NOT NULL,
+		rol_id INT NOT NULL,
+		FOREIGN KEY (permiso_id) REFERENCES permisos(id),
+		FOREIGN KEY (rol_id) REFERENCES roles(id)
+	);
 
--- Productos generales del inventario
+	CREATE TABLE razas (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		nombre VARCHAR(255) NOT NULL,
+		especie_id INT NOT NULL,
+		FOREIGN KEY (especie_id) REFERENCES especies(id)
+	);
 
--- Información general de medicamentos
-CREATE TABLE info_medicamentos (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	nombre VARCHAR(255) NOT NULL,              
-	uso_general VARCHAR(255),                  
-	via_administracion VARCHAR(100),           
-	presentacion VARCHAR(100),                 
-	informacion_adicional TEXT                 
-);
+	CREATE TABLE mascotas (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		usuario_id INT NOT NULL,
+		nombre VARCHAR(255) NOT NULL,
+		raza_id INT NOT NULL,
+		edad_semanas INT,
+		sexo ENUM('macho', 'hembra', 'desconocido') NOT NULL,
+		estado_vital BOOLEAN DEFAULT TRUE,
+		FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+		FOREIGN KEY (raza_id) REFERENCES razas(id)
+	);
 
--- Medicamentos en inventario
-CREATE TABLE medicamentos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_info_medicamento INT NOT NULL,    
-    precio DECIMAL NOT NULL,
-    fecha_caducidad DATE,
-	cantidad INT NOT NULL,
-	numero_lote VARCHAR(100),
-    FOREIGN KEY (id_info_medicamento) REFERENCES info_medicamentos(id)
-);
+	CREATE TABLE antecedentes (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		mascota_id INT NOT NULL,
+		titulo varchar(100) NOT NULL,
+		diagnostico TEXT NOT NULL,
+		fecha_creado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,	
+		activo boolean default true,
+		FOREIGN KEY (mascota_id) REFERENCES mascotas(id)
+	);	
 
-CREATE TABLE servicios(
-	id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre varchar(255) NOT NULL,
-    descripcion TEXT NOT NULL,
-    precio DECIMAL NOT NULL
-);
+	CREATE TABLE tratamientos(
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		antecedente_id INT NOT NULL,
+		usuario_id INT NOT NULL,
+		titulo varchar(100) NOT NULL,
+		descripcion TEXT NOT NULL,
+		fecha_creado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		activo boolean default true,
+		FOREIGN KEY (antecedente_id) REFERENCES antecedentes(id),
+		FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+	);
 
-CREATE TABLE productos (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	nombre VARCHAR(255) NOT NULL,
-	precio DECIMAL NOT NULL,
-	descripcion TEXT,
-	fecha_caducidad DATE,
-	id_tipo int NOT NULL,
-	stock INT NOT NULL,
-    FOREIGN KEY (id_tipo) REFERENCES tipos_productos(id)
-);
+	CREATE TABLE medicamentos (
+		elemento_id INT PRIMARY KEY,                              
+		info_medicamento_id INT NOT NULL,                
+		fecha_caducidad DATE,
+		cantidad INT NOT NULL,
+		numero_lote VARCHAR(100),
+		FOREIGN KEY (elemento_id) REFERENCES elementos(id),
+		FOREIGN KEY (info_medicamento_id) REFERENCES info_medicamentos(id)
+	);
 
-CREATE TABLE elementos(
-	id INT AUTO_INCREMENT PRIMARY KEY,
-    
-);
--- Medicamentos recetados en tratamientos
-CREATE TABLE medicamentos_tratamientos (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	id_tratamiento INT NOT NULL,
-	id_info_medicamento INT NOT NULL, 
-	dosis VARCHAR(100) DEFAULT 'No aplica',
-	frecuencia_aplicacion VARCHAR(100),
-	duracion INT,
-	activo boolean default true,
-	FOREIGN KEY (id_tratamiento) REFERENCES tratamientos(id),	
-	FOREIGN KEY (id_info_medicamento) REFERENCES info_medicamentos(id)
-);
+	CREATE TABLE productos (
+		elemento_id INT PRIMARY KEY, 
+		tipo_id INT NOT NULL,            
+		stock INT NOT NULL,
+		fecha_caducidad DATE,
+		FOREIGN KEY (elemento_id) REFERENCES elementos(id),
+		FOREIGN KEY (tipo_id)  REFERENCES tipos_productos(id)
+	);
 
--- Servicios ofrecidos
+	CREATE TABLE servicios(
+		elemento_id INT PRIMARY KEY, 
+		FOREIGN KEY (elemento_id) REFERENCES elementos(id) ON DELETE CASCADE
+	);
 
--- Ventas realizadas
-CREATE TABLE ventas (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	id_comprador INT,
-    id_vendedor INT,
-	fecha_creado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	total DECIMAL NOT NULL,	
-    monto DECIMAL NOT NULL,	
-    estado ENUM('completada', 'pendiente'),
-	FOREIGN KEY (id_comprador) REFERENCES usuarios(id),
-    FOREIGN KEY (id_vendedor) REFERENCES usuarios(id)
-);
+	CREATE TABLE medicamentos_tratamientos (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		tratamiento_id INT NOT NULL,
+		info_medicamento_id INT NOT NULL, 
+		dosis VARCHAR(100) DEFAULT 'No aplica',
+		frecuencia_aplicacion VARCHAR(100),
+		duracion INT,
+		activo boolean default true,
+		FOREIGN KEY (tratamiento_id) REFERENCES tratamientos(id),	
+		FOREIGN KEY (info_medicamento_id) REFERENCES info_medicamentos(id)
+	);
 
--- Detalles de cada venta
-CREATE TABLE elementos_ventas (
-	id INT AUTO_INCREMENT PRIMARY KEY,
-	id_venta INT NOT NULL,
-	id_elemento INT,
-    precio DECIMAL NOT NULL,
-    valor_adicional DECIMAL DEFAULT 0,
-	cantidad INT NOT NULL,        
-	subtotal DECIMAL NOT NULL,
-    FOREIGN KEY (id_elemento) REFERENCES elementos(id),
-	FOREIGN KEY (id_venta) REFERENCES ventas(id)
-);
+	CREATE TABLE ventas (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		usuario_cliente_id INT,
+		usuario_vendedor_id INT,
+		fecha_creado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		total DECIMAL NOT NULL,	
+		monto DECIMAL NOT NULL,	
+		estado ENUM('completada', 'pendiente'),
+		FOREIGN KEY (usuario_cliente_id) REFERENCES usuarios(id),
+		FOREIGN KEY (usuario_vendedor_id) REFERENCES usuarios(id)
+	);
+
+	CREATE TABLE elementos_ventas (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		venta_id INT NOT NULL,
+		elemento_id INT,
+		precio DECIMAL NOT NULL,
+		valor_adicional DECIMAL DEFAULT 0,
+		cantidad INT NOT NULL,        
+		subtotal DECIMAL NOT NULL,
+		FOREIGN KEY (elemento_id) REFERENCES elementos(id),
+		FOREIGN KEY (venta_id) REFERENCES ventas(id)
+	);

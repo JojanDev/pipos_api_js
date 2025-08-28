@@ -1,9 +1,9 @@
 import Mascota from "../models/Mascota.js";
-// import Usuario from "../models/Usuario.js";
+import Usuario from "../models/Usuario.js";
 
 class MascotaService {
   static objMascota = new Mascota();
-  // static objUsuario = new Usuario();
+  static objUsuario = new Usuario();
 
   static async getAllMascotas() {
     try {
@@ -59,6 +59,9 @@ class MascotaService {
 
   static async createMascota(mascota) {
     try {
+      if (!(await this.objUsuario.getById(mascota.usuario_id)))
+        return { error: true, code: 409, message: "El usuario propietario no esta registrado." };
+
       // Llamamos el método crear
       const mascotaCreado = await this.objMascota.create(
         mascota

@@ -2,7 +2,7 @@ import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
 class Usuario extends Modelo {
-  #tableName = "personal";
+  #tableName = "usuarios";
 
   /**
    * Obtiene todos los tipos de documentos de la base de datos
@@ -29,6 +29,22 @@ class Usuario extends Modelo {
     } catch (error) {
       throw new Error(
         `Error al obtener el usuario con ID ${id}: ${error.message}`
+      );
+    }
+  }
+
+  /**
+   * Obtiene un tipo de documento específico por su ID
+   * @param {number} documento - ID del tipo de documento
+   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getByDocumento(documento) {
+    try {
+      return (await super.getByField(this.#tableName, "numero_documento", documento))[0];
+    } catch (error) {
+      throw new Error(
+        `Error al obtener el usuario con el numero de documento ${documento}: ${error.message}`
       );
     }
   }

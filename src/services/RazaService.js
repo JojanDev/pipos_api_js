@@ -1,9 +1,9 @@
+import Especie from "../models/Especie.js";
 import Raza from "../models/Raza.js";
-// import Usuario from "../models/Usuario.js";
 
 class RazaService {
   static objRaza = new Raza();
-  // static objUsuario = new Usuario();
+  static objEspecie = new Especie();
 
   static async getAllRazas() {
     try {
@@ -59,6 +59,9 @@ class RazaService {
 
   static async createRaza(raza) {
     try {
+      if (!(await this.objEspecie.getById(raza.especie_id)))
+        return { error: true, code: 409, message: "La especie de la raza no esta registrada." };
+
       // Llamamos el método crear
       const razaCreada = await this.objRaza.create(
         raza

@@ -59,6 +59,9 @@ class UsuarioService {
 
   static async createUsuario(usuario) {
     try {
+      if (await this.objUsuario.getByDocumento(usuario.numero_documento))
+        return { error: true, code: 409, message: "El nombre de documento ya esta registrado." };
+
       // Llamamos el método crear
       const usuarioCreado = await this.objUsuario.create(
         usuario

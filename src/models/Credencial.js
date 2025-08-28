@@ -36,6 +36,38 @@ class Credencial extends Modelo {
   }
 
   /**
+   * Obtiene un tipo de documento específico por su ID
+   * @param {number} usuarioId - ID del tipo de documento
+   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getByUsuarioId(usuarioId) {
+    try {
+      return (await super.getByField(this.#tableName, "usuario_id", usuarioId))[0];
+    } catch (error) {
+      throw new Error(
+        `Error al obtener la credencial del usuario con ID ${usuarioId}: ${error.message}`
+      );
+    }
+  }
+
+  /**
+   * Obtiene un tipo de documento específico por su ID
+   * @param {number} usuario - ID del tipo de documento
+   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getByUsuario(usuario) {
+    try {
+      return (await super.getByField(this.#tableName, "usuario", usuario))[0];
+    } catch (error) {
+      throw new Error(
+        `Error al obtener la credencial con el usuario "${usuario}": ${error.message}`
+      );
+    }
+  }
+
+  /**
    * Crea un nuevo tipo de documento en la base de datos
    * @param {Object} credencial - Objeto con los datos del tipo de documento {nombre}
    * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló

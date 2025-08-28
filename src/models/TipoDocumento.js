@@ -2,7 +2,7 @@ import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
 class TipoDocumento extends Modelo {
-  #tableName = "tipos_productos";
+  #tableName = "tipos_documentos";
 
   /**
    * Obtiene todos los tipos de documentos de la base de datos

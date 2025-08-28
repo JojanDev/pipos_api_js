@@ -1,9 +1,10 @@
 import Antecedente from "../models/Antecedente.js";
+import Mascota from "../models/Mascota.js";
 // import Usuario from "../models/Usuario.js";
 
 class AntecedenteService {
   static objAntecedente = new Antecedente();
-  // static objUsuario = new Usuario();
+  static objMascota = new Mascota();
 
   static async getAllAntecedentes() {
     try {
