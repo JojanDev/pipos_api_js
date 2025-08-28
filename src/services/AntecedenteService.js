@@ -60,6 +60,11 @@ class AntecedenteService {
 
   static async createAntecedente(antecedente) {
     try {
+      const mascotaExistente = await this.objMascota.getById(antecedente.mascota_id);
+
+      if (!mascotaExistente)
+        return { error: true, code: 409, message: mascotaExistente.message};
+
       // Llamamos el método crear
       const antecedenteCreado = await this.objAntecedente.create(
         antecedente
