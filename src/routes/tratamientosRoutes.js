@@ -3,9 +3,8 @@ import express from "express";
 import {
   validarTratamiento,
   validarTratamientoParcial,
-} from "../middlewares/entities/tratamientos/antecedenteValidator.js";
+} from "../middlewares/entities/tratamientos/tratamientoValidator.js";
 import TratamientoController from "../controllers/TratamientoController.js";
-
 
 const router = express.Router();
 
@@ -16,18 +15,10 @@ router.get("/", TratamientoController.getAllTratamientos);
 router.get("/:id", TratamientoController.getTratamientoById);
 
 // Crear un nuevo tipo de documento
-router.post(
-  "/",
-  validarTratamiento,
-  TratamientoController.createTratamiento
-);
+router.post("/", validarTratamiento, TratamientoController.createTratamiento);
 
 // Actualizar un tipo de documento
-router.put(
-  "/:id",
-  validarTratamiento,
-  TratamientoController.updateTratamiento
-);
+router.put("/:id", validarTratamiento, TratamientoController.updateTratamiento);
 
 // Actualizar un tipo de documento parcialmente
 router.patch(

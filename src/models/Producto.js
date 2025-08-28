@@ -1,8 +1,8 @@
 import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
-class Usuario extends Modelo {
-  #tableName = "personal";
+class Producto extends Modelo {
+  #tableName = "productos";
 
   /**
    * Obtiene todos los tipos de documentos de la base de datos
@@ -13,7 +13,7 @@ class Usuario extends Modelo {
     try {
       return await super.getAll(this.#tableName);
     } catch (error) {
-      throw new Error(`Error al obtener todos los usuarios: ${error.message}`);
+      throw new Error(`Error al obtener todas los productos: ${error.message}`);
     }
   }
 
@@ -28,45 +28,45 @@ class Usuario extends Modelo {
       return await super.getById(this.#tableName, id);
     } catch (error) {
       throw new Error(
-        `Error al obtener el usuario con ID ${id}: ${error.message}`
+        `Error al obtener el producto con ID ${id}: ${error.message}`
       );
     }
   }
 
   /**
    * Crea un nuevo tipo de documento en la base de datos
-   * @param {Object} usuario - Objeto con los datos del tipo de documento {nombre}
+   * @param {Object} producto - Objeto con los datos del tipo de documento {nombre}
    * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló
    * @throws {Error} Si ocurre un error en la inserción
    */
-  async create(usuario) {
+  async create(producto) {
     try {
-      const idCreado = await super.create(this.#tableName, usuario);
+      const idCreado = await super.create(this.#tableName, producto);
       if (idCreado) {
         return await this.getById(idCreado);
       }
       return null;
     } catch (error) {
-      throw new Error(`Error al crear el usuario: ${error.message}`);
+      throw new Error(`Error al crear el producto: ${error.message}`);
     }
   }
 
   /**
    * Actualiza un tipo de documento existente
    * @param {number} id - ID del tipo de documento a actualizar
-   * @param {Object} usuario - Objeto con los nuevos datos del tipo de documento
+   * @param {Object} producto - Objeto con los nuevos datos del tipo de documento
    * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si falló
    * @throws {Error} Si ocurre un error en la actualización
    */
-  async update(id, usuario) {
+  async update(id, producto) {
     try {
-      if (await super.update(this.#tableName, id, usuario)) {
+      if (await super.update(this.#tableName, id, producto)) {
         return await this.getById(id);
       }
       return null;
     } catch (error) {
       throw new Error(
-        `Error al actualizar el usuario con ID ${id}: ${error.message}`
+        `Error al actualizar el producto con ID ${id}: ${error.message}`
       );
     }
   }
@@ -82,26 +82,10 @@ class Usuario extends Modelo {
       return await super.delete(this.#tableName, id);
     } catch (error) {
       throw new Error(
-        `Error al eliminar el usuario con ID ${id}: ${error.message}`
-      );
-    }
-  }
-
-  /**
-   * Método para obtener un usuario por su documento
-   *
-   * @param {Number} usuario Documento del usuario
-   * @returns {Object} Objeto usuario
-   */
-  async getByUsuario(usuario) {
-    try {
-      return (await super.getByField(this.#tableName, "usuario", usuario))[0];
-    } catch (error) {
-      throw new Error(
-        `Error al obtener el usuario "${usuario}": ${error.message}`
+        `Error al eliminar el producto con ID ${id}: ${error.message}`
       );
     }
   }
 }
 
-export default Usuario;
+export default Producto;

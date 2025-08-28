@@ -1,11 +1,11 @@
 import { ResponseProvider } from "../providers/ResponseProvider.js";
-import ServicioService from "../services/ServicioService.js";
+import ElementoVentaService from "../services/ElementoVentaService.js";
 
-class ServicioController {
+class ElementoVentaController {
   // Obtener todos los tipos de documentos
-  static getAllServicios = async (req, res) => {
+  static getAllElementosVentas = async (req, res) => {
     try {
-      const response = await ServicioService.getAllServicios();
+      const response = await ElementoVentaService.getAllElementosVentas();
       // Validamos si no hay tipos de documentos
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -23,11 +23,11 @@ class ServicioController {
   };
 
   // Obtener un tipo de documento por su ID
-  static getServicioById = async (req, res) => {
+  static getElementoVentaById = async (req, res) => {
     const { id } = req.params;
     try {
       // Llamamos al servicio para obtener el tipo de documento por su ID
-      const response = await ServicioService.getServicioById(id);
+      const response = await ElementoVentaService.getElementoVentaById(id);
       // Validamos si no hay tipo de documento
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -46,11 +46,13 @@ class ServicioController {
   };
 
   // Crear un nuevo tipo de documento
-  static createServicio = async (req, res) => {
-    const servicio = req.body;
+  static createElementoVenta = async (req, res) => {
+    const elementoVenta = req.body;
     try {
       // Llamamos el método crear del modelo
-      const response = await ServicioService.createServicio(servicio);
+      const response = await ElementoVentaService.createElementoVenta(
+        elementoVenta
+      );
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -70,12 +72,15 @@ class ServicioController {
   };
 
   // Actualizar un tipo de documento
-  static updateServicio = async (req, res) => {
+  static updateElementoVenta = async (req, res) => {
     const { id } = req.params;
-    const servicio = req.body;
+    const elementoVenta = req.body;
     try {
       // Llamamos al método actualizar del modelo
-      const response = await ServicioService.updateServicio(id, servicio);
+      const response = await ElementoVentaService.updateElementoVenta(
+        id,
+        elementoVenta
+      );
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -96,11 +101,11 @@ class ServicioController {
   };
 
   // Eliminar un tipo de documento
-  static deleteServicio = async (req, res) => {
+  static deleteElementoVenta = async (req, res) => {
     const { id } = req.params;
     try {
       // Llamamos al servicio para eliminar el tipo de documento por su ID
-      const response = await ServicioService.deleteServicio(id);
+      const response = await ElementoVentaService.deleteElementoVenta(id);
       // Validamos si no se pudo eliminar el tipo de documento
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -120,4 +125,4 @@ class ServicioController {
   };
 }
 
-export default ServicioController;
+export default ElementoVentaController;

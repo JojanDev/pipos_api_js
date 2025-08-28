@@ -3,7 +3,7 @@ import express from "express";
 import {
   validarInfoMedicamento,
   validarInfoMedicamentoParcial,
-} from "../middlewares/entities/infosMedicamentos/tipoProductoValidator.js";
+} from "../middlewares/entities/infosMedicamentos/infoMedicamentoValidator.js";
 import InfoMedicamentoController from "../controllers/InfoMedicamentoController.js";
 
 const router = express.Router();

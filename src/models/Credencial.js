@@ -1,8 +1,8 @@
 import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
-class DetalleVenta extends Modelo {
-  #tableName = "detalles_ventas";
+class Credencial extends Modelo {
+  #tableName = "credenciales";
 
   /**
    * Obtiene todos los tipos de documentos de la base de datos
@@ -14,7 +14,7 @@ class DetalleVenta extends Modelo {
       return await super.getAll(this.#tableName);
     } catch (error) {
       throw new Error(
-        `Error al obtener todas los detalles de ventas: ${error.message}`
+        `Error al obtener todas las credenciales: ${error.message}`
       );
     }
   }
@@ -30,45 +30,45 @@ class DetalleVenta extends Modelo {
       return await super.getById(this.#tableName, id);
     } catch (error) {
       throw new Error(
-        `Error al obtener el detalle de venta con ID ${id}: ${error.message}`
+        `Error al obtener la credencial con ID ${id}: ${error.message}`
       );
     }
   }
 
   /**
    * Crea un nuevo tipo de documento en la base de datos
-   * @param {Object} detalleVenta - Objeto con los datos del tipo de documento {nombre}
+   * @param {Object} credencial - Objeto con los datos del tipo de documento {nombre}
    * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló
    * @throws {Error} Si ocurre un error en la inserción
    */
-  async create(detalleVenta) {
+  async create(credencial) {
     try {
-      const idCreado = await super.create(this.#tableName, detalleVenta);
+      const idCreado = await super.create(this.#tableName, credencial);
       if (idCreado) {
         return await this.getById(idCreado);
       }
       return null;
     } catch (error) {
-      throw new Error(`Error al crear el detalle de venta: ${error.message}`);
+      throw new Error(`Error al crear la credencial: ${error.message}`);
     }
   }
 
   /**
    * Actualiza un tipo de documento existente
    * @param {number} id - ID del tipo de documento a actualizar
-   * @param {Object} detalleVenta - Objeto con los nuevos datos del tipo de documento
+   * @param {Object} credencial - Objeto con los nuevos datos del tipo de documento
    * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si falló
    * @throws {Error} Si ocurre un error en la actualización
    */
-  async update(id, detalleVenta) {
+  async update(id, credencial) {
     try {
-      if (await super.update(this.#tableName, id, detalleVenta)) {
+      if (await super.update(this.#tableName, id, credencial)) {
         return await this.getById(id);
       }
       return null;
     } catch (error) {
       throw new Error(
-        `Error al actualizar el detalle de venta con ID ${id}: ${error.message}`
+        `Error al actualizar la credencial con ID ${id}: ${error.message}`
       );
     }
   }
@@ -84,10 +84,10 @@ class DetalleVenta extends Modelo {
       return await super.delete(this.#tableName, id);
     } catch (error) {
       throw new Error(
-        `Error al eliminar el detalle de venta con ID ${id}: ${error.message}`
+        `Error al eliminar la credencial con ID ${id}: ${error.message}`
       );
     }
   }
 }
 
-export default DetalleVenta;
+export default Credencial;

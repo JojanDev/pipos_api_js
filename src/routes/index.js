@@ -22,13 +22,18 @@ import tratamientos from "./tratamientosRoutes.js"; // Rutas para la entidad 'ti
 import medicamentosTratamientos from "./medicamentosTratamientosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import razas from "./razasRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import ventas from "./ventasRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import detallesVentas from "./detallesVentasRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import elementosVentas from "./elementosVentasRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import roles from "./rolesRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import permisos from "./permisosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import permisosRoles from "./permisosRolesRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import usuarios from "./usuariosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import rolesUsuarios from "./rolesUsuariosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import medicamentos from "./medicamentosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import servicios from "./serviciosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import elementos from "./elementosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import productos from "./productosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import auth from "./authRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import credenciales from "./credencialesRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 // import permisosRoles from './permisosRolesRoutes.js'; // Rutas para la entidad 'permisos de roles'
 // import permisos from './permisosRoutes.js'; // Rutas para la entidad 'permisos'
 // import roles from './rolesRoutes.js'; // Rutas para la entidad 'roles'
@@ -36,19 +41,6 @@ import medicamentos from "./medicamentosRoutes.js"; // Rutas para la entidad 'ti
 
 // Definición de las rutas de la API
 const rutas = [
-  // { path: '/fotos', router: fotos }, // Ruta para manejar fotos
-  // { path: '/reportes', router: reportes }, // Ruta para manejar reportes
-  // { path: '/elementos', router: elementos }, // Ruta para manejar elementos
-  // { path: '/tipos-elementos', router: tiposElementos }, // Ruta para manejar tipos de elementos
-  // { path: '/estados', router: estados }, // Ruta para manejar estados
-  // { path: '/ambientes', router: ambientes }, // Ruta para manejar ambientes
-  // { path: '/centros', router: centros }, // Ruta para manejar centros
-  // { path: '/inventarios', router: inventarios }, // Ruta para manejar inventarios
-  // { path: '/roles-usuarios', router: rolesUsuarios }, // Ruta para manejar roles de usuarios
-  // { path: '/usuarios', router: usuarios }, // Ruta para manejar usuarios
-  // { path: '/generos', router: generos }, // Ruta para manejar géneros
-  // { path: '/fichas', router: fichas }, // Ruta para manejar fichas
-  // { path: '/programas-formacion', router: programaFormacion }, // Ruta para manejar programas de formación
   { path: "/tipos-documentos", router: tiposDocumentos }, // Ruta para manejar tipos de documentos
   { path: "/especies", router: especies }, // Ruta para manejar tipos de documentos
   { path: "/tipos-productos", router: tiposProductos }, // Ruta para manejar tipos de documentos
@@ -59,17 +51,18 @@ const rutas = [
   { path: "/medicamentos-tratamientos", router: medicamentosTratamientos }, // Ruta para manejar tipos de documentos
   { path: "/razas", router: razas }, // Ruta para manejar tipos de documentos
   { path: "/ventas", router: ventas }, // Ruta para manejar tipos de documentos
-  { path: "/detalles-ventas", router: detallesVentas }, // Ruta para manejar tipos de documentos
+  { path: "/elementos-ventas", router: elementosVentas }, // Ruta para manejar tipos de documentos
   { path: "/roles", router: roles }, // Ruta para manejar tipos de documentos
   { path: "/permisos", router: permisos }, // Ruta para manejar tipos de documentos
   { path: "/permisos-roles", router: permisosRoles }, // Ruta para manejar tipos de documentos
   { path: "/usuarios", router: usuarios }, // Ruta para manejar tipos de documentos
   { path: "/roles-usuarios", router: rolesUsuarios }, // Ruta para manejar tipos de documentos
   { path: "/medicamentos", router: medicamentos }, // Ruta para manejar tipos de documentos
-  // { path: '/permisos-roles', router: permisosRoles }, // Ruta para manejar permisos de roles
-  // { path: '/permisos', router: permisos }, // Ruta para manejar permisos
-  // { path: '/roles', router: roles }, // Ruta para manejar roles
-  // { path: '/auth', router: auth }, // Ruta para manejar la autenticación
+  { path: "/servicios", router: servicios }, // Ruta para manejar tipos de documentos
+  { path: "/elementos", router: elementos }, // Ruta para manejar tipos de documentos
+  { path: "/productos", router: productos }, // Ruta para manejar tipos de documentos
+  { path: "/auth", router: auth }, // Ruta para manejar tipos de documentos
+  { path: "/credenciales", router: credenciales }, // Ruta para manejar tipos de documentos
 ];
 
 // Exporta el array de rutas como valor por defecto del módulo

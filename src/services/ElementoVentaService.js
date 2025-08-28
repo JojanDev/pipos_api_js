@@ -1,29 +1,29 @@
-import DetalleVenta from "../models/DetalleVenta.js";
+import ElementoVenta from "../models/ElementoVenta.js";
 // import Usuario from "../models/Usuario.js";
 
-class DetalleVentaService {
-  static objDetalleVenta = new DetalleVenta();
+class ElementoVentaService {
+  static objElementoVenta = new ElementoVenta();
   // static objUsuario = new Usuario();
 
-  static async getAllDetallesVentas() {
+  static async getAllElementosVentas() {
     try {
       // Llamamos el método listar
-      const detallesVentas = await this.objDetalleVenta.getAll();
+      const elementosVentas = await this.objElementoVenta.getAll();
 
       // Validamos si no hay tipos de productos
-      if (!detallesVentas || detallesVentas.length === 0)
+      if (!elementosVentas || elementosVentas.length === 0)
         return {
           error: true,
           code: 404,
-          message: "No hay detalles de ventas registrados",
+          message: "No hay elementos de ventas registrados",
         };
 
       // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
-        message: "Detalles de ventas obtenidos correctamente",
-        data: detallesVentas,
+        message: "Elementos de ventas obtenidos correctamente",
+        data: elementosVentas,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -32,24 +32,24 @@ class DetalleVentaService {
     }
   }
 
-  static async getDetalleVentaById(id) {
+  static async getElementoVentaById(id) {
     try {
       // Llamamos el método consultar por ID
-      const detalleVenta = await this.objDetalleVenta.getById(id);
-      // Validamos si no hay detalleVenta
-      if (!detalleVenta)
+      const elementoVenta = await this.objElementoVenta.getById(id);
+      // Validamos si no hay elementoVenta
+      if (!elementoVenta)
         return {
           error: true,
           code: 404,
-          message: "Detalle de venta no encontrado",
+          message: "Elemento de venta no encontrado",
         };
 
-      // Retornamos la detalleVenta obtenida
+      // Retornamos la elementoVenta obtenida
       return {
         error: false,
         code: 200,
-        message: "Detalle de venta obtenido correctamente",
-        data: detalleVenta,
+        message: "Elemento de venta obtenido correctamente",
+        data: elementoVenta,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -57,26 +57,26 @@ class DetalleVentaService {
     }
   }
 
-  static async createDetalleVenta(detalleVenta) {
+  static async createElementoVenta(elementoVenta) {
     try {
       // Llamamos el método crear
-      const detalleVentaCreado = await this.objDetalleVenta.create(
-        detalleVenta
+      const elementoVentaCreado = await this.objElementoVenta.create(
+        elementoVenta
       );
       // Validamos si no se pudo crear el tipo de producto
-      if (detalleVentaCreado === null)
+      if (elementoVentaCreado === null)
         return {
           error: true,
           code: 400,
-          message: "Error al crear el Detalle de venta",
+          message: "Error al crear el Elemento de venta",
         };
 
       // Retornamos el tipo de producto creado
       return {
         error: false,
         code: 201,
-        message: "Detalle de venta creado correctamente",
-        data: detalleVentaCreado,
+        message: "Elemento de venta creado correctamente",
+        data: elementoVentaCreado,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -84,38 +84,38 @@ class DetalleVentaService {
     }
   }
 
-  static async updateDetalleVenta(id, detalleVenta) {
+  static async updateElementoVenta(id, elementoVenta) {
     try {
       // Llamamos el método consultar por ID
-      const existente = await this.objDetalleVenta.getById(id);
+      const existente = await this.objElementoVenta.getById(id);
       // Validamos si el tipo de producto existe
       if (!existente) {
         return {
           error: true,
           code: 404,
-          message: "Detalle de venta no encontrada",
+          message: "Elemento de venta no encontrada",
         };
       }
 
       // Llamamos el método actualizar
-      const detalleVentaActualizado = await this.objDetalleVenta.update(
+      const elementoVentaActualizado = await this.objElementoVenta.update(
         id,
-        detalleVenta
+        elementoVenta
       );
       // Validamos si no se pudo actualizar el tipo de producto
-      if (detalleVentaActualizado === null)
+      if (elementoVentaActualizado === null)
         return {
           error: true,
           code: 400,
-          message: "Error al actualizar el Detalle de venta",
+          message: "Error al actualizar el Elemento de venta",
         };
 
       // Retornamos el tipo de producto actualizado
       return {
         error: false,
         code: 200,
-        message: "Detalle de venta actualizado correctamente",
-        data: detalleVentaActualizado,
+        message: "Elemento de venta actualizado correctamente",
+        data: elementoVentaActualizado,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -123,39 +123,39 @@ class DetalleVentaService {
     }
   }
 
-  static async deleteDetalleVenta(id) {
+  static async deleteElementoVenta(id) {
     try {
       // Llamamos el método consultar por ID
-      const detalleVenta = await this.objDetalleVenta.getById(id);
+      const elementoVenta = await this.objElementoVenta.getById(id);
       // Validamos si el tipo de producto existe
-      if (!detalleVenta)
+      if (!elementoVenta)
         return {
           error: true,
           code: 404,
-          message: "Detalle de venta no encontrado",
+          message: "Elemento de venta no encontrado",
         };
 
-      // const usuariosTipo = await this.objUsuario.getAllByDetalleVentaId(id);
+      // const usuariosTipo = await this.objUsuario.getAllByElementoVentaId(id);
       // Validamos si no hay usuarios
       // if (usuariosTipo && usuariosTipo.length > 0) {
       //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
       // }
 
       // Llamamos el método eliminar
-      const detalleVentaEliminado = await this.objDetalleVenta.delete(id);
+      const elementoVentaEliminado = await this.objElementoVenta.delete(id);
       // Validamos si no se pudo eliminar el tipo de producto
-      if (!detalleVentaEliminado)
+      if (!elementoVentaEliminado)
         return {
           error: true,
           code: 400,
-          message: "Error al eliminar el Detalle de venta",
+          message: "Error al eliminar el Elemento de venta",
         };
 
       // Retornamos el tipo de producto eliminado
       return {
         error: false,
         code: 200,
-        message: "Detalle de venta eliminado correctamente",
+        message: "Elemento de venta eliminado correctamente",
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -164,4 +164,4 @@ class DetalleVentaService {
   }
 }
 
-export default DetalleVentaService;
+export default ElementoVentaService;

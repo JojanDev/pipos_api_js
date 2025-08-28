@@ -1,11 +1,11 @@
 import { ResponseProvider } from "../providers/ResponseProvider.js";
-import ServicioService from "../services/ServicioService.js";
+import ProductoService from "../services/ProductoService.js";
 
-class ServicioController {
+class ProductoController {
   // Obtener todos los tipos de documentos
-  static getAllServicios = async (req, res) => {
+  static getAllProductos = async (req, res) => {
     try {
-      const response = await ServicioService.getAllServicios();
+      const response = await ProductoService.getAllProductos();
       // Validamos si no hay tipos de documentos
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -23,11 +23,11 @@ class ServicioController {
   };
 
   // Obtener un tipo de documento por su ID
-  static getServicioById = async (req, res) => {
+  static getProductoById = async (req, res) => {
     const { id } = req.params;
     try {
-      // Llamamos al servicio para obtener el tipo de documento por su ID
-      const response = await ServicioService.getServicioById(id);
+      // Llamamos al producto para obtener el tipo de documento por su ID
+      const response = await ProductoService.getProductoById(id);
       // Validamos si no hay tipo de documento
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -46,11 +46,11 @@ class ServicioController {
   };
 
   // Crear un nuevo tipo de documento
-  static createServicio = async (req, res) => {
-    const servicio = req.body;
+  static createProducto = async (req, res) => {
+    const producto = req.body;
     try {
       // Llamamos el método crear del modelo
-      const response = await ServicioService.createServicio(servicio);
+      const response = await ProductoService.createProducto(producto);
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -70,12 +70,12 @@ class ServicioController {
   };
 
   // Actualizar un tipo de documento
-  static updateServicio = async (req, res) => {
+  static updateProducto = async (req, res) => {
     const { id } = req.params;
-    const servicio = req.body;
+    const producto = req.body;
     try {
       // Llamamos al método actualizar del modelo
-      const response = await ServicioService.updateServicio(id, servicio);
+      const response = await ProductoService.updateProducto(id, producto);
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -96,11 +96,11 @@ class ServicioController {
   };
 
   // Eliminar un tipo de documento
-  static deleteServicio = async (req, res) => {
+  static deleteProducto = async (req, res) => {
     const { id } = req.params;
     try {
-      // Llamamos al servicio para eliminar el tipo de documento por su ID
-      const response = await ServicioService.deleteServicio(id);
+      // Llamamos al producto para eliminar el tipo de documento por su ID
+      const response = await ProductoService.deleteProducto(id);
       // Validamos si no se pudo eliminar el tipo de documento
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -120,4 +120,4 @@ class ServicioController {
   };
 }
 
-export default ServicioController;
+export default ProductoController;
