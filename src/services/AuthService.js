@@ -11,6 +11,7 @@ import RolUsuario from "../models/RolUsuario.js";
 import PermisoRol from "../models/PermisoRol.js";
 import Permiso from "../models/Permiso.js";
 import Rol from "../models/Rol.js";
+import Credencial from "../models/Credencial.js";
 
 // Carga variables de entorno desde el archivo .env
 dotenv.config();
@@ -115,24 +116,22 @@ class AuthService {
   // Valida credenciales y genera tokens si el login es exitoso
   static async login(datosLogin) {
     try {
-      const usuario = new Usuario();
+      const objCredencial = new Credencial();
 
-      // Busca el usuario por documento
-      const existente = await usuario.getByUsuario(datosLogin.usuario);
+      const usuarioExistente = await objCredencial.getByUsuario(datosLogin.usuario);
+      console.log(usuarioExistente);
 
-      // Verifica existencia y estado activo
-      if (!existente || !existente.activo) {
+      if (!usuarioExistente)
         return {
           error: true,
-          code: 404,
-          message: "El usuario no se encontró o se encuentra inactivo",
+          code: 409,
+          message: "Nombre de usuario no registrado.",
         };
-      }
 
       // Compara la contraseña ingresada con la almacenada
       const contrasenaValida = await bcrypt.compare(
         datosLogin.contrasena,
-        existente.contrasena
+        usuarioExistente.contrasena
       );
 
       if (!contrasenaValida) {
@@ -143,12 +142,15 @@ class AuthService {
         };
       }
 
+
+      console.log(usuarioExistente);
+
       // Configura los datos del usuario para el token y frontend
-      const usuarioCookie = await this.configurarUsuario(existente);
+      // const usuarioCookie = await this.configurarUsuario(existente);
 
       // Genera tokens de autenticación
-      const token = await this.#genToken(existente.id);
-      const refreshToken = await this.#genRefreshToken(existente.id);
+      const token = await this.#genToken(usuarioExistente.id);
+      const refreshToken = await this.#genRefreshToken(usuarioExistente.id);
 
       // Retorna tokens y datos del usuario
       return {
@@ -158,7 +160,7 @@ class AuthService {
         data: {
           token,
           refreshToken,
-          usuarioCookie,
+          // usuarioCookie,
         },
       };
     } catch (error) {
@@ -188,9 +190,8 @@ class AuthService {
     const usuarioToken = {};
 
     // Construye nombre corto para mostrar en frontend
-    usuarioToken.nombre_corto = `${usuario.nombres.split(" ")[0]} ${
-      usuario.apellidos.split(" ")[0]
-    }`;
+    usuarioToken.nombre_corto = `${usuario.nombres.split(" ")[0]} ${usuario.apellidos.split(" ")[0]
+      }`;
     usuarioToken.nombres = usuario.nombres;
     usuarioToken.apellidos = usuario.apellidos;
 

@@ -88,6 +88,39 @@ class RolUsuario extends Modelo {
       );
     }
   }
+
+  /**
+   * Obtiene un tipo de documento específico por su ID
+   * @param {number} id - ID del tipo de documento
+   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getByRolUsuarioExists(usuario_id, rol_id) {
+    try {
+      // Obtenemos el resultado de la consulta y Retornamos la respuesta al servicio
+      return (await connection.query(`SELECT * FROM ${this.#tableName} WHERE usuario_id = ? AND rol_id = ?`, [usuario_id, rol_id]))[0];
+    } catch (error) {
+      throw new Error(
+        `Error al obtener el rol de usuario con ID de usuario ${rol_id} y ID de rol ${permiso_id}: ${error}`
+      );
+    }
+  }
+
+  /**
+   * Obtiene un tipo de documento específico por su ID
+   * @param {number} usuarioId - ID del tipo de documento
+   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getAllByUsuarioId(usuarioId) {
+    try {
+      return await super.getByField(this.#tableName, "usuario_id", usuarioId);
+    } catch (error) {
+      throw new Error(
+        `Error al obtener los roles del usuario con ID ${id}: ${error.message}`
+      );
+    }
+  }
 }
 
 export default RolUsuario;

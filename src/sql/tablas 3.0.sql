@@ -13,7 +13,8 @@
 
 	CREATE TABLE roles(
 		id INT AUTO_INCREMENT PRIMARY KEY,
-		nombre varchar(255) NOT NULL
+		nombre varchar(30) NOT NULL,
+        descripcion varchar(100) NOT NULL
 	);
 
 	CREATE TABLE permisos (
@@ -68,7 +69,6 @@
 		contrasena VARCHAR(255) NOT NULL,
 		FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 	);
-
 
 	CREATE TABLE permisos_roles (
 		id INT AUTO_INCREMENT PRIMARY KEY,

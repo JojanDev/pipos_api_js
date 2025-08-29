@@ -123,6 +123,24 @@ class UsuarioController {
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
+
+  // Obtener todos los usuarios administrativos
+  static getUsuariosClientes = async (req, res) => {
+    try {
+      console.log("SI");
+
+      const response = await UsuarioService.getUsuariosClientes();
+      // Validamos si no hay usuarios
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(res, response.data, response.message, response.code);
+
+    } catch (error) {
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
 }
 
 export default UsuarioController;

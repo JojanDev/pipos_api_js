@@ -1,4 +1,6 @@
 import RolUsuario from "../models/RolUsuario.js";
+import RolService from "./RolService.js";
+import UsuarioService from "./UsuarioService.js";
 // import Usuario from "../models/Usuario.js";
 
 class RolUsuarioService {
@@ -59,6 +61,25 @@ class RolUsuarioService {
 
   static async createRolUsuario(rolUsuario) {
     try {
+      const rolExistente = await RolService.getRolById(
+        rolUsuario.rol_id
+      );
+
+      if (rolExistente.error) return rolExistente;
+
+      const usuarioExistente = await UsuarioService.getUsuarioById(rolUsuario.usuario_id);
+
+      if (usuarioExistente.error) return usuarioExistente;
+
+      const rolUsuarioExistente = await this.objRolUsuario.getByRolUsuarioExists(rolUsuario.usuario_id, rolUsuario.rol_id);
+
+      if (rolUsuarioExistente && rolUsuarioExistente.length !== 0)
+        return {
+          error: true,
+          code: 400,
+          message: "Este rol ya ha sido asignado al usuario",
+        };
+
       // Llamamos el método crear
       const rolUsuarioCreado = await this.objRolUsuario.create(
         rolUsuario

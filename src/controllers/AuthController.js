@@ -153,7 +153,9 @@ class AuthController {
       }
 
       // Extrae los tokens y datos del usuario para la cookie
-      const { token, refreshToken, usuarioCookie } = response.data;
+      const { token, refreshToken,
+        // usuarioCookie
+      } = response.data;
 
       // Guarda el access token en cookie httpOnly
       res.cookie("token", token, {
@@ -169,24 +171,24 @@ class AuthController {
         sameSite: "Lax",
       });
 
-      const { permisos, roles, ...usuario } = usuarioCookie;
+      // const { permisos, roles, ...usuario } = usuarioCookie;
 
       // Guarda los datos del usuario en cookie pública (para el frontend)
-      res.cookie("usuario", JSON.stringify(usuario), {
-        httpOnly: false,
-        secure: false,
-        sameSite: "Lax",
-      });
-      res.cookie("permisos", JSON.stringify(permisos), {
-        httpOnly: false,
-        secure: false,
-        sameSite: "Lax",
-      });
-      res.cookie("roles", JSON.stringify(roles), {
-        httpOnly: false,
-        secure: false,
-        sameSite: "Lax",
-      });
+      // res.cookie("usuario", JSON.stringify(usuario), {
+      //   httpOnly: false,
+      //   secure: false,
+      //   sameSite: "Lax",
+      // });
+      // res.cookie("permisos", JSON.stringify(permisos), {
+      //   httpOnly: false,
+      //   secure: false,
+      //   sameSite: "Lax",
+      // });
+      // res.cookie("roles", JSON.stringify(roles), {
+      //   httpOnly: false,
+      //   secure: false,
+      //   sameSite: "Lax",
+      // });
 
       // Respuesta exitosa sin datos, ya que todo se guarda en cookies
       return ResponseProvider.success(

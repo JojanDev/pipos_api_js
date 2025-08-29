@@ -1,6 +1,8 @@
 import Credencial from "../models/Credencial.js";
 import Usuario from "../models/Usuario.js";
 import UsuarioService from "./UsuarioService.js";
+import bcrypt from "bcrypt";
+const saltRounds = 10;
 
 class CredencialService {
   static objCredencial = new Credencial();
@@ -80,6 +82,10 @@ class CredencialService {
           code: 409,
           message: "El nombre de usuario ya esta registrado.",
         };
+
+      if (credencial.contrasena) {
+        credencial.contrasena = await bcrypt.hash(credencial.contrasena, saltRounds);
+      }
 
       // Llamamos el método crear
       const credencialCreado = await this.objCredencial.create(credencial);

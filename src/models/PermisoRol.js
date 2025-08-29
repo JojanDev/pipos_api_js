@@ -36,6 +36,23 @@ class PermisoRol extends Modelo {
   }
 
   /**
+   * Obtiene un tipo de documento específico por su ID
+   * @param {number} id - ID del tipo de documento
+   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getByPermisoRolExists(rol_id, permiso_id) {
+    try {
+      // Obtenemos el resultado de la consulta y Retornamos la respuesta al servicio
+      return (await connection.query(`SELECT * FROM ${this.#tableName} WHERE rol_id = ? AND permiso_id = ?`, [rol_id, permiso_id]))[0];
+    } catch (error) {
+      throw new Error(
+        `Error al obtener el permiso de rol con ID de rol ${rol_id} y  ID de permiso ${permiso_id}: ${error}`
+      );
+    }
+  }
+
+  /**
    * Crea un nuevo tipo de documento en la base de datos
    * @param {Object} permisoRol - Objeto con los datos del tipo de documento {nombre}
    * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló

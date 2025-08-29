@@ -1,12 +1,14 @@
 import Usuario from "../models/Usuario.js";
 import TipoDocumento from "../models/TipoDocumento.js";
 import TipoDocumentoService from "./TipoDocumentoService.js";
+import RolUsuario from "../models/RolUsuario.js";
+import RolUsuarioService from "./RolUsuarioService.js";
 
 class UsuarioService {
   static objUsuario = new Usuario();
   static objTipoDocumento = new TipoDocumento();
   static objTipoDocumentoService = new TipoDocumentoService();
-  // static objUsuario = new Usuario();
+  static objRolUsuario = new RolUsuario();
 
   static async getAllUsuarios() {
     try {
@@ -85,6 +87,16 @@ class UsuarioService {
           code: 400,
           message: "Error al crear el Usuario",
         };
+
+      const rolAsignado =
+        await RolUsuarioService.createRolUsuario(
+          {
+            usuario_id: usuarioCreado.id,
+            rol_id: 1
+          }
+        );
+
+      if (tipoDocumentoExistente.error) return tipoDocumentoExistente;
 
       // Retornamos el tipo de producto creado
       return {
@@ -171,6 +183,41 @@ class UsuarioService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async getUsuariosClientes() {
+    try {
+
+      // Llamamos el método listar
+      const usuarios = await this.getAllUsuarios();
+      // Validamos si no hay usuarios
+      if (usuarios.error) return usuarios;
+
+      const usuariosCliente = (await Promise.all(
+        usuarios.data.map(async (usuario) => {
+          const rolesUsuario = await this.objRolUsuario.getAllByUsuarioId(usuario.id);
+          return rolesUsuario.some((rolUsuario) => rolUsuario.rol_id === 1) ? usuario : null;
+        })
+      )).filter(usuario => usuario);
+
+
+      // Retornamos los usuarios obtenidos
+      return {
+        error: false, code: 200, message: `Usuarios clientes obtenidos correctamente`,
+        data: usuariosCliente.map(usuario => usuario
+          // ({
+          //   id: usuario.id,
+          //   documento: usuario.documento,
+          //   nombre: usuario.nombres.split(" ")[0] + " " + usuario.apellidos.split(" ")[0]
+          // })
+        )
+      };
+
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      console.log(error);
       return { error: true, code: 500, message: error.message };
     }
   }

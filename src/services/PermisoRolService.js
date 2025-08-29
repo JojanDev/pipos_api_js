@@ -71,7 +71,14 @@ class PermisoRolService {
 
       if (rolExistente.error) return rolExistente;
 
-      //QUE UN PERMISO NO ESTE DOS VECES EN UN ROL
+      const permisoRolExistente = await this.objPermisoRol.getByPermisoRolExists(permisoRol.rol_id, permisoRol.permiso_id);
+
+      if (permisoRolExistente && permisoRolExistente.length !== 0)
+        return {
+          error: true,
+          code: 400,
+          message: "Este permiso ya ha sido asignado al rol",
+        };
 
       // Llamamos el método crear
       const permisoRolCreado = await this.objPermisoRol.create(permisoRol);
