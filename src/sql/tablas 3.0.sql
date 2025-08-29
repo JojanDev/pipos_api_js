@@ -34,10 +34,10 @@
 	CREATE TABLE info_medicamentos (
 		id INT AUTO_INCREMENT PRIMARY KEY,
 		nombre VARCHAR(255) NOT NULL,              
-		uso_general VARCHAR(255),                  
-		via_administracion VARCHAR(100),           
-		presentacion VARCHAR(100),                 
-		informacion_adicional TEXT                 
+		uso_general VARCHAR(255) NOT NULL,                  
+		via_administracion VARCHAR(100) NOT NULL,           
+		presentacion VARCHAR(100) NOT NULL,                 
+		informacion_adicional TEXT                
 	);
 
 	-- Dependientes de las anteriores
@@ -121,12 +121,12 @@
     
     CREATE TABLE medicamentos (
 		id INT AUTO_INCREMENT PRIMARY KEY,
-		id_info_medicamento INT NOT NULL,
+		info_medicamento_id INT NOT NULL,
 		precio DECIMAL(10,2) NOT NULL,
 		fecha_caducidad DATE,
 		cantidad INT NOT NULL,
 		numero_lote VARCHAR(100),
-		FOREIGN KEY (id_info_medicamento) REFERENCES info_medicamentos(id)
+		FOREIGN KEY (info_medicamento_id) REFERENCES info_medicamentos(id)
 	);
 
 	-- Servicios ofrecidos
@@ -138,15 +138,15 @@
 	);
 
 	-- Productos en inventario
-	CREATE TABLE productos (
+	CREATE TABLE productos (	
 		id INT AUTO_INCREMENT PRIMARY KEY,
 		nombre VARCHAR(255) NOT NULL,
 		precio DECIMAL(10,2) NOT NULL,
 		descripcion TEXT,
 		fecha_caducidad DATE,
-		id_tipo INT NOT NULL,
+		tipo_producto_id INT NOT NULL,
 		stock INT NOT NULL,
-		FOREIGN KEY (id_tipo) REFERENCES tipos_productos(id)
+		FOREIGN KEY (tipo_producto_id) REFERENCES tipos_productos(id)
 	);
 
 	CREATE TABLE medicamentos_tratamientos (
@@ -154,8 +154,8 @@
 		tratamiento_id INT NOT NULL,
 		info_medicamento_id INT NOT NULL, 
 		dosis VARCHAR(100) DEFAULT 'No aplica',
-		frecuencia_aplicacion VARCHAR(100),
-		duracion INT,
+		frecuencia_aplicacion VARCHAR(100) NOT NULL,
+		duracion INT NOT NULL,
 		activo boolean default true,
 		FOREIGN KEY (tratamiento_id) REFERENCES tratamientos(id),	
 		FOREIGN KEY (info_medicamento_id) REFERENCES info_medicamentos(id)
@@ -163,14 +163,18 @@
 
 	CREATE TABLE ventas (
 		id INT AUTO_INCREMENT PRIMARY KEY,
-		usuario_cliente_id INT,
-		usuario_vendedor_id INT,
 		fecha_creado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		total DECIMAL NOT NULL,	
 		monto DECIMAL NOT NULL,	
-		estado ENUM('completada', 'pendiente'),
-		FOREIGN KEY (usuario_cliente_id) REFERENCES usuarios(id),
-		FOREIGN KEY (usuario_vendedor_id) REFERENCES usuarios(id)
+		estado ENUM('completada', 'pendiente')
+	);
+    
+	CREATE TABLE usuarios_ventas (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		venta_id INT NOT NULL,
+		usuario_id INT NOT NULL,
+		FOREIGN KEY (venta_id) REFERENCES ventas(id),
+		FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 	);
     
 	CREATE TABLE medicamentos_ventas (
