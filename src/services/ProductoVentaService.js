@@ -1,4 +1,6 @@
 import ProductoVenta from "../models/ProductoVenta.js";
+import ProductoService from "./ProductoService.js";
+import VentaService from "./VentaService.js";
 // import Usuario from "../models/Usuario.js";
 
 class ProductoVentaService {
@@ -59,6 +61,18 @@ class ProductoVentaService {
 
   static async createProductoVenta(productoVenta) {
     try {
+      const ventaExistente = await VentaService.getVentaById(
+        productoVenta.venta_id
+      );
+
+      if (ventaExistente.error) return ventaExistente;
+
+      const productoExistente = await ProductoService.getProductoById(
+        productoVenta.producto_id
+      );
+
+      if (productoExistente.error) return productoExistente;
+
       // Llamamos el método crear
       const productoVentaCreado = await this.objProductoVenta.create(
         productoVenta
@@ -134,12 +148,6 @@ class ProductoVentaService {
           code: 404,
           message: "Venta del producto no encontrada",
         };
-
-      // const usuariosTipo = await this.objUsuario.getAllByProductoVentaId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
-      // }
 
       // Llamamos el método eliminar
       const productoVentaEliminado = await this.objProductoVenta.delete(id);

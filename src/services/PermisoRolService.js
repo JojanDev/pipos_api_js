@@ -1,4 +1,6 @@
 import PermisoRol from "../models/PermisoRol.js";
+import PermisoService from "./PermisoService.js";
+import RolService from "./RolService.js";
 // import Usuario from "../models/Usuario.js";
 
 class PermisoRolService {
@@ -59,10 +61,20 @@ class PermisoRolService {
 
   static async createPermisoRol(permisoRol) {
     try {
-      // Llamamos el método crear
-      const permisoRolCreado = await this.objPermisoRol.create(
-        permisoRol
+      const permisoExistente = await PermisoService.getPermisoById(
+        permisoRol.permiso_id
       );
+
+      if (permisoExistente.error) return permisoExistente;
+
+      const rolExistente = await RolService.getRolById(permisoRol.rol_id);
+
+      if (rolExistente.error) return rolExistente;
+
+      //QUE UN PERMISO NO ESTE DOS VECES EN UN ROL
+
+      // Llamamos el método crear
+      const permisoRolCreado = await this.objPermisoRol.create(permisoRol);
       // Validamos si no se pudo crear el tipo de producto
       if (permisoRolCreado === null)
         return {

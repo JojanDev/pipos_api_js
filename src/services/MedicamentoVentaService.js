@@ -1,9 +1,10 @@
 import MedicamentoVenta from "../models/MedicamentoVenta.js";
+import MedicamentoService from "./MedicamentoService.js";
+import VentaService from "./VentaService.js";
 // import Usuario from "../models/Usuario.js";
 
 class MedicamentoVentaService {
   static objMedicamentoVenta = new MedicamentoVenta();
-  // static objUsuario = new Usuario();
 
   static async getAllMedicamentosVentas() {
     try {
@@ -59,6 +60,18 @@ class MedicamentoVentaService {
 
   static async createMedicamentoVenta(medicamentoVenta) {
     try {
+      const ventaExistente = await VentaService.getVentaById(
+        productoVenta.venta_id
+      );
+
+      if (ventaExistente.error) return ventaExistente;
+
+      const medicamentoExistente = await MedicamentoService.getMedicamentoById(
+        medicamentoVenta.medicamento_id
+      );
+
+      if (medicamentoExistente.error) return medicamentoExistente;
+
       // Llamamos el método crear
       const medicamentoVentaCreado = await this.objMedicamentoVenta.create(
         medicamentoVenta
@@ -134,12 +147,6 @@ class MedicamentoVentaService {
           code: 404,
           message: "Venta de medicamento no encontrada",
         };
-
-      // const usuariosTipo = await this.objUsuario.getAllByMedicamentoVentaId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
-      // }
 
       // Llamamos el método eliminar
       const medicamentoVentaEliminado = await this.objMedicamentoVenta.delete(

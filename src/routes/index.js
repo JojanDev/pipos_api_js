@@ -15,7 +15,7 @@
 import tiposDocumentos from "./tiposDocumentosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import especies from "./especiesRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import tiposProductos from "./tiposProductosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import infosMedicamentos from "./infosMedicamentosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import infoMedicamentos from "./infosMedicamentosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import mascotas from "./mascotasRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import antecedentes from "./antecedentesRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import tratamientos from "./tratamientosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
@@ -35,6 +35,7 @@ import serviciosVentas from "./serviciosVentasRoutes.js"; // Rutas para la entid
 import productos from "./productosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import auth from "./authRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 import credenciales from "./credencialesRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import usuariosVentas from "./usuariosVentasRoutes.js"; // Rutas para la entidad 'tipos de documentos'
 // import permisosRoles from './permisosRolesRoutes.js'; // Rutas para la entidad 'permisos de roles'
 // import permisos from './permisosRoutes.js'; // Rutas para la entidad 'permisos'
 // import roles from './rolesRoutes.js'; // Rutas para la entidad 'roles'
@@ -45,7 +46,7 @@ const rutas = [
   { path: "/tipos-documentos", router: tiposDocumentos }, // Ruta para manejar tipos de documentos
   { path: "/especies", router: especies }, // Ruta para manejar tipos de documentos
   { path: "/tipos-productos", router: tiposProductos }, // Ruta para manejar tipos de documentos
-  { path: "/infos-medicamentos", router: infosMedicamentos }, // Ruta para manejar tipos de documentos
+  { path: "/info-medicamentos", router: infoMedicamentos }, // Ruta para manejar tipos de documentos
   { path: "/mascotas", router: mascotas }, // Ruta para manejar tipos de documentos
   { path: "/antecedentes", router: antecedentes }, // Ruta para manejar tipos de documentos
   { path: "/tratamientos", router: tratamientos }, // Ruta para manejar tipos de documentos
@@ -65,6 +66,7 @@ const rutas = [
   { path: "/productos", router: productos }, // Ruta para manejar tipos de documentos
   { path: "/auth", router: auth }, // Ruta para manejar tipos de documentos
   { path: "/credenciales", router: credenciales }, // Ruta para manejar tipos de documentos
+  { path: "/usuarios-ventas", router: usuariosVentas }, // Ruta para manejar tipos de documentos
 ];
 
 // Exporta el array de rutas como valor por defecto del módulo

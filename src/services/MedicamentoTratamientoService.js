@@ -1,6 +1,8 @@
 // import Usuario from "../models/Usuario.js";
 
 import MedicamentoTratamiento from "../models/MedicamentoTratamiento.js";
+import InfoMedicamentoService from "./InfoMedicamentoService.js";
+import TratamientoService from "./TratamientoService.js";
 
 class MedicamentoTratamientoService {
   static objMedicamentoTratamiento = new MedicamentoTratamiento();
@@ -9,7 +11,8 @@ class MedicamentoTratamientoService {
   static async getAllMedicamentosTratamientos() {
     try {
       // Llamamos el método listar
-      const medicamentosTratamientos = await this.objMedicamentoTratamiento.getAll();
+      const medicamentosTratamientos =
+        await this.objMedicamentoTratamiento.getAll();
 
       // Validamos si no hay tipos de productos
       if (!medicamentosTratamientos || medicamentosTratamientos.length === 0)
@@ -36,7 +39,8 @@ class MedicamentoTratamientoService {
   static async getMedicamentoTratamientoById(id) {
     try {
       // Llamamos el método consultar por ID
-      const medicamentoTratamiento = await this.objMedicamentoTratamiento.getById(id);
+      const medicamentoTratamiento =
+        await this.objMedicamentoTratamiento.getById(id);
       // Validamos si no hay medicamentoTratamiento
       if (!medicamentoTratamiento)
         return {
@@ -60,10 +64,22 @@ class MedicamentoTratamientoService {
 
   static async createMedicamentoTratamiento(medicamentoTratamiento) {
     try {
-      // Llamamos el método crear
-      const medicamentoTratamientoCreado = await this.objMedicamentoTratamiento.create(
-        medicamentoTratamiento
+      const tratamientoExistente = await TratamientoService.getTratamientoById(
+        medicamentoTratamiento.tratamiento_id
       );
+
+      if (tratamientoExistente.error) return tratamientoExistente;
+
+      const infoMedicamentoExistente =
+        await InfoMedicamentoService.getInfoMedicamentoById(
+          medicamentoTratamiento.info_medicamento_id
+        );
+
+      if (infoMedicamentoExistente.error) return infoMedicamentoExistente;
+
+      // Llamamos el método crear
+      const medicamentoTratamientoCreado =
+        await this.objMedicamentoTratamiento.create(medicamentoTratamiento);
       // Validamos si no se pudo crear el tipo de producto
       if (medicamentoTratamientoCreado === null)
         return {
@@ -99,10 +115,8 @@ class MedicamentoTratamientoService {
       }
 
       // Llamamos el método actualizar
-      const medicamentoTratamientoActualizado = await this.objMedicamentoTratamiento.update(
-        id,
-        medicamentoTratamiento
-      );
+      const medicamentoTratamientoActualizado =
+        await this.objMedicamentoTratamiento.update(id, medicamentoTratamiento);
       // Validamos si no se pudo actualizar el tipo de producto
       if (medicamentoTratamientoActualizado === null)
         return {
@@ -127,7 +141,8 @@ class MedicamentoTratamientoService {
   static async deleteMedicamentoTratamiento(id) {
     try {
       // Llamamos el método consultar por ID
-      const medicamentoTratamiento = await this.objMedicamentoTratamiento.getById(id);
+      const medicamentoTratamiento =
+        await this.objMedicamentoTratamiento.getById(id);
       // Validamos si el tipo de producto existe
       if (!medicamentoTratamiento)
         return {
@@ -143,7 +158,8 @@ class MedicamentoTratamientoService {
       // }
 
       // Llamamos el método eliminar
-      const medicamentoTratamientoEliminado = await this.objMedicamentoTratamiento.delete(id);
+      const medicamentoTratamientoEliminado =
+        await this.objMedicamentoTratamiento.delete(id);
       // Validamos si no se pudo eliminar el tipo de producto
       if (!medicamentoTratamientoEliminado)
         return {

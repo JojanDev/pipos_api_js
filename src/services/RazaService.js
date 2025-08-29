@@ -60,11 +60,11 @@ class RazaService {
 
   static async createRaza(raza) {
     try {
-      const razaExistente = await EspecieService.getEspecieById(
+      const especieExistente = await EspecieService.getEspecieById(
         raza.especie_id
       );
 
-      if (razaExistente.error) return razaExistente;
+      if (especieExistente.error) return especieExistente;
 
       // Llamamos el método crear
       const razaCreada = await this.objRaza.create(raza);

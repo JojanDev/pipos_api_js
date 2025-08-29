@@ -1,4 +1,5 @@
 import Medicamento from "../models/Medicamento.js";
+import InfoMedicamentoService from "./InfoMedicamentoService.js";
 // import Usuario from "../models/Usuario.js";
 
 class MedicamentoService {
@@ -59,10 +60,15 @@ class MedicamentoService {
 
   static async createMedicamento(medicamento) {
     try {
+      const infoMedicamentoExistente =
+        await InfoMedicamentoService.getInfoMedicamentoById(
+          medicamento.info_medicamento_id
+        );
+
+      if (infoMedicamentoExistente.error) return infoMedicamentoExistente;
+
       // Llamamos el método crear
-      const medicamentoCreado = await this.objMedicamento.create(
-        medicamento
-      );
+      const medicamentoCreado = await this.objMedicamento.create(medicamento);
       // Validamos si no se pudo crear el tipo de producto
       if (medicamentoCreado === null)
         return {
