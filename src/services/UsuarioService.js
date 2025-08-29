@@ -1,8 +1,11 @@
 import Usuario from "../models/Usuario.js";
-// import Usuario from "../models/Usuario.js";
+import TipoDocumento from "../models/TipoDocumento.js";
+import TipoDocumentoService from "./TipoDocumentoService.js";
 
 class UsuarioService {
   static objUsuario = new Usuario();
+  static objTipoDocumento = new TipoDocumento();
+  static objTipoDocumentoService = new TipoDocumentoService();
   // static objUsuario = new Usuario();
 
   static async getAllUsuarios() {
@@ -59,13 +62,22 @@ class UsuarioService {
 
   static async createUsuario(usuario) {
     try {
+      const tipoDocumentoExistente =
+        await TipoDocumentoService.getTipoDocumentoById(
+          usuario.tipo_documento_id
+        );
+
+      if (tipoDocumentoExistente.error) return tipoDocumentoExistente;
+
       if (await this.objUsuario.getByDocumento(usuario.numero_documento))
-        return { error: true, code: 409, message: "El nombre de documento ya esta registrado." };
+        return {
+          error: true,
+          code: 409,
+          message: "El nombre de documento ya esta registrado.",
+        };
 
       // Llamamos el método crear
-      const usuarioCreado = await this.objUsuario.create(
-        usuario
-      );
+      const usuarioCreado = await this.objUsuario.create(usuario);
       // Validamos si no se pudo crear el tipo de producto
       if (usuarioCreado === null)
         return {
@@ -101,10 +113,7 @@ class UsuarioService {
       }
 
       // Llamamos el método actualizar
-      const usuarioActualizado = await this.objUsuario.update(
-        id,
-        usuario
-      );
+      const usuarioActualizado = await this.objUsuario.update(id, usuario);
       // Validamos si no se pudo actualizar el tipo de producto
       if (usuarioActualizado === null)
         return {

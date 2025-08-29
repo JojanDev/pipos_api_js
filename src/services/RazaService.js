@@ -1,5 +1,6 @@
 import Especie from "../models/Especie.js";
 import Raza from "../models/Raza.js";
+import EspecieService from "./EspecieService.js";
 
 class RazaService {
   static objRaza = new Raza();
@@ -59,13 +60,14 @@ class RazaService {
 
   static async createRaza(raza) {
     try {
-      if (!(await this.objEspecie.getById(raza.especie_id)))
-        return { error: true, code: 409, message: "La especie de la raza no esta registrada." };
+      const razaExistente = await EspecieService.getEspecieById(
+        raza.especie_id
+      );
+
+      if (razaExistente.error) return razaExistente;
 
       // Llamamos el método crear
-      const razaCreada = await this.objRaza.create(
-        raza
-      );
+      const razaCreada = await this.objRaza.create(raza);
       // Validamos si no se pudo crear el tipo de producto
       if (razaCreada === null)
         return {
@@ -101,10 +103,7 @@ class RazaService {
       }
 
       // Llamamos el método actualizar
-      const razaActualizada = await this.objRaza.update(
-        id,
-        raza
-      );
+      const razaActualizada = await this.objRaza.update(id, raza);
       // Validamos si no se pudo actualizar el tipo de producto
       if (razaActualizada === null)
         return {

@@ -1,8 +1,8 @@
 import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
-class Elemento extends Modelo {
-  #tableName = "elementos";
+class MedicamentoVenta extends Modelo {
+  #tableName = "medicamentos_ventas";
 
   /**
    * Obtiene todos los tipos de documentos de la base de datos
@@ -13,7 +13,9 @@ class Elemento extends Modelo {
     try {
       return await super.getAll(this.#tableName);
     } catch (error) {
-      throw new Error(`Error al obtener todas los elementos: ${error.message}`);
+      throw new Error(
+        `Error al obtener todas las ventas de medicamentos: ${error.message}`
+      );
     }
   }
 
@@ -28,45 +30,47 @@ class Elemento extends Modelo {
       return await super.getById(this.#tableName, id);
     } catch (error) {
       throw new Error(
-        `Error al obtener el elemento con ID ${id}: ${error.message}`
+        `Error al obtener la venta del medicamento con ID ${id}: ${error.message}`
       );
     }
   }
 
   /**
    * Crea un nuevo tipo de documento en la base de datos
-   * @param {Object} elemento - Objeto con los datos del tipo de documento {nombre}
+   * @param {Object} medicamentoVenta - Objeto con los datos del tipo de documento {nombre}
    * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló
    * @throws {Error} Si ocurre un error en la inserción
    */
-  async create(elemento) {
+  async create(medicamentoVenta) {
     try {
-      const idCreado = await super.create(this.#tableName, elemento);
+      const idCreado = await super.create(this.#tableName, medicamentoVenta);
       if (idCreado) {
         return await this.getById(idCreado);
       }
       return null;
     } catch (error) {
-      throw new Error(`Error al crear el elemento: ${error.message}`);
+      throw new Error(
+        `Error al crear la venta del medicamento: ${error.message}`
+      );
     }
   }
 
   /**
    * Actualiza un tipo de documento existente
    * @param {number} id - ID del tipo de documento a actualizar
-   * @param {Object} elemento - Objeto con los nuevos datos del tipo de documento
+   * @param {Object} medicamentoVenta - Objeto con los nuevos datos del tipo de documento
    * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si falló
    * @throws {Error} Si ocurre un error en la actualización
    */
-  async update(id, elemento) {
+  async update(id, medicamentoVenta) {
     try {
-      if (await super.update(this.#tableName, id, elemento)) {
+      if (await super.update(this.#tableName, id, medicamentoVenta)) {
         return await this.getById(id);
       }
       return null;
     } catch (error) {
       throw new Error(
-        `Error al actualizar el elemento con ID ${id}: ${error.message}`
+        `Error al actualizar la venta del medicamento con ID ${id}: ${error.message}`
       );
     }
   }
@@ -82,10 +86,10 @@ class Elemento extends Modelo {
       return await super.delete(this.#tableName, id);
     } catch (error) {
       throw new Error(
-        `Error al eliminar el elemento con ID ${id}: ${error.message}`
+        `Error al eliminar la venta del medicamento con ID ${id}: ${error.message}`
       );
     }
   }
 }
 
-export default Elemento;
+export default MedicamentoVenta;

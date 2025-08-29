@@ -1,29 +1,29 @@
-import Elemento from "../models/Elemento.js";
+import MedicamentoVenta from "../models/MedicamentoVenta.js";
 // import Usuario from "../models/Usuario.js";
 
-class ElementoService {
-  static objElemento = new Elemento();
+class MedicamentoVentaService {
+  static objMedicamentoVenta = new MedicamentoVenta();
   // static objUsuario = new Usuario();
 
-  static async getAllElementos() {
+  static async getAllMedicamentosVentas() {
     try {
       // Llamamos el método listar
-      const elementos = await this.objElemento.getAll();
+      const medicamentosVentas = await this.objMedicamentoVenta.getAll();
 
       // Validamos si no hay tipos de productos
-      if (!elementos || elementos.length === 0)
+      if (!medicamentosVentas || medicamentosVentas.length === 0)
         return {
           error: true,
           code: 404,
-          message: "No hay elementos registrados",
+          message: "No hay ventas de medicamentos registradas",
         };
 
       // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
-        message: "Elementos obtenidos correctamente",
-        data: elementos,
+        message: "Ventas de medicamentos obtenidas correctamente",
+        data: medicamentosVentas,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -32,24 +32,24 @@ class ElementoService {
     }
   }
 
-  static async getElementoById(id) {
+  static async getMedicamentoVentaById(id) {
     try {
       // Llamamos el método consultar por ID
-      const elemento = await this.objElemento.getById(id);
-      // Validamos si no hay elemento
-      if (!elemento)
+      const medicamentoVenta = await this.objMedicamentoVenta.getById(id);
+      // Validamos si no hay medicamentoVenta
+      if (!medicamentoVenta)
         return {
           error: true,
           code: 404,
-          message: "Elemento no encontrado",
+          message: "Venta de medicamento no encontrada",
         };
 
-      // Retornamos la elemento obtenida
+      // Retornamos la medicamentoVenta obtenida
       return {
         error: false,
         code: 200,
-        message: "Elemento obtenido correctamente",
-        data: elemento,
+        message: "Venta de medicamento obtenida correctamente",
+        data: medicamentoVenta,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -57,24 +57,26 @@ class ElementoService {
     }
   }
 
-  static async createElemento(elemento) {
+  static async createMedicamentoVenta(medicamentoVenta) {
     try {
       // Llamamos el método crear
-      const elementoCreado = await this.objElemento.create(elemento);
+      const medicamentoVentaCreado = await this.objMedicamentoVenta.create(
+        medicamentoVenta
+      );
       // Validamos si no se pudo crear el tipo de producto
-      if (elementoCreado === null)
+      if (medicamentoVentaCreado === null)
         return {
           error: true,
           code: 400,
-          message: "Error al crear el Elemento",
+          message: "Error al crear la venta del medicamento",
         };
 
       // Retornamos el tipo de producto creado
       return {
         error: false,
         code: 201,
-        message: "Elemento creado correctamente",
-        data: elementoCreado,
+        message: "Venta de medicamento creada correctamente",
+        data: medicamentoVentaCreado,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -82,35 +84,38 @@ class ElementoService {
     }
   }
 
-  static async updateElemento(id, elemento) {
+  static async updateMedicamentoVenta(id, medicamentoVenta) {
     try {
       // Llamamos el método consultar por ID
-      const existente = await this.objElemento.getById(id);
+      const existente = await this.objMedicamentoVenta.getById(id);
       // Validamos si el tipo de producto existe
       if (!existente) {
         return {
           error: true,
           code: 404,
-          message: "Elemento no encontrado",
+          message: "Venta de medicamento no encontrada",
         };
       }
 
       // Llamamos el método actualizar
-      const elementoActualizado = await this.objElemento.update(id, elemento);
+      const medicamentoVentaActualizado = await this.objMedicamentoVenta.update(
+        id,
+        medicamentoVenta
+      );
       // Validamos si no se pudo actualizar el tipo de producto
-      if (elementoActualizado === null)
+      if (medicamentoVentaActualizado === null)
         return {
           error: true,
           code: 400,
-          message: "Error al actualizar el Elemento",
+          message: "Error al actualizar la venta del medicamento",
         };
 
       // Retornamos el tipo de producto actualizado
       return {
         error: false,
         code: 200,
-        message: "Elemento actualizado correctamente",
-        data: elementoActualizado,
+        message: "Venta de medicamento actualizada correctamente",
+        data: medicamentoVentaActualizado,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -118,39 +123,41 @@ class ElementoService {
     }
   }
 
-  static async deleteElemento(id) {
+  static async deleteMedicamentoVenta(id) {
     try {
       // Llamamos el método consultar por ID
-      const elemento = await this.objElemento.getById(id);
+      const medicamentoVenta = await this.objMedicamentoVenta.getById(id);
       // Validamos si el tipo de producto existe
-      if (!elemento)
+      if (!medicamentoVenta)
         return {
           error: true,
           code: 404,
-          message: "Elemento no encontrado",
+          message: "Venta de medicamento no encontrada",
         };
 
-      // const usuariosTipo = await this.objUsuario.getAllByElementoId(id);
+      // const usuariosTipo = await this.objUsuario.getAllByMedicamentoVentaId(id);
       // Validamos si no hay usuarios
       // if (usuariosTipo && usuariosTipo.length > 0) {
       //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
       // }
 
       // Llamamos el método eliminar
-      const elementoEliminado = await this.objElemento.delete(id);
+      const medicamentoVentaEliminado = await this.objMedicamentoVenta.delete(
+        id
+      );
       // Validamos si no se pudo eliminar el tipo de producto
-      if (!elementoEliminado)
+      if (!medicamentoVentaEliminado)
         return {
           error: true,
           code: 400,
-          message: "Error al eliminar el Elemento",
+          message: "Error al eliminar la venta del medicamento",
         };
 
       // Retornamos el tipo de producto eliminado
       return {
         error: false,
         code: 200,
-        message: "Elemento eliminado correctamente",
+        message: "Venta del medicamento eliminada correctamente",
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -159,4 +166,4 @@ class ElementoService {
   }
 }
 
-export default ElementoService;
+export default MedicamentoVentaService;

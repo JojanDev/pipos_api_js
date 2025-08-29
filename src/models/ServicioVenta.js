@@ -1,8 +1,8 @@
 import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
-class Tratamiento extends Modelo {
-  #tableName = "tratamientos";
+class ServicioVenta extends Modelo {
+  #tableName = "servicios_ventas";
 
   /**
    * Obtiene todos los tipos de documentos de la base de datos
@@ -14,7 +14,7 @@ class Tratamiento extends Modelo {
       return await super.getAll(this.#tableName);
     } catch (error) {
       throw new Error(
-        `Error al obtener todos los tratamientos: ${error.message}`
+        `Error al obtener todas las ventas de servicios: ${error.message}`
       );
     }
   }
@@ -30,45 +30,45 @@ class Tratamiento extends Modelo {
       return await super.getById(this.#tableName, id);
     } catch (error) {
       throw new Error(
-        `Error al obtener el tratamiento con ID ${id}: ${error.message}`
+        `Error al obtener la venta del servicio con ID ${id}: ${error.message}`
       );
     }
   }
 
   /**
    * Crea un nuevo tipo de documento en la base de datos
-   * @param {Object} tratamiento - Objeto con los datos del tipo de documento {nombre}
+   * @param {Object} servicioVenta - Objeto con los datos del tipo de documento {nombre}
    * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló
    * @throws {Error} Si ocurre un error en la inserción
    */
-  async create(tratamiento) {
+  async create(servicioVenta) {
     try {
-      const idCreado = await super.create(this.#tableName, tratamiento);
+      const idCreado = await super.create(this.#tableName, servicioVenta);
       if (idCreado) {
         return await this.getById(idCreado);
       }
       return null;
     } catch (error) {
-      throw new Error(`Error al crear el tratamiento: ${error.message}`);
+      throw new Error(`Error al crear la venta del servicio: ${error.message}`);
     }
   }
 
   /**
    * Actualiza un tipo de documento existente
    * @param {number} id - ID del tipo de documento a actualizar
-   * @param {Object} tratamiento - Objeto con los nuevos datos del tipo de documento
+   * @param {Object} servicioVenta - Objeto con los nuevos datos del tipo de documento
    * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si falló
    * @throws {Error} Si ocurre un error en la actualización
    */
-  async update(id, tratamiento) {
+  async update(id, servicioVenta) {
     try {
-      if (await super.update(this.#tableName, id, tratamiento)) {
+      if (await super.update(this.#tableName, id, servicioVenta)) {
         return await this.getById(id);
       }
       return null;
     } catch (error) {
       throw new Error(
-        `Error al actualizar el tratamiento con ID ${id}: ${error.message}`
+        `Error al actualizar la venta del servicio con ID ${id}: ${error.message}`
       );
     }
   }
@@ -84,10 +84,10 @@ class Tratamiento extends Modelo {
       return await super.delete(this.#tableName, id);
     } catch (error) {
       throw new Error(
-        `Error al eliminar el tratamiento con ID ${id}: ${error.message}`
+        `Error al eliminar la venta del servicio con ID ${id}: ${error.message}`
       );
     }
   }
 }
 
-export default Tratamiento;
+export default ServicioVenta;

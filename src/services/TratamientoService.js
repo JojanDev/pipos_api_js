@@ -1,5 +1,7 @@
 // import Usuario from "../models/Usuario.js";
 import Tratamiento from "../models/Tratamiento.js";
+import AntecedenteService from "./AntecedenteService.js";
+import UsuarioService from "./UsuarioService.js";
 
 class TratamientoService {
   static objTratamiento = new Tratamiento();
@@ -59,10 +61,20 @@ class TratamientoService {
 
   static async createTratamiento(tratamiento) {
     try {
-      // Llamamos el método crear
-      const tratamientoCreado = await this.objTratamiento.create(
-        tratamiento
+      const usuarioExistente = await UsuarioService.getUsuarioById(
+        tratamiento.usuario_id
       );
+
+      if (usuarioExistente.error) return usuarioExistente;
+
+      const antecedenteExistente = await AntecedenteService.getAntecedenteById(
+        tratamiento.antecedente_id
+      );
+
+      if (antecedenteExistente.error) return antecedenteExistente;
+
+      // Llamamos el método crear
+      const tratamientoCreado = await this.objTratamiento.create(tratamiento);
       // Validamos si no se pudo crear el tipo de producto
       if (tratamientoCreado === null)
         return {

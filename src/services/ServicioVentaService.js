@@ -1,31 +1,29 @@
-import Antecedente from "../models/Antecedente.js";
-import Mascota from "../models/Mascota.js";
-import MascotaService from "./MascotaService.js";
+import ServicioVenta from "../models/ServicioVenta.js";
 // import Usuario from "../models/Usuario.js";
 
-class AntecedenteService {
-  static objAntecedente = new Antecedente();
-  static objMascota = new Mascota();
+class ServicioVentaService {
+  static objServicioVenta = new ServicioVenta();
+  // static objUsuario = new Usuario();
 
-  static async getAllAntecedentes() {
+  static async getAllServiciosVentas() {
     try {
       // Llamamos el método listar
-      const antecedentes = await this.objAntecedente.getAll();
+      const serviciosVentas = await this.objServicioVenta.getAll();
 
       // Validamos si no hay tipos de productos
-      if (!antecedentes || antecedentes.length === 0)
+      if (!serviciosVentas || serviciosVentas.length === 0)
         return {
           error: true,
           code: 404,
-          message: "No hay antecedentes registrados",
+          message: "No hay ventas de servicios registradas",
         };
 
       // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
-        message: "Antecedentes obtenidos correctamente",
-        data: antecedentes,
+        message: "Ventas de servicios obtenidas correctamente",
+        data: serviciosVentas,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -34,24 +32,24 @@ class AntecedenteService {
     }
   }
 
-  static async getAntecedenteById(id) {
+  static async getServicioVentaById(id) {
     try {
       // Llamamos el método consultar por ID
-      const antecedente = await this.objAntecedente.getById(id);
-      // Validamos si no hay antecedente
-      if (!antecedente)
+      const servicioVenta = await this.objServicioVenta.getById(id);
+      // Validamos si no hay servicioVenta
+      if (!servicioVenta)
         return {
           error: true,
           code: 404,
-          message: "Antecedente no encontrado",
+          message: "Venta de servicio no encontrada",
         };
 
-      // Retornamos la antecedente obtenida
+      // Retornamos la servicioVenta obtenida
       return {
         error: false,
         code: 200,
-        message: "Antecedente obtenido correctamente",
-        data: antecedente,
+        message: "Venta de servicio obtenida correctamente",
+        data: servicioVenta,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -59,30 +57,26 @@ class AntecedenteService {
     }
   }
 
-  static async createAntecedente(antecedente) {
+  static async createServicioVenta(servicioVenta) {
     try {
-      const mascotaExistente = await MascotaService.getMascotaById(
-        antecedente.mascota_id
-      );
-
-      if (mascotaExistente.error) return mascotaExistente;
-
       // Llamamos el método crear
-      const antecedenteCreado = await this.objAntecedente.create(antecedente);
+      const servicioVentaCreado = await this.objServicioVenta.create(
+        servicioVenta
+      );
       // Validamos si no se pudo crear el tipo de producto
-      if (antecedenteCreado === null)
+      if (servicioVentaCreado === null)
         return {
           error: true,
           code: 400,
-          message: "Error al crear el antecedente",
+          message: "Error al crear la venta del servicio",
         };
 
       // Retornamos el tipo de producto creado
       return {
         error: false,
         code: 201,
-        message: "Antecedente creado correctamente",
-        data: antecedenteCreado,
+        message: "Venta de servicio creada correctamente",
+        data: servicioVentaCreado,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -90,38 +84,38 @@ class AntecedenteService {
     }
   }
 
-  static async updateAntecedente(id, antecedente) {
+  static async updateServicioVenta(id, servicioVenta) {
     try {
       // Llamamos el método consultar por ID
-      const existente = await this.objAntecedente.getById(id);
+      const existente = await this.objServicioVenta.getById(id);
       // Validamos si el tipo de producto existe
       if (!existente) {
         return {
           error: true,
           code: 404,
-          message: "Antecedente no encontrada",
+          message: "Venta de servicio no encontrada",
         };
       }
 
       // Llamamos el método actualizar
-      const antecedenteActualizado = await this.objAntecedente.update(
+      const servicioVentaActualizado = await this.objServicioVenta.update(
         id,
-        antecedente
+        servicioVenta
       );
       // Validamos si no se pudo actualizar el tipo de producto
-      if (antecedenteActualizado === null)
+      if (servicioVentaActualizado === null)
         return {
           error: true,
           code: 400,
-          message: "Error al actualizar el antecedente",
+          message: "Error al actualizar la venta del servicio",
         };
 
       // Retornamos el tipo de producto actualizado
       return {
         error: false,
         code: 200,
-        message: "Antecedente actualizado correctamente",
-        data: antecedenteActualizado,
+        message: "Venta de servicio actualizada correctamente",
+        data: servicioVentaActualizado,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -129,39 +123,39 @@ class AntecedenteService {
     }
   }
 
-  static async deleteAntecedente(id) {
+  static async deleteServicioVenta(id) {
     try {
       // Llamamos el método consultar por ID
-      const antecedente = await this.objAntecedente.getById(id);
+      const servicioVenta = await this.objServicioVenta.getById(id);
       // Validamos si el tipo de producto existe
-      if (!antecedente)
+      if (!servicioVenta)
         return {
           error: true,
           code: 404,
-          message: "Antecedente no encontrado",
+          message: "Venta de servicio no encontrada",
         };
 
-      // const usuariosTipo = await this.objUsuario.getAllByAntecedenteId(id);
+      // const usuariosTipo = await this.objUsuario.getAllByServicioVentaId(id);
       // Validamos si no hay usuarios
       // if (usuariosTipo && usuariosTipo.length > 0) {
       //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
       // }
 
       // Llamamos el método eliminar
-      const antecedenteEliminado = await this.objAntecedente.delete(id);
+      const servicioVentaEliminado = await this.objServicioVenta.delete(id);
       // Validamos si no se pudo eliminar el tipo de producto
-      if (!antecedenteEliminado)
+      if (!servicioVentaEliminado)
         return {
           error: true,
           code: 400,
-          message: "Error al eliminar el antecedente",
+          message: "Error al eliminar la venta del servicio",
         };
 
       // Retornamos el tipo de producto eliminado
       return {
         error: false,
         code: 200,
-        message: "Antecedente eliminado correctamente",
+        message: "Venta del servicio eliminada correctamente",
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -170,4 +164,4 @@ class AntecedenteService {
   }
 }
 
-export default AntecedenteService;
+export default ServicioVentaService;

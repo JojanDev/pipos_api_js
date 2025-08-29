@@ -1,5 +1,7 @@
 import Mascota from "../models/Mascota.js";
 import Usuario from "../models/Usuario.js";
+import RazaService from "./RazaService.js";
+import UsuarioService from "./UsuarioService.js";
 
 class MascotaService {
   static objMascota = new Mascota();
@@ -59,13 +61,18 @@ class MascotaService {
 
   static async createMascota(mascota) {
     try {
-      if (!(await this.objUsuario.getById(mascota.usuario_id)))
-        return { error: true, code: 409, message: "El usuario propietario no esta registrado." };
+      const usuarioExistente = await UsuarioService.getUsuarioById(
+        mascota.usuario_id
+      );
+
+      if (usuarioExistente.error) return usuarioExistente;
+
+      const razaExistente = await RazaService.getRazaById(mascota.raza_id);
+
+      if (razaExistente.error) return razaExistente;
 
       // Llamamos el método crear
-      const mascotaCreado = await this.objMascota.create(
-        mascota
-      );
+      const mascotaCreado = await this.objMascota.create(mascota);
       // Validamos si no se pudo crear el tipo de producto
       if (mascotaCreado === null)
         return {
@@ -101,10 +108,7 @@ class MascotaService {
       }
 
       // Llamamos el método actualizar
-      const mascotaActualizado = await this.objMascota.update(
-        id,
-        mascota
-      );
+      const mascotaActualizado = await this.objMascota.update(id, mascota);
       // Validamos si no se pudo actualizar el tipo de producto
       if (mascotaActualizado === null)
         return {

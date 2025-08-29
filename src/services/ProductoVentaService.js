@@ -1,29 +1,29 @@
-import ElementoVenta from "../models/ElementoVenta.js";
+import ProductoVenta from "../models/ProductoVenta.js";
 // import Usuario from "../models/Usuario.js";
 
-class ElementoVentaService {
-  static objElementoVenta = new ElementoVenta();
+class ProductoVentaService {
+  static objProductoVenta = new ProductoVenta();
   // static objUsuario = new Usuario();
 
-  static async getAllElementosVentas() {
+  static async getAllProductosVentas() {
     try {
       // Llamamos el método listar
-      const elementosVentas = await this.objElementoVenta.getAll();
+      const productoVentas = await this.objProductoVenta.getAll();
 
       // Validamos si no hay tipos de productos
-      if (!elementosVentas || elementosVentas.length === 0)
+      if (!productoVentas || productoVentas.length === 0)
         return {
           error: true,
           code: 404,
-          message: "No hay elementos de ventas registrados",
+          message: "No hay ventas de productos registrados",
         };
 
       // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
-        message: "Elementos de ventas obtenidos correctamente",
-        data: elementosVentas,
+        message: "Ventas de productos obtenidos correctamente",
+        data: productoVentas,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -32,24 +32,24 @@ class ElementoVentaService {
     }
   }
 
-  static async getElementoVentaById(id) {
+  static async getProductoVentaById(id) {
     try {
       // Llamamos el método consultar por ID
-      const elementoVenta = await this.objElementoVenta.getById(id);
-      // Validamos si no hay elementoVenta
-      if (!elementoVenta)
+      const productoVenta = await this.objProductoVenta.getById(id);
+      // Validamos si no hay productoVenta
+      if (!productoVenta)
         return {
           error: true,
           code: 404,
-          message: "Elemento de venta no encontrado",
+          message: "Venta del producto no encontrada",
         };
 
-      // Retornamos la elementoVenta obtenida
+      // Retornamos la productoVenta obtenida
       return {
         error: false,
         code: 200,
-        message: "Elemento de venta obtenido correctamente",
-        data: elementoVenta,
+        message: "Venta del producto obtenida correctamente",
+        data: productoVenta,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -57,26 +57,26 @@ class ElementoVentaService {
     }
   }
 
-  static async createElementoVenta(elementoVenta) {
+  static async createProductoVenta(productoVenta) {
     try {
       // Llamamos el método crear
-      const elementoVentaCreado = await this.objElementoVenta.create(
-        elementoVenta
+      const productoVentaCreado = await this.objProductoVenta.create(
+        productoVenta
       );
       // Validamos si no se pudo crear el tipo de producto
-      if (elementoVentaCreado === null)
+      if (productoVentaCreado === null)
         return {
           error: true,
           code: 400,
-          message: "Error al crear el Elemento de venta",
+          message: "Error al crear la venta del producto",
         };
 
       // Retornamos el tipo de producto creado
       return {
         error: false,
         code: 201,
-        message: "Elemento de venta creado correctamente",
-        data: elementoVentaCreado,
+        message: "Venta del producto creada correctamente",
+        data: productoVentaCreado,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -84,38 +84,38 @@ class ElementoVentaService {
     }
   }
 
-  static async updateElementoVenta(id, elementoVenta) {
+  static async updateProductoVenta(id, productoVenta) {
     try {
       // Llamamos el método consultar por ID
-      const existente = await this.objElementoVenta.getById(id);
+      const existente = await this.objProductoVenta.getById(id);
       // Validamos si el tipo de producto existe
       if (!existente) {
         return {
           error: true,
           code: 404,
-          message: "Elemento de venta no encontrada",
+          message: "Venta del producto no encontrada",
         };
       }
 
       // Llamamos el método actualizar
-      const elementoVentaActualizado = await this.objElementoVenta.update(
+      const productoVentaActualizado = await this.objProductoVenta.update(
         id,
-        elementoVenta
+        productoVenta
       );
       // Validamos si no se pudo actualizar el tipo de producto
-      if (elementoVentaActualizado === null)
+      if (productoVentaActualizado === null)
         return {
           error: true,
           code: 400,
-          message: "Error al actualizar el Elemento de venta",
+          message: "Error al actualizar la venta del producto",
         };
 
       // Retornamos el tipo de producto actualizado
       return {
         error: false,
         code: 200,
-        message: "Elemento de venta actualizado correctamente",
-        data: elementoVentaActualizado,
+        message: "Venta del producto actualizada correctamente",
+        data: productoVentaActualizado,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -123,39 +123,39 @@ class ElementoVentaService {
     }
   }
 
-  static async deleteElementoVenta(id) {
+  static async deleteProductoVenta(id) {
     try {
       // Llamamos el método consultar por ID
-      const elementoVenta = await this.objElementoVenta.getById(id);
+      const productoVenta = await this.objProductoVenta.getById(id);
       // Validamos si el tipo de producto existe
-      if (!elementoVenta)
+      if (!productoVenta)
         return {
           error: true,
           code: 404,
-          message: "Elemento de venta no encontrado",
+          message: "Venta del producto no encontrada",
         };
 
-      // const usuariosTipo = await this.objUsuario.getAllByElementoVentaId(id);
+      // const usuariosTipo = await this.objUsuario.getAllByProductoVentaId(id);
       // Validamos si no hay usuarios
       // if (usuariosTipo && usuariosTipo.length > 0) {
       //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
       // }
 
       // Llamamos el método eliminar
-      const elementoVentaEliminado = await this.objElementoVenta.delete(id);
+      const productoVentaEliminado = await this.objProductoVenta.delete(id);
       // Validamos si no se pudo eliminar el tipo de producto
-      if (!elementoVentaEliminado)
+      if (!productoVentaEliminado)
         return {
           error: true,
           code: 400,
-          message: "Error al eliminar el Elemento de venta",
+          message: "Error al eliminar la venta del producto",
         };
 
       // Retornamos el tipo de producto eliminado
       return {
         error: false,
         code: 200,
-        message: "Elemento de venta eliminado correctamente",
+        message: "Venta del producto eliminada correctamente",
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -164,4 +164,4 @@ class ElementoVentaService {
   }
 }
 
-export default ElementoVentaService;
+export default ProductoVentaService;

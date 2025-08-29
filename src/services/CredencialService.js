@@ -1,5 +1,6 @@
 import Credencial from "../models/Credencial.js";
 import Usuario from "../models/Usuario.js";
+import UsuarioService from "./UsuarioService.js";
 
 class CredencialService {
   static objCredencial = new Credencial();
@@ -60,17 +61,25 @@ class CredencialService {
 
   static async createCredencial(credencial) {
     try {
-      const usuarioExistente = await this.objUsuario.getById(credencial.usuario_id);
-      console.log(usuarioExistente);
-      
-      if (!usuarioExistente) 
-        return { error: true, code: 404, message: "El usuario no esta registrado." };
-      
+      const usuarioExistente = await UsuarioService.getUsuarioById(
+        credencial.usuario_id
+      );
+
+      if (usuarioExistente.error) return usuarioExistente;
+
       if (await this.objCredencial.getByUsuarioId(credencial.usuario_id))
-        return { error: true, code: 409, message: "El usuario ya tiene credenciales registradas." };
+        return {
+          error: true,
+          code: 409,
+          message: "El usuario ya tiene credenciales registradas.",
+        };
 
       if (await this.objCredencial.getByUsuario(credencial.usuario))
-        return { error: true, code: 409, message: "El nombre de usuario ya esta registrado." };
+        return {
+          error: true,
+          code: 409,
+          message: "El nombre de usuario ya esta registrado.",
+        };
 
       // Llamamos el método crear
       const credencialCreado = await this.objCredencial.create(credencial);

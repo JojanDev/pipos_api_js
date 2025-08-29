@@ -1,11 +1,11 @@
 import { ResponseProvider } from "../providers/ResponseProvider.js";
-import ElementoVentaService from "../services/ElementoVentaService.js";
+import MedicamentoVentaService from "../services/MedicamentoVentaService.js";
 
-class ElementoVentaController {
+class MedicamentoVentaController {
   // Obtener todos los tipos de documentos
-  static getAllElementosVentas = async (req, res) => {
+  static getAllMedicamentosVentas = async (req, res) => {
     try {
-      const response = await ElementoVentaService.getAllElementosVentas();
+      const response = await MedicamentoVentaService.getAllMedicamentosVentas();
       // Validamos si no hay tipos de documentos
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -23,11 +23,13 @@ class ElementoVentaController {
   };
 
   // Obtener un tipo de documento por su ID
-  static getElementoVentaById = async (req, res) => {
+  static getMedicamentoVentaById = async (req, res) => {
     const { id } = req.params;
     try {
       // Llamamos al servicio para obtener el tipo de documento por su ID
-      const response = await ElementoVentaService.getElementoVentaById(id);
+      const response = await MedicamentoVentaService.getMedicamentoVentaById(
+        id
+      );
       // Validamos si no hay tipo de documento
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -46,12 +48,12 @@ class ElementoVentaController {
   };
 
   // Crear un nuevo tipo de documento
-  static createElementoVenta = async (req, res) => {
-    const elementoVenta = req.body;
+  static createMedicamentoVenta = async (req, res) => {
+    const medicamentoVenta = req.body;
     try {
       // Llamamos el método crear del modelo
-      const response = await ElementoVentaService.createElementoVenta(
-        elementoVenta
+      const response = await MedicamentoVentaService.createMedicamentoVenta(
+        medicamentoVenta
       );
       // Validamos que la respuesta no tenga error
       if (response.error) {
@@ -72,14 +74,14 @@ class ElementoVentaController {
   };
 
   // Actualizar un tipo de documento
-  static updateElementoVenta = async (req, res) => {
+  static updateMedicamentoVenta = async (req, res) => {
     const { id } = req.params;
-    const elementoVenta = req.body;
+    const medicamentoVenta = req.body;
     try {
       // Llamamos al método actualizar del modelo
-      const response = await ElementoVentaService.updateElementoVenta(
+      const response = await MedicamentoVentaService.updateMedicamentoVenta(
         id,
-        elementoVenta
+        medicamentoVenta
       );
       // Validamos que la respuesta no tenga error
       if (response.error) {
@@ -101,11 +103,11 @@ class ElementoVentaController {
   };
 
   // Eliminar un tipo de documento
-  static deleteElementoVenta = async (req, res) => {
+  static deleteMedicamentoVenta = async (req, res) => {
     const { id } = req.params;
     try {
       // Llamamos al servicio para eliminar el tipo de documento por su ID
-      const response = await ElementoVentaService.deleteElementoVenta(id);
+      const response = await MedicamentoVentaService.deleteMedicamentoVenta(id);
       // Validamos si no se pudo eliminar el tipo de documento
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -125,4 +127,4 @@ class ElementoVentaController {
   };
 }
 
-export default ElementoVentaController;
+export default MedicamentoVentaController;
