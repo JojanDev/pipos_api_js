@@ -11,6 +11,8 @@ const router = express.Router();
 // Obtener todos los tipos de documentos
 router.get("/", RazaController.getAllRazas);
 
+router.get("/especie/:especie_id", RazaController.getAllRazasByEspecieId);
+
 // Obtener un tipo de documento por ID
 router.get("/:id", RazaController.getRazaById);
 

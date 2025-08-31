@@ -45,6 +45,9 @@ class RazaService {
           message: "Raza no encontrada",
         };
 
+      const especie = await EspecieService.getEspecieById(raza.especie_id);
+      raza["especie"] = especie.data;
+
       // Retornamos la raza obtenida
       return {
         error: false,
@@ -158,6 +161,31 @@ class RazaService {
         error: false,
         code: 200,
         message: "Raza eliminada correctamente",
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async getAllRazasByEspecieId(especie_id) {
+    try {
+      // Llamamos el método consultar por ID
+      const raza = await this.objRaza.getAllByEspecieId(especie_id);
+      // Validamos si no hay raza
+      if (!raza)
+        return {
+          error: true,
+          code: 404,
+          message: "Razas de especie no encontradas",
+        };
+
+      // Retornamos la raza obtenida
+      return {
+        error: false,
+        code: 200,
+        message: "Razas de especie obtenidas correctamente",
+        data: raza,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción

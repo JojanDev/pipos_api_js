@@ -1,4 +1,6 @@
+import Especie from "../models/Especie.js";
 import Mascota from "../models/Mascota.js";
+import Raza from "../models/Raza.js";
 import Usuario from "../models/Usuario.js";
 import RazaService from "./RazaService.js";
 import UsuarioService from "./UsuarioService.js";
@@ -6,6 +8,8 @@ import UsuarioService from "./UsuarioService.js";
 class MascotaService {
   static objMascota = new Mascota();
   static objUsuario = new Usuario();
+  static objRaza = new Raza();
+  static objEspecie = new Especie();
 
   static async getAllMascotas() {
     try {
@@ -20,12 +24,25 @@ class MascotaService {
           message: "No hay mascotas registradas",
         };
 
+      const mascotasInfo = await Promise.all(
+        mascotas.map(async (mascota) => {
+          const user = await this.objUsuario.getById(mascota.usuario_id);
+          const raza = await this.objRaza.getById(mascota.raza_id);
+          const especie = await this.objEspecie.getById(raza.especie_id);
+          mascota["cliente"] = user.nombre;
+          mascota["telefono"] = user.telefono;
+          mascota["raza"] = raza.nombre;
+          mascota["especie"] = especie.nombre;
+          return mascota;
+        })
+      );
+
       // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
         message: "Mascotas obtenidas correctamente",
-        data: mascotas,
+        data: mascotasInfo,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -45,6 +62,9 @@ class MascotaService {
           code: 404,
           message: "Mascota no encontrada",
         };
+
+      const raza = await RazaService.getRazaById(mascota.raza_id);
+      mascota["raza"] = raza.data;
 
       // Retornamos la mascota obtenida
       return {
@@ -141,12 +161,6 @@ class MascotaService {
           code: 404,
           message: "Mascota no encontrada",
         };
-
-      // const usuariosTipo = await this.objUsuario.getAllByMascotaId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
-      // }
 
       // Llamamos el método eliminar
       const mascotaEliminado = await this.objMascota.delete(id);

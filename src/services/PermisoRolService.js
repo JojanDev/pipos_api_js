@@ -71,7 +71,11 @@ class PermisoRolService {
 
       if (rolExistente.error) return rolExistente;
 
-      const permisoRolExistente = await this.objPermisoRol.getByPermisoRolExists(permisoRol.rol_id, permisoRol.permiso_id);
+      const permisoRolExistente =
+        await this.objPermisoRol.getByPermisoRolExists(
+          permisoRol.rol_id,
+          permisoRol.permiso_id
+        );
 
       if (permisoRolExistente && permisoRolExistente.length !== 0)
         return {

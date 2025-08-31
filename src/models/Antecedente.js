@@ -88,6 +88,22 @@ class Antecedente extends Modelo {
       );
     }
   }
+
+  /**
+   * Obtiene un tipo de documento específico por su ID
+   * @param {number} mascotaId - ID del tipo de documento
+   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getAllByMascotaId(mascotaId) {
+    try {
+      return await super.getByField(this.#tableName, "mascota_id", mascotaId);
+    } catch (error) {
+      throw new Error(
+        `Error al obtener los antecedentes de la mascota con ID ${mascotaId}: ${error.message}`
+      );
+    }
+  }
 }
 
 export default Antecedente;

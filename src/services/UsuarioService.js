@@ -88,13 +88,10 @@ class UsuarioService {
           message: "Error al crear el Usuario",
         };
 
-      const rolAsignado =
-        await RolUsuarioService.createRolUsuario(
-          {
-            usuario_id: usuarioCreado.id,
-            rol_id: 1
-          }
-        );
+      const rolAsignado = await RolUsuarioService.createRolUsuario({
+        usuario_id: usuarioCreado.id,
+        rol_id: 1,
+      });
 
       if (tipoDocumentoExistente.error) return tipoDocumentoExistente;
 
@@ -189,32 +186,38 @@ class UsuarioService {
 
   static async getUsuariosClientes() {
     try {
-
       // Llamamos el método listar
       const usuarios = await this.getAllUsuarios();
       // Validamos si no hay usuarios
       if (usuarios.error) return usuarios;
 
-      const usuariosCliente = (await Promise.all(
-        usuarios.data.map(async (usuario) => {
-          const rolesUsuario = await this.objRolUsuario.getAllByUsuarioId(usuario.id);
-          return rolesUsuario.some((rolUsuario) => rolUsuario.rol_id === 1) ? usuario : null;
-        })
-      )).filter(usuario => usuario);
-
+      const usuariosCliente = (
+        await Promise.all(
+          usuarios.data.map(async (usuario) => {
+            const rolesUsuario = await this.objRolUsuario.getAllByUsuarioId(
+              usuario.id
+            );
+            return rolesUsuario.some((rolUsuario) => rolUsuario.rol_id === 5)
+              ? usuario
+              : null;
+          })
+        )
+      ).filter((usuario) => usuario);
 
       // Retornamos los usuarios obtenidos
       return {
-        error: false, code: 200, message: `Usuarios clientes obtenidos correctamente`,
-        data: usuariosCliente.map(usuario => usuario
+        error: false,
+        code: 200,
+        message: `Usuarios clientes obtenidos correctamente`,
+        data: usuariosCliente.map(
+          (usuario) => usuario
           // ({
           //   id: usuario.id,
           //   documento: usuario.documento,
           //   nombre: usuario.nombres.split(" ")[0] + " " + usuario.apellidos.split(" ")[0]
           // })
-        )
+        ),
       };
-
     } catch (error) {
       // Retornamos un error en caso de excepción
       console.log(error);

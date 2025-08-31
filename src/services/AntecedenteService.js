@@ -168,6 +168,33 @@ class AntecedenteService {
       return { error: true, code: 500, message: error.message };
     }
   }
+
+  static async getAntecedentesByMascotaId(mascotaId) {
+    try {
+      // Llamamos el método consultar por ID
+      const antecedentesMascota = await this.objAntecedente.getAllByMascotaId(
+        mascotaId
+      );
+      // Validamos si no hay antecedente
+      if (!antecedentesMascota || antecedentesMascota.length === 0)
+        return {
+          error: true,
+          code: 404,
+          message: "La mascota no tiene antecedentes registrados",
+        };
+
+      // Retornamos la antecedente obtenida
+      return {
+        error: false,
+        code: 200,
+        message: "Antecedentes de mascota obtenidos correctamente",
+        data: antecedentesMascota,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
 }
 
 export default AntecedenteService;

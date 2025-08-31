@@ -13,9 +13,7 @@ class Raza extends Modelo {
     try {
       return await super.getAll(this.#tableName);
     } catch (error) {
-      throw new Error(
-        `Error al obtener todas las razas: ${error.message}`
-      );
+      throw new Error(`Error al obtener todas las razas: ${error.message}`);
     }
   }
 
@@ -85,6 +83,22 @@ class Raza extends Modelo {
     } catch (error) {
       throw new Error(
         `Error al eliminar la raza con ID ${id}: ${error.message}`
+      );
+    }
+  }
+
+  /**
+   * Obtiene un tipo de documento específico por su ID
+   * @param {number} id - ID del tipo de documento
+   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getAllByEspecieId(especie_id) {
+    try {
+      return await super.getByField(this.#tableName, "especie_id", especie_id);
+    } catch (error) {
+      throw new Error(
+        `Error al obtener la razas de la especie con ID ${especie_id}: ${error.message}`
       );
     }
   }

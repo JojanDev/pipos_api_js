@@ -1,4 +1,5 @@
 import Especie from "../models/Especie.js";
+import RazaService from "./RazaService.js";
 // import Usuario from "../models/Usuario.js";
 
 class EspecieService {
@@ -17,6 +18,14 @@ class EspecieService {
           code: 404,
           message: "No hay especies registradas",
         };
+
+      // const especiesRazas = await Promise.all(
+      //   especies.map(async (especie) => {
+      //     const razas = await RazaService.getAllRazasByEspecieId(especie.id);
+      //     especie["razas"] = razas.data;
+      //     return especie;
+      //   })
+      // );
 
       // Retornamos las tipos de documentos obtenidas
       return {
@@ -128,12 +137,6 @@ class EspecieService {
           code: 404,
           message: "Especie no encontrada",
         };
-
-      // const usuariosTipo = await this.objUsuario.getAllByEspeciesId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de documento porque tiene usuarios asociados" };
-      // }
 
       // Llamamos el método eliminar
       const especieEliminada = await this.objEspecie.delete(id);
