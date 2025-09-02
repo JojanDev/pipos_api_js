@@ -11,6 +11,11 @@ const router = express.Router();
 // Obtener todos los tipos de documentos
 router.get("/", TratamientoController.getAllTratamientos);
 
+router.get(
+  "/antecedente/:id",
+  TratamientoController.getAllTratamientosByAntecedenteId
+);
+
 // Obtener un tipo de documento por ID
 router.get("/:id", TratamientoController.getTratamientoById);
 

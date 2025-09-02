@@ -13,6 +13,8 @@ router.get("/", UsuarioController.getAllUsuarios);
 
 router.get("/clientes", UsuarioController.getUsuariosClientes);
 
+router.get("/veterinarios", UsuarioController.getUsuariosVeterinarios);
+
 // Obtener un tipo de documento por ID
 router.get("/:id", UsuarioController.getUsuarioById);
 

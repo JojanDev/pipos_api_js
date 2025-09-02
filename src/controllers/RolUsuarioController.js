@@ -50,9 +50,7 @@ class RolUsuarioControlUsuarioler {
     const rolUsuario = req.body;
     try {
       // Llamamos el método crear del modelo
-      const response = await RolUsuarioService.createRolUsuario(
-        rolUsuario
-      );
+      const response = await RolUsuarioService.createRolUsuario(rolUsuario);
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -77,10 +75,7 @@ class RolUsuarioControlUsuarioler {
     const rolUsuario = req.body;
     try {
       // Llamamos al método actualizar del modelo
-      const response = await RolUsuarioService.updateRolUsuario(
-        id,
-        rolUsuario
-      );
+      const response = await RolUsuarioService.updateRolUsuario(id, rolUsuario);
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -112,6 +107,30 @@ class RolUsuarioControlUsuarioler {
         return ResponseProvider.error(res, response.message, response.code);
       }
       // Retornamos el tipo de documento eliminado
+      return ResponseProvider.success(
+        res,
+        response.data,
+        response.message,
+        response.code
+      );
+    } catch (error) {
+      // Llamamos el provider para centralizar los mensajes de respuesta
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
+
+  static getAllRolesUsuarioByUsuarioId = async (req, res) => {
+    const { id } = req.params;
+    try {
+      // Llamamos al servicio para obtener el tipo de documento por su ID
+      const response = await RolUsuarioService.getAllRolesUsuarioByUsuarioId(
+        id
+      );
+      // Validamos si no hay tipo de documento
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
       return ResponseProvider.success(
         res,
         response.data,

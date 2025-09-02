@@ -179,6 +179,36 @@ class MedicamentoTratamientoService {
       return { error: true, code: 500, message: error.message };
     }
   }
+
+  static async getAllMedicamentosTratamientosByTratamientoId(tratamiento_id) {
+    try {
+      // Llamamos el método listar
+      const medicamentosTratamiento =
+        await this.objMedicamentoTratamiento.getAllByTratamientoId(
+          tratamiento_id
+        );
+
+      // Validamos si no hay tipos de productos
+      if (!medicamentosTratamiento || medicamentosTratamiento.length === 0)
+        return {
+          error: true,
+          code: 404,
+          message: "No hay medicamentos registrados para el tratamiento.",
+        };
+
+      // Retornamos las tipos de productos obtenidas
+      return {
+        error: false,
+        code: 200,
+        message: "Medicamentos del tratamiento obtenidos correctamente",
+        data: medicamentosTratamiento,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      console.log(error);
+      return { error: true, code: 500, message: error.message };
+    }
+  }
 }
 
 export default MedicamentoTratamientoService;

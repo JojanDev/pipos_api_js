@@ -50,9 +50,7 @@ class TratamientoController {
     const tratamiento = req.body;
     try {
       // Llamamos el método crear del modelo
-      const response = await TratamientoService.createTratamiento(
-        tratamiento
-      );
+      const response = await TratamientoService.createTratamiento(tratamiento);
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -120,6 +118,29 @@ class TratamientoController {
       );
     } catch (error) {
       // Llamamos el provider para centralizar los mensajes de respuesta
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
+
+  // Obtener todos los tipos de documentos
+  static getAllTratamientosByAntecedenteId = async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const response =
+        await TratamientoService.getAllTratamientosByAntecedenteId(id);
+      // Validamos si no hay tipos de documentos
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(
+        res,
+        response.data,
+        response.message,
+        response.code
+      );
+    } catch (error) {
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };

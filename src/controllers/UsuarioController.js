@@ -50,9 +50,7 @@ class UsuarioController {
     const usuario = req.body;
     try {
       // Llamamos el método crear del modelo
-      const response = await UsuarioService.createUsuario(
-        usuario
-      );
+      const response = await UsuarioService.createUsuario(usuario);
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -77,10 +75,7 @@ class UsuarioController {
     const usuario = req.body;
     try {
       // Llamamos al método actualizar del modelo
-      const response = await UsuarioService.updateUsuario(
-        id,
-        usuario
-      );
+      const response = await UsuarioService.updateUsuario(id, usuario);
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -127,16 +122,37 @@ class UsuarioController {
   // Obtener todos los usuarios administrativos
   static getUsuariosClientes = async (req, res) => {
     try {
-      console.log("SI");
-
       const response = await UsuarioService.getUsuariosClientes();
       // Validamos si no hay usuarios
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      return ResponseProvider.success(res, response.data, response.message, response.code);
+      return ResponseProvider.success(
+        res,
+        response.data,
+        response.message,
+        response.code
+      );
+    } catch (error) {
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
 
+  static getUsuariosVeterinarios = async (req, res) => {
+    try {
+      const response = await UsuarioService.getUsuariosVeterinarios();
+      // Validamos si no hay usuarios
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(
+        res,
+        response.data,
+        response.message,
+        response.code
+      );
     } catch (error) {
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }

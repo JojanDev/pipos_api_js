@@ -1,11 +1,13 @@
 // import Usuario from "../models/Usuario.js";
+import RolUsuario from "../models/RolUsuario.js";
 import Tratamiento from "../models/Tratamiento.js";
 import AntecedenteService from "./AntecedenteService.js";
+import RolUsuarioService from "./RolUsuarioService.js";
 import UsuarioService from "./UsuarioService.js";
 
 class TratamientoService {
   static objTratamiento = new Tratamiento();
-  // static objUsuario = new Usuario();
+  static objRolUsuario = new RolUsuario();
 
   static async getAllTratamientos() {
     try {
@@ -66,6 +68,25 @@ class TratamientoService {
       );
 
       if (usuarioExistente.error) return usuarioExistente;
+
+      const rolesUsuario =
+        await RolUsuarioService.getAllRolesUsuarioByUsuarioId(
+          tratamiento.usuario_id
+        );
+
+      if (rolesUsuario.error) return usuarioExistente;
+      console.log(rolesUsuario);
+
+      const isVeterinario = rolesUsuario.data.some(
+        (rolUsuario) => rolUsuario.rol_id == 2
+      );
+
+      if (!isVeterinario)
+        return {
+          error: true,
+          code: 400,
+          message: "El usuario asignado al tratamiento no es un veterinario",
+        };
 
       const antecedenteExistente = await AntecedenteService.getAntecedenteById(
         tratamiento.antecedente_id
@@ -147,12 +168,6 @@ class TratamientoService {
           message: "Tratamiento no encontrado",
         };
 
-      // const usuariosTipo = await this.objUsuario.getAllByTratamientoId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
-      // }
-
       // Llamamos el método eliminar
       const tratamientoEliminado = await this.objTratamiento.delete(id);
       // Validamos si no se pudo eliminar el tipo de producto
@@ -171,6 +186,34 @@ class TratamientoService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async getAllTratamientosByAntecedenteId(antecedente_id) {
+    try {
+      // Llamamos el método listar
+      const tratamientosAntecedente =
+        await this.objTratamiento.getAllByAntecedenteId(antecedente_id);
+
+      // Validamos si no hay tipos de productos
+      if (!tratamientosAntecedente || tratamientosAntecedente.length === 0)
+        return {
+          error: true,
+          code: 404,
+          message: "No hay tratamientos registrados para el antecedente.",
+        };
+
+      // Retornamos las tipos de productos obtenidas
+      return {
+        error: false,
+        code: 200,
+        message: "Tratamientos del Antecedente obtenidos correctamente",
+        data: tratamientosAntecedente,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      console.log(error);
       return { error: true, code: 500, message: error.message };
     }
   }

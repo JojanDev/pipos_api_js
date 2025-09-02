@@ -26,14 +26,19 @@ class MascotaService {
 
       const mascotasInfo = await Promise.all(
         mascotas.map(async (mascota) => {
-          const user = await this.objUsuario.getById(mascota.usuario_id);
+          const { nombre, telefono } = await this.objUsuario.getById(
+            mascota.usuario_id
+          );
           const raza = await this.objRaza.getById(mascota.raza_id);
           const especie = await this.objEspecie.getById(raza.especie_id);
-          mascota["cliente"] = user.nombre;
-          mascota["telefono"] = user.telefono;
-          mascota["raza"] = raza.nombre;
-          mascota["especie"] = especie.nombre;
-          return mascota;
+
+          return {
+            ...mascota,
+            cliente: nombre,
+            telefono,
+            raza: raza.nombre,
+            especie: especie.nombre,
+          };
         })
       );
 
@@ -101,12 +106,26 @@ class MascotaService {
           message: "Error al crear la mascota",
         };
 
+      const { nombre, telefono } = await this.objUsuario.getById(
+        mascotaCreado.usuario_id
+      );
+      const raza = await this.objRaza.getById(mascotaCreado.raza_id);
+      const especie = await this.objEspecie.getById(raza.especie_id);
+
+      const mascotaInfo = {
+        ...mascotaCreado,
+        cliente: nombre,
+        telefono,
+        raza: raza.nombre,
+        especie: especie.nombre,
+      };
+
       // Retornamos el tipo de producto creado
       return {
         error: false,
         code: 201,
         message: "Mascota creada correctamente",
-        data: mascotaCreado,
+        data: mascotaInfo,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -136,6 +155,9 @@ class MascotaService {
           code: 400,
           message: "Error al actualizar la mascota",
         };
+
+      const raza = await RazaService.getRazaById(mascota.raza_id);
+      mascotaActualizado["raza"] = raza.data;
 
       // Retornamos el tipo de producto actualizado
       return {
@@ -180,6 +202,41 @@ class MascotaService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async getAllMascotasByUsuarioId(usuario_id) {
+    try {
+      // Llamamos el método listar
+      const mascotas = await this.objMascota.getAllByUsuarioId(usuario_id);
+
+      // Validamos si no hay tipos de productos
+      if (!mascotas || mascotas.length === 0)
+        return {
+          error: true,
+          code: 404,
+          message: "No hay mascotas registradas para el cliente",
+        };
+
+      const mascotasInfo = await Promise.all(
+        mascotas.map(async (mascota) => {
+          const raza = await this.objRaza.getById(mascota.raza_id);
+          const especie = await this.objEspecie.getById(raza.especie_id);
+          return { ...mascota, raza: raza.nombre, especie: especie.nombre };
+        })
+      );
+
+      // Retornamos las tipos de productos obtenidas
+      return {
+        error: false,
+        code: 200,
+        message: "Mascotas del cliente obtenidas correctamente",
+        data: mascotasInfo,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      console.log(error);
       return { error: true, code: 500, message: error.message };
     }
   }

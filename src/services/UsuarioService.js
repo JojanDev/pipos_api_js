@@ -88,13 +88,6 @@ class UsuarioService {
           message: "Error al crear el Usuario",
         };
 
-      const rolAsignado = await RolUsuarioService.createRolUsuario({
-        usuario_id: usuarioCreado.id,
-        rol_id: 1,
-      });
-
-      if (tipoDocumentoExistente.error) return tipoDocumentoExistente;
-
       // Retornamos el tipo de producto creado
       return {
         error: false,
@@ -210,6 +203,47 @@ class UsuarioService {
         code: 200,
         message: `Usuarios clientes obtenidos correctamente`,
         data: usuariosCliente.map(
+          (usuario) => usuario
+          // ({
+          //   id: usuario.id,
+          //   documento: usuario.documento,
+          //   nombre: usuario.nombres.split(" ")[0] + " " + usuario.apellidos.split(" ")[0]
+          // })
+        ),
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      console.log(error);
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async getUsuariosVeterinarios() {
+    try {
+      // Llamamos el método listar
+      const usuarios = await this.getAllUsuarios();
+      // Validamos si no hay usuarios
+      if (usuarios.error) return usuarios;
+
+      const usuariosVeterinarios = (
+        await Promise.all(
+          usuarios.data.map(async (usuario) => {
+            const rolesUsuario = await this.objRolUsuario.getAllByUsuarioId(
+              usuario.id
+            );
+            return rolesUsuario.some((rolUsuario) => rolUsuario.rol_id === 2)
+              ? usuario
+              : null;
+          })
+        )
+      ).filter((usuario) => usuario);
+
+      // Retornamos los usuarios obtenidos
+      return {
+        error: false,
+        code: 200,
+        message: `Usuarios clientes obtenidos correctamente`,
+        data: usuariosVeterinarios.map(
           (usuario) => usuario
           // ({
           //   id: usuario.id,

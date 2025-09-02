@@ -50,9 +50,7 @@ class MascotaController {
     const mascota = req.body;
     try {
       // Llamamos el método crear del modelo
-      const response = await MascotaService.createMascota(
-        mascota
-      );
+      const response = await MascotaService.createMascota(mascota);
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -77,10 +75,7 @@ class MascotaController {
     const mascota = req.body;
     try {
       // Llamamos al método actualizar del modelo
-      const response = await MascotaService.updateMascota(
-        id,
-        mascota
-      );
+      const response = await MascotaService.updateMascota(id, mascota);
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -120,6 +115,27 @@ class MascotaController {
       );
     } catch (error) {
       // Llamamos el provider para centralizar los mensajes de respuesta
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
+
+  // Obtener todos los tipos de documentos
+  static getAllMascotasByUsuarioId = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const response = await MascotaService.getAllMascotasByUsuarioId(id);
+      // Validamos si no hay tipos de documentos
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(
+        res,
+        response.data,
+        response.message,
+        response.code
+      );
+    } catch (error) {
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };

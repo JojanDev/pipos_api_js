@@ -88,6 +88,25 @@ class Medicamento extends Modelo {
       );
     }
   }
+
+  /**
+   * Obtiene todos los tipos de documentos de la base de datos
+   * @returns {Promise<Array>} Lista de todos los tipos de documentos
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getByNumeroLote(numero_lote) {
+    try {
+      return await super.getByField(
+        this.#tableName,
+        "numero_lote",
+        numero_lote
+      );
+    } catch (error) {
+      throw new Error(
+        `Error al obtener todas los medicamentos: ${error.message}`
+      );
+    }
+  }
 }
 
 export default Medicamento;

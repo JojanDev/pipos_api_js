@@ -61,17 +61,21 @@ class RolUsuarioService {
 
   static async createRolUsuario(rolUsuario) {
     try {
-      const rolExistente = await RolService.getRolById(
-        rolUsuario.rol_id
-      );
+      const rolExistente = await RolService.getRolById(rolUsuario.rol_id);
 
       if (rolExistente.error) return rolExistente;
 
-      const usuarioExistente = await UsuarioService.getUsuarioById(rolUsuario.usuario_id);
+      const usuarioExistente = await UsuarioService.getUsuarioById(
+        rolUsuario.usuario_id
+      );
 
       if (usuarioExistente.error) return usuarioExistente;
 
-      const rolUsuarioExistente = await this.objRolUsuario.getByRolUsuarioExists(rolUsuario.usuario_id, rolUsuario.rol_id);
+      const rolUsuarioExistente =
+        await this.objRolUsuario.getByRolUsuarioExists(
+          rolUsuario.usuario_id,
+          rolUsuario.rol_id
+        );
 
       if (rolUsuarioExistente && rolUsuarioExistente.length !== 0)
         return {
@@ -81,9 +85,7 @@ class RolUsuarioService {
         };
 
       // Llamamos el método crear
-      const rolUsuarioCreado = await this.objRolUsuario.create(
-        rolUsuario
-      );
+      const rolUsuarioCreado = await this.objRolUsuario.create(rolUsuario);
       // Validamos si no se pudo crear el tipo de producto
       if (rolUsuarioCreado === null)
         return {
@@ -180,6 +182,35 @@ class RolUsuarioService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async getAllRolesUsuarioByUsuarioId(usuario_id) {
+    try {
+      // Llamamos el método listar
+      const rolesUsuario = await this.objRolUsuario.getAllByUsuarioId(
+        usuario_id
+      );
+
+      // Validamos si no hay tipos de productos
+      if (!rolesUsuario || rolesUsuario.length === 0)
+        return {
+          error: true,
+          code: 404,
+          message: "No hay roles registrados para el usuario",
+        };
+
+      // Retornamos las tipos de productos obtenidas
+      return {
+        error: false,
+        code: 200,
+        message: "Roles de usuario obtenidos correctamente",
+        data: rolesUsuario,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      console.log(error);
       return { error: true, code: 500, message: error.message };
     }
   }

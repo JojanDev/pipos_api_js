@@ -67,6 +67,16 @@ class MedicamentoService {
 
       if (infoMedicamentoExistente.error) return infoMedicamentoExistente;
 
+      const loteExistente = await this.objMedicamento.create(medicamento);
+      // Validamos si no se pudo crear el tipo de producto
+      if (loteExistente || loteExistente.length !== 0)
+        return {
+          error: true,
+          code: 400,
+          message:
+            "Este lote ya está registrado para el medicamento seleccionado",
+        };
+
       // Llamamos el método crear
       const medicamentoCreado = await this.objMedicamento.create(medicamento);
       // Validamos si no se pudo crear el tipo de producto
