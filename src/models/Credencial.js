@@ -120,6 +120,22 @@ class Credencial extends Modelo {
       );
     }
   }
+
+  /**
+   * Obtiene un tipo de documento específico por su ID
+   * @param {number} id - ID del tipo de documento
+   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getByUsuarioId(usuario_id) {
+    try {
+      return await super.getByField(this.#tableName, "usuario_id", usuario_id);
+    } catch (error) {
+      throw new Error(
+        `Error al obtener la credencial del usuario con ID ${usuario_id}: ${error.message}`
+      );
+    }
+  }
 }
 
 export default Credencial;

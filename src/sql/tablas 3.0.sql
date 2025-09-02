@@ -166,15 +166,11 @@
 		fecha_creado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 		total DECIMAL NOT NULL,	
 		monto DECIMAL NOT NULL,	
-		estado ENUM('completada', 'pendiente')
-	);
-    
-	CREATE TABLE usuarios_ventas (
-		id INT AUTO_INCREMENT PRIMARY KEY,
-		venta_id INT NOT NULL,
-		usuario_id INT NOT NULL,
-		FOREIGN KEY (venta_id) REFERENCES ventas(id),
-		FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+        vendedor_id INT NOT NULL,
+        comprador_id INT NOT NULL,
+        estado ENUM('completada', 'pendiente'),
+		FOREIGN KEY (vendedor_id) REFERENCES usuarios(id),
+        FOREIGN KEY (comprador_id) REFERENCES usuarios(id)
 	);
     
 	CREATE TABLE medicamentos_ventas (

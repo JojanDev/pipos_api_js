@@ -12,6 +12,9 @@ const router = express.Router();
 router.get("/", CredencialController.getAllCredenciales);
 
 // Obtener un tipo de documento por ID
+router.get("/usuario/:id", CredencialController.getCredencialById);
+
+// Obtener un tipo de documento por ID
 router.get("/:id", CredencialController.getCredencialById);
 
 // Crear un nuevo tipo de documento

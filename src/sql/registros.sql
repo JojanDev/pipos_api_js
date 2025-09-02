@@ -46,7 +46,7 @@ INSERT INTO usuarios (tipo_documento_id, numero_documento, nombre, telefono, cor
   (3, '800900800', 'Pedro Martínez', '3107008003', 'pmartinez@mail.com', 'Av. Colombia #100-40'),
   (4, 'P9876543', 'Luisa Rodríguez', '3149001004', 'lrodriguez@mail.com', 'Diagonal 25 #75-60'),
   (5, 'RC102030', 'Ana Gómez', '3153002005', 'agomez@mail.com', 'Transversal 8 #33-22');
-
+INSERT INTO usuarios (tipo_documento_id, numero_documento, nombre, telefono, correo, direccion) VALUES (5, 'RC1020310', 'Johan Sebastian', '3153002005', 'agomez@mail.com', 'Transversal 8 #33-22');
 INSERT INTO roles_usuarios (rol_id, usuario_id) VALUES
   (1, 1),
   (2, 2),
@@ -60,6 +60,7 @@ INSERT INTO credenciales (usuario_id, usuario, contrasena) VALUES
   (3, 'pmartinez', 'abc789'),
   (4, 'lrodriguez', 'vetpass1'),
   (5, 'agomez', 'cliente2025');
+  INSERT INTO credenciales (usuario_id, usuario, contrasena) VALUES (6, 'johan', 'Wasm_123');
 
 INSERT INTO permisos_roles (permiso_id, rol_id) VALUES
   (1, 1),
@@ -124,19 +125,13 @@ INSERT INTO medicamentos_tratamientos (tratamiento_id, info_medicamento_id, dosi
   (4, 3, '50 mg', 'Cada 8 horas', 10),
   (5, 2, '5 ml', 'Cada 12 horas', 3);
 
-INSERT INTO ventas (total, monto, estado) VALUES
-  (95.00, 95.00, 'completada'),
-  (150.00, 150.00, 'pendiente'),
-  (200.00, 200.00, 'completada'),
-  (60.00, 60.00, 'completada'),
-  (300.00, 300.00, 'pendiente');
+INSERT INTO ventas (total, monto, estado, vendedor_id, comprador_id) VALUES
+  (95.00, 95.00, 'completada',1,2),
+  (150.00, 150.00, 'pendiente',2,3),
+  (200.00, 200.00, 'completada',3,4),
+  (60.00, 60.00, 'completada',4,5),
+  (300.00, 300.00, 'pendiente',1,3);
 
-INSERT INTO usuarios_ventas (venta_id, usuario_id) VALUES
-  (1, 1),
-  (2, 2),
-  (3, 3),
-  (4, 4),
-  (5, 5);
 
 INSERT INTO medicamentos_ventas (venta_id, medicamento_id, precio, valor_adicional, cantidad, subtotal) VALUES
   (1, 1, 45.00, 0.00, 1, 45.00),
