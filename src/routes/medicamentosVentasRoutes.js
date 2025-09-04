@@ -12,6 +12,12 @@ const router = express.Router();
 router.get("/", MedicamentoVentaController.getAllMedicamentosVentas);
 
 // Obtener un tipo de documento por ID
+router.get(
+  "/venta/:id",
+  MedicamentoVentaController.getAllMedicamentosVentasByVentaId
+);
+
+// Obtener un tipo de documento por ID
 router.get("/:id", MedicamentoVentaController.getMedicamentoVentaById);
 
 // Crear un nuevo tipo de documento

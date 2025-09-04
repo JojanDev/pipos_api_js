@@ -125,6 +125,28 @@ class MedicamentoVentaController {
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
+
+  // Obtener todos los tipos de documentos
+  static getAllMedicamentosVentasByVentaId = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const response =
+        await MedicamentoVentaService.getAllMedicamentosVentasByVentaId(id);
+      // Validamos si no hay tipos de documentos
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(
+        res,
+        response.data,
+        response.message,
+        response.code
+      );
+    } catch (error) {
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
 }
 
 export default MedicamentoVentaController;

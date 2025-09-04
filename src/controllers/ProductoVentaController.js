@@ -123,6 +123,31 @@ class ProductoVentaController {
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
+
+  // Obtener un tipo de documento por su ID
+  static getAllProductoVentaByVentaId = async (req, res) => {
+    const { id } = req.params;
+    try {
+      // Llamamos al productoVenta para obtener el tipo de documento por su ID
+      const response = await ProductoVentaService.getAllProductoVentaByVentaId(
+        id
+      );
+      // Validamos si no hay tipo de documento
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(
+        res,
+        response.data,
+        response.message,
+        response.code
+      );
+    } catch (error) {
+      // Llamamos el provider para centralizar los mensajes de respuesta
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
 }
 
 export default ProductoVentaController;

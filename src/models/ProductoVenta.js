@@ -88,6 +88,22 @@ class ProductoVenta extends Modelo {
       );
     }
   }
+
+  /**
+   * Obtiene un tipo de documento específico por su ID
+   * @param {number} id - ID del tipo de documento
+   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getAllByVentaId(venta_id) {
+    try {
+      return await super.getByField(this.#tableName, "venta_id", venta_id);
+    } catch (error) {
+      throw new Error(
+        `Error al obtener los productos vendidos de la Venta con ID ${venta_id}: ${error.message}`
+      );
+    }
+  }
 }
 
 export default ProductoVenta;

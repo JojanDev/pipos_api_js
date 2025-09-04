@@ -170,6 +170,33 @@ class ProductoVentaService {
       return { error: true, code: 500, message: error.message };
     }
   }
+
+  static async getAllProductoVentaByVentaId(venta_id) {
+    try {
+      // Llamamos el método consultar por ID
+      const productosVenta = await this.objProductoVenta.getAllByVentaId(
+        venta_id
+      );
+      // Validamos si no hay productoVenta
+      if (!productosVenta)
+        return {
+          error: true,
+          code: 404,
+          message: "La venta no tiene productos registrados",
+        };
+
+      // Retornamos la productoVenta obtenida
+      return {
+        error: false,
+        code: 200,
+        message: "Ventas del producto obtenida correctamente",
+        data: productosVenta,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
 }
 
 export default ProductoVentaService;

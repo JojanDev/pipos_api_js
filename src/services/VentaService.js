@@ -1,4 +1,5 @@
 import Venta from "../models/Venta.js";
+import UsuarioService from "./UsuarioService.js";
 // import Usuario from "../models/Usuario.js";
 
 class VentaService {
@@ -58,8 +59,22 @@ class VentaService {
 
   static async createVenta(venta) {
     try {
+      const vendedorExistente = await UsuarioService.getUsuarioById(
+        venta.vendedor_id
+      );
+
+      if (vendedorExistente.error) return vendedorExistente;
+
+      const compradorExistente = await UsuarioService.getUsuarioById(
+        venta.comprador_id
+      );
+
+      if (compradorExistente.error) return compradorExistente;
+
+      const estado = venta.total == venta.monto ? "completada" : "pendiente";
+
       // Llamamos el método crear
-      const ventaCreada = await this.objVenta.create(venta);
+      const ventaCreada = await this.objVenta.create({ ...venta, estado });
       // Validamos si no se pudo crear el tipo de documento
       if (ventaCreada === null)
         return {

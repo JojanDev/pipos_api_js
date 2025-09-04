@@ -171,6 +171,35 @@ class MedicamentoVentaService {
       return { error: true, code: 500, message: error.message };
     }
   }
+
+  static async getAllMedicamentosVentasByVentaId(venta_id) {
+    try {
+      // Llamamos el método listar
+      const medicamentosVenta = await this.objMedicamentoVenta.getAllByVentaId(
+        venta_id
+      );
+
+      // Validamos si no hay tipos de productos
+      if (!medicamentosVenta || medicamentosVenta.length === 0)
+        return {
+          error: true,
+          code: 404,
+          message: "No hay medicamentos vendidos en la venta",
+        };
+
+      // Retornamos las tipos de productos obtenidas
+      return {
+        error: false,
+        code: 200,
+        message: "Ventas de medicamentos obtenidas correctamente",
+        data: medicamentosVenta,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      console.log(error);
+      return { error: true, code: 500, message: error.message };
+    }
+  }
 }
 
 export default MedicamentoVentaService;

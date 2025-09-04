@@ -90,6 +90,21 @@ class MedicamentoVenta extends Modelo {
       );
     }
   }
+
+  /**
+   * Obtiene todos los tipos de documentos de la base de datos
+   * @returns {Promise<Array>} Lista de todos los tipos de documentos
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getAllByVentaId(venta_id) {
+    try {
+      return await super.getByField(this.#tableName, "venta_id", venta_id);
+    } catch (error) {
+      throw new Error(
+        `Error al obtener todas las ventas de medicamentos con ID de venta ${venta_id}: ${error.message}`
+      );
+    }
+  }
 }
 
 export default MedicamentoVenta;

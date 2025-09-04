@@ -88,6 +88,22 @@ class ServicioVenta extends Modelo {
       );
     }
   }
+
+  /**
+   * Obtiene un tipo de documento específico por su ID
+   * @param {number} id - ID del tipo de documento
+   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getByVentaId(venta_id) {
+    try {
+      return await super.getByField(this.#tableName, "venta_id", venta_id);
+    } catch (error) {
+      throw new Error(
+        `Error al obtener los servicios vendidos en la venta con ID ${id}: ${error.message}`
+      );
+    }
+  }
 }
 
 export default ServicioVenta;

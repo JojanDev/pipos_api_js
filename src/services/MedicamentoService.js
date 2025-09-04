@@ -19,12 +19,22 @@ class MedicamentoService {
           message: "No hay medicamentos registrados",
         };
 
+      const infoMedicamentos = await Promise.all(
+        medicamentos.map(async (medicamento) => {
+          const { data: infoMedicamento } =
+            await InfoMedicamentoService.getInfoMedicamentoById(
+              medicamento.info_medicamento_id
+            );
+          return { ...medicamento, nombre: infoMedicamento.nombre };
+        })
+      );
+
       // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
         message: "Medicamentos obtenidos correctamente",
-        data: medicamentos,
+        data: infoMedicamentos,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción

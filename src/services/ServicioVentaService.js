@@ -62,7 +62,7 @@ class ServicioVentaService {
   static async createServicioVenta(servicioVenta) {
     try {
       const ventaExistente = await VentaService.getVentaById(
-        productoVenta.venta_id
+        servicioVenta.venta_id
       );
 
       if (ventaExistente.error) return ventaExistente;
@@ -164,6 +164,31 @@ class ServicioVentaService {
         error: false,
         code: 200,
         message: "Venta del servicio eliminada correctamente",
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async getAllServicioVentaByVentaId(venta_id) {
+    try {
+      // Llamamos el método consultar por ID
+      const serviciosVenta = await this.objServicioVenta.getByVentaId(venta_id);
+      // Validamos si no hay servicioVenta
+      if (!serviciosVenta || serviciosVenta.length === 0)
+        return {
+          error: true,
+          code: 404,
+          message: "No hay servicios registrados en la venta",
+        };
+
+      // Retornamos la servicioVenta obtenida
+      return {
+        error: false,
+        code: 200,
+        message: "Ventas de servicio obtenida correctamente",
+        data: serviciosVenta,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción

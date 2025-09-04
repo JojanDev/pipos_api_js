@@ -19,12 +19,22 @@ class ProductoService {
           message: "No hay productos registrados",
         };
 
+      const infoProductos = await Promise.all(
+        productos.map(async (producto) => {
+          const { data: tipoProducto } =
+            await TipoProductoService.getTipoProductoById(
+              producto.tipo_producto_id
+            );
+          return { ...producto, tipo_producto: tipoProducto.nombre };
+        })
+      );
+
       // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
         message: "Productos obtenidos correctamente",
-        data: productos,
+        data: infoProductos,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
