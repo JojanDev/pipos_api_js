@@ -44,7 +44,14 @@ class PermisoRol extends Modelo {
   async getByPermisoRolExists(rol_id, permiso_id) {
     try {
       // Obtenemos el resultado de la consulta y Retornamos la respuesta al servicio
-      return (await connection.query(`SELECT * FROM ${this.#tableName} WHERE rol_id = ? AND permiso_id = ?`, [rol_id, permiso_id]))[0];
+      return (
+        await connection.query(
+          `SELECT * FROM ${
+            this.#tableName
+          } WHERE rol_id = ? AND permiso_id = ?`,
+          [rol_id, permiso_id]
+        )
+      )[0];
     } catch (error) {
       throw new Error(
         `Error al obtener el permiso de rol con ID de rol ${rol_id} y  ID de permiso ${permiso_id}: ${error}`
@@ -102,6 +109,21 @@ class PermisoRol extends Modelo {
     } catch (error) {
       throw new Error(
         `Error al eliminar el permiso de rol con ID ${id}: ${error.message}`
+      );
+    }
+  }
+
+  /**
+   * Obtiene todos los tipos de documentos de la base de datos
+   * @returns {Promise<Array>} Lista de todos los tipos de documentos
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getAllByRolId(rol_id) {
+    try {
+      return await super.getByField(this.#tableName, "rol_id", rol_id);
+    } catch (error) {
+      throw new Error(
+        `Error al obtener todos los permisos de roles: ${error.message}`
       );
     }
   }

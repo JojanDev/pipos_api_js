@@ -69,14 +69,24 @@ class CredencialService {
 
       if (usuarioExistente.error) return usuarioExistente;
 
-      if (await this.objCredencial.getByUsuarioId(credencial.usuario_id))
+      const credencialUsuario = await this.objCredencial.getByUsuarioId(
+        credencial.usuario_id
+      );
+
+      // Validamos si no hay tipos de documentos
+      if (!credencialUsuario || credencialUsuario.length !== 0)
         return {
           error: true,
           code: 409,
           message: "El usuario ya tiene credenciales registradas.",
         };
 
-      if (await this.objCredencial.getByUsuario(credencial.usuario))
+      const nombreUsuarioExistente = await this.objCredencial.getByUsuario(
+        credencial.usuario
+      );
+
+      // Validamos si no hay tipos de documentos
+      if (nombreUsuarioExistente)
         return {
           error: true,
           code: 409,
@@ -84,7 +94,10 @@ class CredencialService {
         };
 
       if (credencial.contrasena) {
-        credencial.contrasena = await bcrypt.hash(credencial.contrasena, saltRounds);
+        credencial.contrasena = await bcrypt.hash(
+          credencial.contrasena,
+          saltRounds
+        );
       }
 
       // Llamamos el método crear

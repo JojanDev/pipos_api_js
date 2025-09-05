@@ -147,15 +147,15 @@ class AuthController {
       // Llama al servicio para validar credenciales y generar tokens
       const response = await AuthService.login(datosLogin);
 
+      console.log("response:", response);
+
       // Si hubo error en el servicio, responde con error
       if (response.error) {
         return ResponseProvider.error(res, response.message, response.code);
       }
 
       // Extrae los tokens y datos del usuario para la cookie
-      const { token, refreshToken,
-        // usuarioCookie
-      } = response.data;
+      const { token, refreshToken, usuarioCookie } = response.data;
 
       // Guarda el access token en cookie httpOnly
       res.cookie("token", token, {
@@ -171,24 +171,26 @@ class AuthController {
         sameSite: "Lax",
       });
 
-      // const { permisos, roles, ...usuario } = usuarioCookie;
+      const { permisos, roles, ...usuario } = usuarioCookie;
+
+      console.log("usuarioCookie:", usuarioCookie);
 
       // Guarda los datos del usuario en cookie pública (para el frontend)
-      // res.cookie("usuario", JSON.stringify(usuario), {
-      //   httpOnly: false,
-      //   secure: false,
-      //   sameSite: "Lax",
-      // });
-      // res.cookie("permisos", JSON.stringify(permisos), {
-      //   httpOnly: false,
-      //   secure: false,
-      //   sameSite: "Lax",
-      // });
-      // res.cookie("roles", JSON.stringify(roles), {
-      //   httpOnly: false,
-      //   secure: false,
-      //   sameSite: "Lax",
-      // });
+      res.cookie("usuario", JSON.stringify(usuario), {
+        httpOnly: false,
+        secure: false,
+        sameSite: "Lax",
+      });
+      res.cookie("permisos", JSON.stringify(permisos), {
+        httpOnly: false,
+        secure: false,
+        sameSite: "Lax",
+      });
+      res.cookie("roles", JSON.stringify(roles), {
+        httpOnly: false,
+        secure: false,
+        sameSite: "Lax",
+      });
 
       // Respuesta exitosa sin datos, ya que todo se guarda en cookies
       return ResponseProvider.success(

@@ -43,7 +43,9 @@ class Credencial extends Modelo {
    */
   async getByUsuarioId(usuarioId) {
     try {
-      return (await super.getByField(this.#tableName, "usuario_id", usuarioId))[0];
+      return (
+        await super.getByField(this.#tableName, "usuario_id", usuarioId)
+      )[0];
     } catch (error) {
       throw new Error(
         `Error al obtener la credencial del usuario con ID ${usuarioId}: ${error.message}`

@@ -22,7 +22,12 @@ export const validateFields = (campos) => {
       const value = body[name]; // Obtiene el valor del campo del cuerpo de la solicitud
 
       // Valida si el campo es obligatorio y está vacío
-      if (required && (!value || value.toString().trim() === "")) {
+      if (
+        required &&
+        (value === undefined ||
+          value === null ||
+          value.toString().trim() === "")
+      ) {
         errors.push({
           campo: name,
           message: `El campo '${name}' es obligatorio.`,

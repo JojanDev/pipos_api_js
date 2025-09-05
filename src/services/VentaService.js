@@ -109,8 +109,19 @@ class VentaService {
         };
       }
 
+      const estado =
+        existente.total == Number(existente.monto) + Number(venta.monto)
+          ? "completada"
+          : "pendiente";
+
+      console.log(existente.total);
+      console.log(Number(existente.monto) + Number(venta.monto));
+
       // Llamamos el método actualizar
-      const ventaActualizada = await this.objVenta.update(id, venta);
+      const ventaActualizada = await this.objVenta.update(id, {
+        ...venta,
+        estado,
+      });
       // Validamos si no se pudo actualizar el tipo de documento
       if (ventaActualizada === null)
         return {

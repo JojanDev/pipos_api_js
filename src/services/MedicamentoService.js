@@ -77,7 +77,9 @@ class MedicamentoService {
 
       if (infoMedicamentoExistente.error) return infoMedicamentoExistente;
 
-      const loteExistente = await this.objMedicamento.create(medicamento);
+      const loteExistente = await this.objMedicamento.getByNumeroLote(
+        medicamento.numero_lote
+      );
       // Validamos si no se pudo crear el tipo de producto
       if (loteExistente || loteExistente.length !== 0)
         return {

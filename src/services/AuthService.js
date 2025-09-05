@@ -118,7 +118,9 @@ class AuthService {
     try {
       const objCredencial = new Credencial();
 
-      const usuarioExistente = await objCredencial.getByUsuario(datosLogin.usuario);
+      const usuarioExistente = await objCredencial.getByUsuario(
+        datosLogin.usuario
+      );
       console.log(usuarioExistente);
 
       if (!usuarioExistente)
@@ -142,15 +144,16 @@ class AuthService {
         };
       }
 
-
-      console.log(usuarioExistente);
-
       // Configura los datos del usuario para el token y frontend
-      // const usuarioCookie = await this.configurarUsuario(existente);
+      const usuarioCookie = await this.configurarUsuario(usuarioExistente);
+
+      console.log("usuarioCookie:", usuarioCookie);
 
       // Genera tokens de autenticación
       const token = await this.#genToken(usuarioExistente.id);
+      console.log("token:", token);
       const refreshToken = await this.#genRefreshToken(usuarioExistente.id);
+      console.log("refreshToken:", refreshToken);
 
       // Retorna tokens y datos del usuario
       return {
@@ -160,7 +163,7 @@ class AuthService {
         data: {
           token,
           refreshToken,
-          // usuarioCookie,
+          usuarioCookie,
         },
       };
     } catch (error) {
@@ -189,11 +192,7 @@ class AuthService {
   static async configurarUsuario(usuario) {
     const usuarioToken = {};
 
-    // Construye nombre corto para mostrar en frontend
-    usuarioToken.nombre_corto = `${usuario.nombres.split(" ")[0]} ${usuario.apellidos.split(" ")[0]
-      }`;
-    usuarioToken.nombres = usuario.nombres;
-    usuarioToken.apellidos = usuario.apellidos;
+    usuarioToken.usuario = usuario;
 
     // Instancia modelos para obtener roles y permisos
     const rolUsuario = new RolUsuario();
