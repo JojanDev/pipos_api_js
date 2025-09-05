@@ -12,13 +12,6 @@ INSERT INTO roles (nombre, descripcion) VALUES
   ('auxiliar', 'Soporte en procedimientos'),
   ('cliente', 'Visualización de datos propios');
 
-INSERT INTO permisos (nombre) VALUES
-  ('crear_usuarios'),
-  ('editar_usuarios'),
-  ('eliminar_usuarios'),
-  ('ver_reportes'),
-  ('gestionar_inventario');
-
 INSERT INTO especies (nombre) VALUES
   ('Perro'),
   ('Gato'),
@@ -58,16 +51,15 @@ INSERT INTO credenciales (usuario_id, usuario, contrasena) VALUES
   (1, 'jlopez', 'pass123'),
   (2, 'mgarcia', 'secret456'),
   (3, 'pmartinez', 'abc789'),
-  (4, 'lrodriguez', 'vetpass1'),
-  (5, 'agomez', 'cliente2025');
-  INSERT INTO credenciales (usuario_id, usuario, contrasena) VALUES (6, 'johan', 'Wasm_123');
+  (4, 'lrodriguez', 'vetpass1');
+  -- INSERT INTO credenciales (usuario_id, usuario, contrasena) VALUES (5, 'johan', 'Wasm_123');
 
 INSERT INTO permisos_roles (permiso_id, rol_id) VALUES
   (1, 1),
   (2, 1),
   (3, 1),
   (4, 2),
-  (5, 3);
+  (4, 5);
 
 INSERT INTO razas (nombre, especie_id) VALUES
   ('Labrador', 1),

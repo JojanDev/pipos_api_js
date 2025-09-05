@@ -19,7 +19,8 @@
 
 	CREATE TABLE permisos (
 		id INT AUTO_INCREMENT PRIMARY KEY,
-		nombre VARCHAR(255) NOT NULL
+		nombre VARCHAR(255) NOT NULL,
+        descripcion varchar(100) NOT NULL
 	);
 
 	CREATE TABLE especies (
@@ -161,17 +162,18 @@
 		FOREIGN KEY (info_medicamento_id) REFERENCES info_medicamentos(id)
 	);
 
-	CREATE TABLE ventas (
-		id INT AUTO_INCREMENT PRIMARY KEY,
-		fecha_creado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-		total DECIMAL NOT NULL,	
-		monto DECIMAL NOT NULL,	
-        vendedor_id INT NOT NULL,
-        comprador_id INT NOT NULL,
-        estado ENUM('completada', 'pendiente'),
-		FOREIGN KEY (vendedor_id) REFERENCES usuarios(id),
-        FOREIGN KEY (comprador_id) REFERENCES usuarios(id)
-	);
+CREATE TABLE ventas (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	fecha_creado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	total DECIMAL(10,2) NOT NULL,	
+	monto DECIMAL(10,2) NOT NULL,	
+    vendedor_id INT NOT NULL,
+    comprador_id INT NOT NULL,
+    estado ENUM('completada', 'pendiente'),
+	FOREIGN KEY (vendedor_id) REFERENCES usuarios(id),
+    FOREIGN KEY (comprador_id) REFERENCES usuarios(id)
+);
+
     
 	CREATE TABLE medicamentos_ventas (
 		id INT AUTO_INCREMENT PRIMARY KEY,
@@ -184,6 +186,7 @@
 		FOREIGN KEY (medicamento_id) REFERENCES medicamentos(id),
 		FOREIGN KEY (venta_id) REFERENCES ventas(id)
 	);
+    
     
     CREATE TABLE servicios_ventas (
 		id INT AUTO_INCREMENT PRIMARY KEY,
