@@ -18,12 +18,14 @@ class RolService {
           message: "No hay roles registrados",
         };
 
+
+
       // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
         message: "Roles obtenidos correctamente",
-        data: roles,
+        data: roles.filter((rol) => rol.id !== 1),
       };
     } catch (error) {
       // Retornamos un error en caso de excepción

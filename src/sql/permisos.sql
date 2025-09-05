@@ -13,6 +13,7 @@ INSERT INTO permisos (nombre, descripcion) VALUES
 ('usuario.create-client', 'Permite crear clientes desde usuario'),
 ('usuario.create-personal', 'Permite crear personal desde usuario'),
 ('usuario.disable', 'Permite deshabilitar usuarios'),
+('usuario.change-state', 'Permite deshabilitar usuarios'),
 ('usuario.*', 'Permite realizar todas las acciones sobre usuarios'),
 
 ('credencial.read', 'Permite leer credenciales'),
@@ -142,4 +143,8 @@ INSERT INTO permisos (nombre, descripcion) VALUES
 ('tipo-producto.create', 'Permite crear tipos de producto'),
 ('tipo-producto.update', 'Permite actualizar tipos de producto'),
 ('tipo-producto.delete', 'Permite eliminar tipos de producto'),
-('tipo-producto.*', 'Permite todas las acciones sobre tipos de producto');
+('tipo-producto.*', 'Permite todas las acciones sobre tipos de producto'),
+
+('usuario.update-client', 'Permite crear clientes desde usuario'),
+('usuario.view-client', 'Permite crear clientes desde usuario'),
+('tipo-producto.read', 'Permite crear tipos de producto');

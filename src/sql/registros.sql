@@ -6,12 +6,10 @@ INSERT INTO tipos_documentos (nombre) VALUES
   ('Registro civil');
 
 INSERT INTO roles (nombre, descripcion) VALUES
-  ('administrador', 'Acceso total al sistema'),
-  ('veterinario', 'Gestión de pacientes y tratamientos'),
-  ('recepcionista', 'Atención al cliente y ventas'),
-  ('auxiliar', 'Soporte en procedimientos'),
-  ('cliente', 'Visualización de datos propios');
-
+  ('Administrador', 'Acceso total al sistema'),
+  ('Veterinario', 'Gestión parcial del sistema'),
+  ('Cliente', 'Este rol no accede directamente al sistema, pero es referenciado o gestionado.');
+select * from roles;
 INSERT INTO especies (nombre) VALUES
   ('Perro'),
   ('Gato'),
@@ -22,7 +20,6 @@ INSERT INTO especies (nombre) VALUES
 INSERT INTO tipos_productos (nombre) VALUES
   ('Alimento'),
   ('Accesorio'),
-  ('Medicamento'),
   ('Higiene'),
   ('Juguete');
 
@@ -34,33 +31,28 @@ INSERT INTO info_medicamentos (nombre, uso_general, via_administracion, presenta
   ('Doxiciclina', 'Antibiótico tetraciclina', 'Oral', 'Cápsulas 100 mg', 'No tomar con lácteos');
 
 INSERT INTO usuarios (tipo_documento_id, numero_documento, nombre, telefono, correo, direccion) VALUES
-  (1, '100200300', 'Juan López', '3121002001', 'jlopez@mail.com', 'Calle 10 #20-30'),
+  (1, '100200300', 'Johan Sebastian Delgado Mantilla', '3121002001', 'jlopez@mail.com', 'Calle 10 #20-30'),
   (2, 'E12345678', 'María García', '3165004002', 'mgarcia@mail.com', 'Carrera 5 #50-15'),
   (3, '800900800', 'Pedro Martínez', '3107008003', 'pmartinez@mail.com', 'Av. Colombia #100-40'),
   (4, 'P9876543', 'Luisa Rodríguez', '3149001004', 'lrodriguez@mail.com', 'Diagonal 25 #75-60'),
   (5, 'RC102030', 'Ana Gómez', '3153002005', 'agomez@mail.com', 'Transversal 8 #33-22');
-INSERT INTO usuarios (tipo_documento_id, numero_documento, nombre, telefono, correo, direccion) VALUES (5, 'RC1020310', 'Johan Sebastian', '3153002005', 'agomez@mail.com', 'Transversal 8 #33-22');
+
 INSERT INTO roles_usuarios (rol_id, usuario_id) VALUES
   (1, 1),
   (2, 2),
-  (3, 3),
-  (4, 4),
-  (5, 5);
+  (2, 3),
+  (3, 4),
+  (3, 5);
 
 INSERT INTO credenciales (usuario_id, usuario, contrasena) VALUES
-  (1, 'jlopez', 'pass123'),
-  (2, 'mgarcia', 'secret456'),
-  (3, 'pmartinez', 'abc789'),
-  (4, 'lrodriguez', 'vetpass1');
-  -- INSERT INTO credenciales (usuario_id, usuario, contrasena) VALUES (5, 'johan', 'Wasm_123');
+  (1, 'johan', '$2b$10$Byf1iv5eLpzZ5qA79r2U2.TP6YmqqxhwPr5RlW0CdTKNheKny06yW'),
+  (2, 'maria', '$2b$10$Byf1iv5eLpzZ5qA79r2U2.TP6YmqqxhwPr5RlW0CdTKNheKny06yW'),
+  (3, 'martinez', '$2b$10$Byf1iv5eLpzZ5qA79r2U2.TP6YmqqxhwPr5RlW0CdTKNheKny06yW');
 
 INSERT INTO permisos_roles (permiso_id, rol_id) VALUES
-  (1, 1),
-  (2, 1),
-  (3, 1),
-  (4, 2),
-  (4, 5);
-
+  (6, 1), (7, 1),(8, 1),(9, 1),(11, 1),(12, 1),(13, 1),(14, 1),(16,1),(17,1),(24,1), (29, 1), (34,1),(39,1),(45,1),(51,1),(56,1),(61,1), (66,1), (72,1),(78,1),(84,1),(90,1),(96,1),(102,1), (108,1),(114,1),(119,1), (124, 1),(125,1),(126,1),
+  (6, 2), (126,2), (11,2),(125,2),(40,2),(41,2),(42,2),(43,2),(46,2),(47,2),(48,2),(49,2), (52,2),(53,2), (57,2), (58,2), (62,2), (63,2), (67,2), (68,2), (73,2), (74,2), (75,2), (76,2), (79,2),(80,2),(81,2), (82,2), (85, 2), (86,2),(87,2),(88,2), (91,2), (92,2), (97,2),(98,2),(104,2), (110,2), (115,2), (127,2);
+select * from permisos;
 INSERT INTO razas (nombre, especie_id) VALUES
   ('Labrador', 1),
   ('Siamés', 2),
