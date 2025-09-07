@@ -121,7 +121,6 @@ class AuthService {
       const usuarioExistente = await objCredencial.getByUsuario(
         datosLogin.usuario
       );
-      console.log(usuarioExistente);
 
       if (!usuarioExistente)
         return {
@@ -144,16 +143,21 @@ class AuthService {
         };
       }
 
+      if (!usuarioExistente.activo)
+        return {
+          error: true,
+          code: 409,
+          message:
+            "Usuario desactivado, contacta a un administrador para ser activado.",
+        };
+
       // Configura los datos del usuario para el token y frontend
       const usuarioCookie = await this.configurarUsuario(usuarioExistente);
 
-      console.log("usuarioCookie:", usuarioCookie);
-
       // Genera tokens de autenticación
       const token = await this.#genToken(usuarioExistente.id);
-      console.log("token:", token);
+
       const refreshToken = await this.#genRefreshToken(usuarioExistente.id);
-      console.log("refreshToken:", refreshToken);
 
       // Retorna tokens y datos del usuario
       return {

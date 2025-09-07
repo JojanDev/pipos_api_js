@@ -68,6 +68,7 @@
 		usuario_id INT NOT NULL UNIQUE,
 		usuario VARCHAR(100) UNIQUE NOT NULL,
 		contrasena VARCHAR(255) NOT NULL,
+        activo BOOLEAN DEFAULT TRUE,
 		FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 	);
 

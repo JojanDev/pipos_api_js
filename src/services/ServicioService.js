@@ -1,4 +1,5 @@
 import Servicio from "../models/Servicio.js";
+import ServicioVentaService from "./ServicioVentaService.js";
 // import Usuario from "../models/Usuario.js";
 
 class ServicioService {
@@ -60,9 +61,7 @@ class ServicioService {
   static async createServicio(servicio) {
     try {
       // Llamamos el método crear
-      const servicioCreado = await this.objServicio.create(
-        servicio
-      );
+      const servicioCreado = await this.objServicio.create(servicio);
       // Validamos si no se pudo crear el tipo de producto
       if (servicioCreado === null)
         return {
@@ -98,10 +97,7 @@ class ServicioService {
       }
 
       // Llamamos el método actualizar
-      const servicioActualizado = await this.objServicio.update(
-        id,
-        servicio
-      );
+      const servicioActualizado = await this.objServicio.update(id, servicio);
       // Validamos si no se pudo actualizar el tipo de producto
       if (servicioActualizado === null)
         return {
@@ -125,21 +121,20 @@ class ServicioService {
 
   static async deleteServicio(id) {
     try {
-      // Llamamos el método consultar por ID
-      const servicio = await this.objServicio.getById(id);
+      const servicio = await this.getServicioById(id);
       // Validamos si el tipo de producto existe
-      if (!servicio)
+      if (servicio.error) return servicio;
+
+      const ventasAsociados =
+        await ServicioVentaService.getAllServicioVentaByServicioId(id);
+      // Validamos si el tipo de producto existe
+
+      if (!ventasAsociados.error)
         return {
           error: true,
-          code: 404,
-          message: "Servicio no encontrado",
+          code: 400,
+          message: "Error al eliminar el servicio, tiene ventas asociadas",
         };
-
-      // const usuariosTipo = await this.objUsuario.getAllByServicioId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
-      // }
 
       // Llamamos el método eliminar
       const servicioEliminado = await this.objServicio.delete(id);

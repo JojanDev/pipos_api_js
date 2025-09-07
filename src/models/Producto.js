@@ -86,6 +86,25 @@ class Producto extends Modelo {
       );
     }
   }
+
+  /**
+   * Obtiene todos los tipos de documentos de la base de datos
+   * @returns {Promise<Array>} Lista de todos los tipos de documentos
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getAllByTipoProductoId(tipo_producto_id) {
+    try {
+      return await super.getByField(
+        this.#tableName,
+        "tipo_producto_id",
+        tipo_producto_id
+      );
+    } catch (error) {
+      throw new Error(
+        `Error al obtener todos los tipos de productos: ${error.message}`
+      );
+    }
+  }
 }
 
 export default Producto;

@@ -1,4 +1,6 @@
 import InfoMedicamento from "../models/InfoMedicamento.js";
+import MedicamentoService from "./MedicamentoService.js";
+import MedicamentoTratamientoService from "./MedicamentoTratamientoService.js";
 // import Usuario from "../models/Usuario.js";
 
 class InfoMedicamentoService {
@@ -125,21 +127,36 @@ class InfoMedicamentoService {
 
   static async deleteInfoMedicamento(id) {
     try {
-      // Llamamos el método consultar por ID
-      const infoMedicamento = await this.objInfoMedicamento.getById(id);
+      const infoMedicamento = await this.getInfoMedicamentoById(id);
       // Validamos si el tipo de producto existe
-      if (!infoMedicamento)
+      if (infoMedicamento.error) return infoMedicamento;
+
+      const medicamentosAsociados =
+        await MedicamentoService.getAllMedicamentosByInfoMedicamentoId(id);
+      // Validamos si el tipo de producto existe
+      console.log(medicamentosAsociados);
+
+      if (!medicamentosAsociados.error)
         return {
           error: true,
-          code: 404,
-          message: "Informacion de medicamento no encontrado",
+          code: 400,
+          message:
+            "Error al eliminar la informacion, tiene medicamentos asociadas",
         };
 
-      // const usuariosTipo = await this.objUsuario.getAllByInfoMedicamentoId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
-      // }
+      const medicamentosTratamientosAsociados =
+        await MedicamentoTratamientoService.getAllMedicamentosTratamientosByInfoMedicamentoId(
+          id
+        );
+      // Validamos si el tipo de producto existe
+
+      if (!medicamentosTratamientosAsociados.error)
+        return {
+          error: true,
+          code: 400,
+          message:
+            "Error al eliminar la informacion, tiene tratamientos asociados",
+        };
 
       // Llamamos el método eliminar
       const infoMedicamentoEliminado = await this.objInfoMedicamento.delete(id);

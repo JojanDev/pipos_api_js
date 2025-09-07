@@ -195,6 +195,33 @@ class ServicioVentaService {
       return { error: true, code: 500, message: error.message };
     }
   }
+
+  static async getAllServicioVentaByServicioId(servicio_id) {
+    try {
+      // Llamamos el método consultar por ID
+      const serviciosVenta = await this.objServicioVenta.getByServicioId(
+        servicio_id
+      );
+      // Validamos si no hay servicioVenta
+      if (!serviciosVenta || serviciosVenta.length === 0)
+        return {
+          error: true,
+          code: 404,
+          message: "No hay registros en ventas del servicio",
+        };
+
+      // Retornamos la servicioVenta obtenida
+      return {
+        error: false,
+        code: 200,
+        message: "Ventas de servicio obtenida correctamente",
+        data: serviciosVenta,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
 }
 
 export default ServicioVentaService;

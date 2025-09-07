@@ -163,12 +163,6 @@ class MedicamentoService {
           message: "Medicamento no encontrado",
         };
 
-      // const usuariosTipo = await this.objUsuario.getAllByMedicamentoId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
-      // }
-
       // Llamamos el método eliminar
       const medicamentoEliminado = await this.objMedicamento.delete(id);
       // Validamos si no se pudo eliminar el tipo de producto
@@ -187,6 +181,45 @@ class MedicamentoService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async getAllMedicamentosByInfoMedicamentoId(info_medicamento_id) {
+    try {
+      // Llamamos el método listar
+      const medicamentos = await this.objMedicamento.getAllByInfoMedicamentoId(
+        info_medicamento_id
+      );
+
+      // Validamos si no hay tipos de productos
+      if (!medicamentos || medicamentos.length === 0)
+        return {
+          error: true,
+          code: 404,
+          message: "No hay medicamentos registrados con esa informacion",
+        };
+
+      const infoMedicamentos = await Promise.all(
+        medicamentos.map(async (medicamento) => {
+          const { data: infoMedicamento } =
+            await InfoMedicamentoService.getInfoMedicamentoById(
+              medicamento.info_medicamento_id
+            );
+          return { ...medicamento, nombre: infoMedicamento.nombre };
+        })
+      );
+
+      // Retornamos las tipos de productos obtenidas
+      return {
+        error: false,
+        code: 200,
+        message: "Medicamentos obtenidos correctamente",
+        data: infoMedicamentos,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      console.log(error);
       return { error: true, code: 500, message: error.message };
     }
   }

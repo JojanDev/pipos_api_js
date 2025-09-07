@@ -151,6 +151,32 @@ class MedicamentoTratamientoController {
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
+
+  static getAllMedicamentosTratamientosByInfoMedicamentoId = async (
+    req,
+    res
+  ) => {
+    const { id } = req.params;
+    try {
+      const response =
+        await MedicamentoTratamientoService.getAllMedicamentosTratamientosByInfoMedicamentoId(
+          id
+        );
+      // Validamos si no hay tipos de documentos
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(
+        res,
+        response.data,
+        response.message,
+        response.code
+      );
+    } catch (error) {
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
 }
 
 export default MedicamentoTratamientoController;

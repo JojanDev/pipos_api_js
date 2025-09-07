@@ -147,8 +147,6 @@ class AuthController {
       // Llama al servicio para validar credenciales y generar tokens
       const response = await AuthService.login(datosLogin);
 
-      console.log("response:", response);
-
       // Si hubo error en el servicio, responde con error
       if (response.error) {
         return ResponseProvider.error(res, response.message, response.code);
@@ -172,8 +170,6 @@ class AuthController {
       });
 
       const { permisos, roles, ...usuario } = usuarioCookie;
-
-      console.log("usuarioCookie:", usuarioCookie);
 
       // Guarda los datos del usuario en cookie pública (para el frontend)
       res.cookie("usuario", JSON.stringify(usuario), {

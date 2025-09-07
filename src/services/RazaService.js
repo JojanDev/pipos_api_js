@@ -1,6 +1,7 @@
 import Especie from "../models/Especie.js";
 import Raza from "../models/Raza.js";
 import EspecieService from "./EspecieService.js";
+import MascotaService from "./MascotaService.js";
 
 class RazaService {
   static objRaza = new Raza();
@@ -130,21 +131,18 @@ class RazaService {
 
   static async deleteRaza(id) {
     try {
-      // Llamamos el método consultar por ID
-      const raza = await this.objRaza.getById(id);
+      const razas = await this.getRazaById(id);
       // Validamos si el tipo de producto existe
-      if (!raza)
+      if (razas.error) return razas;
+
+      const mascotasAsociadas = await MascotaService.getAllMascotasByRazaId(id);
+      // Validamos si el tipo de producto existe
+      if (!mascotasAsociadas.error)
         return {
           error: true,
-          code: 404,
-          message: "Raza no encontrada",
+          code: 400,
+          message: "Error al eliminar la raza, tiene mascotas asociadas",
         };
-
-      // const usuariosTipo = await this.objUsuario.getAllByRazaId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
-      // }
 
       // Llamamos el método eliminar
       const razaEliminada = await this.objRaza.delete(id);
@@ -173,7 +171,7 @@ class RazaService {
       // Llamamos el método consultar por ID
       const raza = await this.objRaza.getAllByEspecieId(especie_id);
       // Validamos si no hay raza
-      if (!raza)
+      if (!raza || raza.length === 0)
         return {
           error: true,
           code: 404,

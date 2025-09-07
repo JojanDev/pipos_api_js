@@ -50,9 +50,7 @@ class MedicamentoController {
     const medicamento = req.body;
     try {
       // Llamamos el método crear del modelo
-      const response = await MedicamentoService.createMedicamento(
-        medicamento
-      );
+      const response = await MedicamentoService.createMedicamento(medicamento);
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -120,6 +118,27 @@ class MedicamentoController {
       );
     } catch (error) {
       // Llamamos el provider para centralizar los mensajes de respuesta
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
+
+  static getAllMedicamentosByInfoMedicamentoId = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const response =
+        await MedicamentoService.getAllMedicamentosByInfoMedicamentoId(id);
+      // Validamos si no hay tipos de documentos
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(
+        res,
+        response.data,
+        response.message,
+        response.code
+      );
+    } catch (error) {
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };

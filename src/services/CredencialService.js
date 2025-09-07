@@ -174,12 +174,6 @@ class CredencialService {
           message: "Credencial no encontrada",
         };
 
-      // const usuariosTipo = await this.objUsuario.getAllByCredencialId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
-      // }
-
       // Llamamos el método eliminar
       const credencialEliminado = await this.objCredencial.delete(id);
       // Validamos si no se pudo eliminar el tipo de producto

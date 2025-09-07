@@ -146,6 +146,16 @@ class MascotaService {
         };
       }
 
+      const usuarioExistente = await UsuarioService.getUsuarioById(
+        mascota.usuario_id
+      );
+
+      if (usuarioExistente.error) return usuarioExistente;
+
+      const razaExistente = await RazaService.getRazaById(mascota.raza_id);
+
+      if (razaExistente.error) return razaExistente;
+
       // Llamamos el método actualizar
       const mascotaActualizado = await this.objMascota.update(id, mascota);
       // Validamos si no se pudo actualizar el tipo de producto
@@ -155,9 +165,6 @@ class MascotaService {
           code: 400,
           message: "Error al actualizar la mascota",
         };
-
-      const raza = await RazaService.getRazaById(mascota.raza_id);
-      mascotaActualizado["raza"] = raza.data;
 
       // Retornamos el tipo de producto actualizado
       return {
@@ -232,6 +239,41 @@ class MascotaService {
         error: false,
         code: 200,
         message: "Mascotas del cliente obtenidas correctamente",
+        data: mascotasInfo,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      console.log(error);
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async getAllMascotasByRazaId(raza_id) {
+    try {
+      // Llamamos el método listar
+      const mascotas = await this.objMascota.getAllByRazaId(raza_id);
+
+      // Validamos si no hay tipos de productos
+      if (!mascotas || mascotas.length === 0)
+        return {
+          error: true,
+          code: 404,
+          message: "No hay mascotas registradas para la raza",
+        };
+
+      const mascotasInfo = await Promise.all(
+        mascotas.map(async (mascota) => {
+          const raza = await this.objRaza.getById(mascota.raza_id);
+          const especie = await this.objEspecie.getById(raza.especie_id);
+          return { ...mascota, raza: raza.nombre, especie: especie.nombre };
+        })
+      );
+
+      // Retornamos las tipos de productos obtenidas
+      return {
+        error: false,
+        code: 200,
+        message: "Mascotas de raza obtenidas correctamente",
         data: mascotasInfo,
       };
     } catch (error) {

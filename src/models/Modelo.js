@@ -2,15 +2,14 @@ import connection from "../utils/db.js";
 
 /**
  * Clase Modelo para interactuar con la base de datos.
- * 
+ *
  * Esta clase proporciona métodos para realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar)
- * en una tabla específica de la base de datos. 
+ * en una tabla específica de la base de datos.
  */
 class Modelo {
-
   /**
    * Método para obtener todos los registros de una tabla.
-   * 
+   *
    * @param {string} tabla - Nombre de la tabla de la que se obtendrán los registros.
    * @returns {Promise<Array>} - Promesa que resuelve con un array de registros.
    * @throws {Error} - Lanza un error si la operación falla.
@@ -18,7 +17,9 @@ class Modelo {
   async getAll(tabla) {
     try {
       // Obtenemos el resultado de la consulta
-      const [rows] = await connection.query(`SELECT * FROM ${tabla} ORDER BY id DESC;`);
+      const [rows] = await connection.query(
+        `SELECT * FROM ${tabla} ORDER BY id DESC;`
+      );
       // Retornamos la respuesta al servicio
       return rows;
     } catch (error) {
@@ -29,16 +30,19 @@ class Modelo {
 
   /**
    * Método para obtener un registro de una tabla por su identificador.
-   * 
+   *
    * @param {string} tabla - Nombre de la tabla de la que se obtendrá el registro.
    * @param {number} id - Identificador del registro a obtener.
    * @returns {Promise<Object|null>} - Promesa que resuelve con el registro encontrado o null si no existe.
    * @throws {Error} - Lanza un error si la operación falla.
    */
   async getById(tabla, id) {
-    try {      
+    try {
       // Obtenemos el resultado de la consulta
-      const [rows] = await connection.query(`SELECT * FROM ${tabla} WHERE id = ?`, [id]);      
+      const [rows] = await connection.query(
+        `SELECT * FROM ${tabla} WHERE id = ?`,
+        [id]
+      );
       // Retornamos la respuesta al servicio
       return rows[0]; // Retorna el primer registro encontrado
     } catch (error) {
@@ -49,7 +53,7 @@ class Modelo {
 
   /**
    * Método para obtener los registros de una tabla por un campo específico.
-   * 
+   *
    * @param {string} tabla - Nombre de la tabla de la que se obtendrán los registros.
    * @param {string} campo - Nombre del campo por el que se filtrarán los registros.
    * @param {*} valor - Valor del campo para filtrar los registros.
@@ -57,9 +61,12 @@ class Modelo {
    * @throws {Error} - Lanza un error si la operación falla.
    */
   async getByField(tabla, campo, valor) {
-    try {      
+    try {
       // Obtenemos el resultado de la consulta
-      const [rows] = await connection.query(`SELECT * FROM ${tabla} WHERE ${campo} = ?`, [valor]);
+      const [rows] = await connection.query(
+        `SELECT * FROM ${tabla} WHERE ${campo} = ? ORDER BY id DESC`,
+        [valor]
+      );
       // Retornamos la respuesta al servicio
       return rows; // Retorna todos los registros que coinciden con el filtro
     } catch (error) {
@@ -70,7 +77,7 @@ class Modelo {
 
   /**
    * Método asincrónico para insertar un registro en una tabla específica.
-   * 
+   *
    * @param {string} tabla - Nombre de la tabla en la que se insertará el registro.
    * @param {Object} campos - Objeto que contiene los campos y valores a insertar.
    * @returns {Promise<number|null>} - Promesa que resuelve con el ID del registro insertado o null si falla.
@@ -106,7 +113,6 @@ class Modelo {
 
       // Devuelve el id insertado si hay filas afectadas o null
       return result.affectedRows > 0 ? result.insertId : null;
-
     } catch (error) {
       // Lanza un error personalizado si la operación falla
       throw new Error(error);
@@ -115,7 +121,7 @@ class Modelo {
 
   /**
    * Método asincrónico para actualizar un registro en una tabla específica usando su ID.
-   * 
+   *
    * @param {string} tabla - Nombre de la tabla en la que se actualizará el registro.
    * @param {number} id - Identificador del registro a actualizar.
    * @param {Object} campos - Objeto que contiene los campos y valores a actualizar.
@@ -150,7 +156,6 @@ class Modelo {
 
       // Si se modificó al menos una fila, devuelve true, de lo contrario, devuelve false
       return result.affectedRows > 0;
-
     } catch (error) {
       // Si ocurre un error durante la operación, lanza un mensaje de error personalizado
       throw new Error(error);
@@ -159,7 +164,7 @@ class Modelo {
 
   /**
    * Método asincrónico para eliminar un registro por su ID de una tabla específica.
-   * 
+   *
    * @param {string} tabla - Nombre de la tabla de la que se eliminará el registro.
    * @param {number} id - Identificador del registro a eliminar.
    * @returns {Promise<boolean>} - Promesa que resuelve con true si se eliminó el registro, false en caso contrario.
@@ -168,11 +173,13 @@ class Modelo {
   async delete(tabla, id) {
     try {
       // Ejecuta una consulta SQL para eliminar un registro en la tabla especificada donde el id coincida
-      const [result] = await connection.query(`DELETE FROM ${tabla} WHERE id = ?`, [id]);
+      const [result] = await connection.query(
+        `DELETE FROM ${tabla} WHERE id = ?`,
+        [id]
+      );
 
       // Si se modificó al menos una fila, devuelve true, de lo contrario, devuelve false
       return result.affectedRows > 0;
-
     } catch (error) {
       // Si ocurre algún error en el proceso, lanza un mensaje de error personalizado
       throw new Error(error);

@@ -128,14 +128,17 @@ class EspecieService {
 
   static async deleteEspecie(id) {
     try {
-      // Llamamos el método consultar por ID
-      const especie = await this.objEspecie.getById(id);
-      // Validamos si el tipo de documento existe
-      if (!especie)
+      const especie = await this.getEspecieById(id);
+      // Validamos si el tipo de producto existe
+      if (especie.error) return especie;
+
+      const razasAsociadas = await RazaService.getAllRazasByEspecieId(id);
+      // Validamos si el tipo de producto existe
+      if (!razasAsociadas.error)
         return {
           error: true,
-          code: 404,
-          message: "Especie no encontrada",
+          code: 400,
+          message: "Error al eliminar la especie, tiene razas asociadas",
         };
 
       // Llamamos el método eliminar

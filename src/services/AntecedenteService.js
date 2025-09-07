@@ -1,6 +1,7 @@
 import Antecedente from "../models/Antecedente.js";
 import Mascota from "../models/Mascota.js";
 import MascotaService from "./MascotaService.js";
+import TratamientoService from "./TratamientoService.js";
 // import Usuario from "../models/Usuario.js";
 
 class AntecedenteService {
@@ -132,20 +133,22 @@ class AntecedenteService {
   static async deleteAntecedente(id) {
     try {
       // Llamamos el método consultar por ID
-      const antecedente = await this.objAntecedente.getById(id);
-      // Validamos si el tipo de producto existe
-      if (!antecedente)
+      const antecedenteExistente = await AntecedenteService.getAntecedenteById(
+        id
+      );
+
+      if (antecedenteExistente.error) return antecedenteExistente;
+
+      const tratamientosAsociados =
+        await TratamientoService.getAllTratamientosByAntecedenteId(id);
+
+      if (!tratamientosAsociados.error)
         return {
           error: true,
-          code: 404,
-          message: "Antecedente no encontrado",
+          code: 400,
+          message:
+            "Error al eliminar el antecedente, tiene tratamientos asociados",
         };
-
-      // const usuariosTipo = await this.objUsuario.getAllByAntecedenteId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
-      // }
 
       // Llamamos el método eliminar
       const antecedenteEliminado = await this.objAntecedente.delete(id);

@@ -2,6 +2,7 @@
 import RolUsuario from "../models/RolUsuario.js";
 import Tratamiento from "../models/Tratamiento.js";
 import AntecedenteService from "./AntecedenteService.js";
+import MedicamentoTratamientoService from "./MedicamentoTratamientoService.js";
 import RolUsuarioService from "./RolUsuarioService.js";
 import UsuarioService from "./UsuarioService.js";
 
@@ -158,14 +159,21 @@ class TratamientoService {
 
   static async deleteTratamiento(id) {
     try {
-      // Llamamos el método consultar por ID
-      const tratamiento = await this.objTratamiento.getById(id);
-      // Validamos si el tipo de producto existe
-      if (!tratamiento)
+      const tratamiento = await this.getTratamientoById(id);
+
+      if (tratamiento.error) return tratamiento;
+
+      const medicamentosAsociados =
+        await MedicamentoTratamientoService.getAllMedicamentosTratamientosByTratamientoId(
+          id
+        );
+
+      if (!medicamentosAsociados.error)
         return {
           error: true,
-          code: 404,
-          message: "Tratamiento no encontrado",
+          code: 400,
+          message:
+            "Error al eliminar el tratamiento, tiene medicamentos asociados",
         };
 
       // Llamamos el método eliminar

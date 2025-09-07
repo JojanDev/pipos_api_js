@@ -107,6 +107,25 @@ class Tratamiento extends Modelo {
       );
     }
   }
+
+  /**
+   * Obtiene todos los tipos de documentos de la base de datos
+   * @returns {Promise<Array>} Lista de todos los tipos de documentos
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getAllByInfoMedicamentoId(info_medicamento_id) {
+    try {
+      return await super.getByField(
+        this.#tableName,
+        "info_medicamento_id",
+        info_medicamento_id
+      );
+    } catch (error) {
+      throw new Error(
+        `Error al obtener todos los tratamientos: ${error.message}`
+      );
+    }
+  }
 }
 
 export default Tratamiento;

@@ -114,9 +114,6 @@ class VentaService {
           ? "completada"
           : "pendiente";
 
-      console.log(existente.total);
-      console.log(Number(existente.monto) + Number(venta.monto));
-
       // Llamamos el método actualizar
       const ventaActualizada = await this.objVenta.update(id, {
         ...venta,
