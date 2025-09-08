@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser"; // Importa cookie-parser para manejar 
 
 import rutas from "./src/routes/index.js"; // Importa las rutas definidas en el archivo de rutas
 import { ResponseProvider } from "./src/providers/ResponseProvider.js"; // Importa el proveedor de respuestas para manejar respuestas de la API
+import authenticate from "./src/middlewares/auth/authenticate.js";
 
 dotenv.config(); // Carga las variables de entorno desde el archivo .env
 
@@ -27,19 +28,14 @@ app.use(express.static("public")); // Sirve archivos estáticos desde la carpeta
 app.use("/fotos_reportes", express.static("public/img/reportes")); // Sirve imágenes de reportes desde la carpeta específica
 
 // ─────────────────────────────────────────────
-// 📌 Ruta principal de documentación
-// ─────────────────────────────────────────────
-app.get(API_BASE_PATH, (req, res) => {
-  // Define una ruta GET para la documentación de la API
-  res.sendFile("endpoints.html", { root: "./public" }); // Envía el archivo 'endpoints.html' como respuesta
-});
-
-// ─────────────────────────────────────────────
 // 🚦 Rutas dinámicas (API)
 // ─────────────────────────────────────────────
-rutas.forEach(({ path, router }) => {
-  // Itera sobre las rutas definidas
-  app.use(API_BASE_PATH + path, router); // Asocia cada ruta con su respectivo router
+rutas.forEach(({ path, router, publico }) => {
+  if (publico) {
+    app.use(API_BASE_PATH + path, router);
+  } else {
+    app.use(API_BASE_PATH + path, authenticate, router);
+  }
 });
 
 // ─────────────────────────────────────────────

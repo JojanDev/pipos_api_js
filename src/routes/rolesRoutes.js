@@ -5,26 +5,23 @@ import {
   validarRolParcial,
 } from "../middlewares/entities/roles/rolValidator.js";
 import RolController from "../controllers/RolController.js";
-
+import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
 // Obtener todos los tipos de documentos
-router.get("/", RolController.getAllRoles);
+router.get("/", authorize("rol.read"), RolController.getAllRoles);
 
 // Obtener un tipo de documento por ID
-router.get("/:id", RolController.getRolById);
+router.get("/:id", authorize("rol.read"), RolController.getRolById);
 
 // Crear un nuevo tipo de documento
-router.post(
-  "/",
-  validarRol,
-  RolController.createRol
-);
+router.post("/", authorize("rol.create"), validarRol, RolController.createRol);
 
 // Actualizar un tipo de documento
 router.put(
   "/:id",
+  authorize("rol.update"),
   validarRol,
   RolController.updateRol
 );
@@ -32,11 +29,12 @@ router.put(
 // Actualizar un tipo de documento parcialmente
 router.patch(
   "/:id",
+  authorize("rol.update"),
   validarRolParcial,
   RolController.updateRol
 );
 
 // Eliminar un tipo de documento
-router.delete("/:id", RolController.deleteRol);
+router.delete("/:id", authorize("rol.delete"), RolController.deleteRol);
 
 export default router;

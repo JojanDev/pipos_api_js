@@ -5,23 +5,27 @@ import {
   validarMedicamentoTratamientoParcial,
 } from "../middlewares/entities/medicamentosTratamientos/medicamentoTratamientoValidator.js";
 import MedicamentoTratamientoController from "../controllers/MedicamentoTratamientoController.js";
+import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
 // Obtener todos los tipos de documentos
 router.get(
   "/",
+  authorize("medicamento-tratamiento.read"),
   MedicamentoTratamientoController.getAllMedicamentosTratamientos
 );
 
 router.get(
   "/tratamiento/:id",
+  authorize("medicamento-tratamiento.read"),
   MedicamentoTratamientoController.getAllMedicamentosTratamientosByTratamientoId
 );
 
 // Obtener un tipo de documento por ID
 router.get(
   "/:id",
+  authorize("medicamento-tratamiento.read"),
   MedicamentoTratamientoController.getMedicamentoTratamientoById
 );
 
@@ -29,6 +33,7 @@ router.get(
 router.post(
   "/",
   validarMedicamentoTratamiento,
+  authorize("medicamento-tratamiento.create"),
   MedicamentoTratamientoController.createMedicamentoTratamiento
 );
 
@@ -36,6 +41,7 @@ router.post(
 router.put(
   "/:id",
   validarMedicamentoTratamiento,
+  authorize("medicamento-tratamiento.update"),
   MedicamentoTratamientoController.updateMedicamentoTratamiento
 );
 
@@ -43,12 +49,14 @@ router.put(
 router.patch(
   "/:id",
   validarMedicamentoTratamientoParcial,
+  authorize("medicamento-tratamiento.update"),
   MedicamentoTratamientoController.updateMedicamentoTratamiento
 );
 
 // Eliminar un tipo de documento
 router.delete(
   "/:id",
+  authorize("medicamento-tratamiento.delete"),
   MedicamentoTratamientoController.deleteMedicamentoTratamiento
 );
 

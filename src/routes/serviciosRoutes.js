@@ -5,25 +5,49 @@ import {
   validarServicioParcial,
 } from "../middlewares/entities/servicios/servicioValidator.js";
 import ServicioController from "../controllers/ServicioController.js";
+import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
 // Obtener todos los tipos de documentos
-router.get("/", ServicioController.getAllServicios);
+router.get("/", authorize("servicio.read"), ServicioController.getAllServicios);
 
 // Obtener un tipo de documento por ID
-router.get("/:id", ServicioController.getServicioById);
+router.get(
+  "/:id",
+  authorize("servicio.read"),
+  ServicioController.getServicioById
+);
 
 // Crear un nuevo tipo de documento
-router.post("/", validarServicio, ServicioController.createServicio);
+router.post(
+  "/",
+  authorize("servicio.create"),
+  validarServicio,
+  ServicioController.createServicio
+);
 
 // Actualizar un tipo de documento
-router.put("/:id", validarServicio, ServicioController.updateServicio);
+router.put(
+  "/:id",
+  authorize("servicio.update"),
+  validarServicio,
+  ServicioController.updateServicio
+);
 
 // Actualizar un tipo de documento parcialmente
-router.patch("/:id", validarServicioParcial, ServicioController.updateServicio);
+router.patch(
+  "/:id",
+  authorize("servicio.update"),
+  validarServicioParcial,
+  ServicioController.updateServicio
+);
 
 // Eliminar un tipo de documento
-router.delete("/:id", ServicioController.deleteServicio);
+router.delete(
+  "/:id",
+  authorize("servicio.delete"),
+  ServicioController.deleteServicio
+);
 
 export default router;
