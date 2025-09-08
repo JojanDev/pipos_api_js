@@ -141,7 +141,7 @@ class MascotaController {
   };
 
   // Obtener todos los tipos de documentos
-  static getAllMascotasByUsuarioId = async (req, res) => {
+  static getAllMascotasByRazaId = async (req, res) => {
     const { id } = req.params;
     try {
       const response = await MascotaService.getAllMascotasByRazaId(id);

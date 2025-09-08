@@ -36,11 +36,11 @@ export const campos = [
     maxLength: 13,
     type: "number",
   }, // DECIMAL(10,2) obligatorio
-  {
-    name: "estado",
-    required: false,
-    minLength: 8,
-    maxLength: 10,
-    type: "string",
-  }, // ENUM('completada','pendiente')
+  // {
+  //   name: "completada",
+  //   required: false,
+  //   minLength: 8,
+  //   maxLength: 10,
+  //   type: "string",
+  // }, // ENUM('completada','pendiente')
 ];

@@ -19,6 +19,12 @@ router.get(
   MascotaController.getAllMascotasByUsuarioId
 );
 
+router.get(
+  "/raza/:id",
+  authorize("mascota.read"),
+  MascotaController.getAllMascotasByRazaId
+);
+
 // Obtener un tipo de documento por ID
 router.get("/:id", authorize("mascota.read"), MascotaController.getMascotaById);
 

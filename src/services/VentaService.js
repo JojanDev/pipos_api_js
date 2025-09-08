@@ -71,10 +71,10 @@ class VentaService {
 
       if (compradorExistente.error) return compradorExistente;
 
-      const estado = venta.total == venta.monto ? "completada" : "pendiente";
+      const completada = venta.total == venta.monto ? 1 : 0;
 
       // Llamamos el método crear
-      const ventaCreada = await this.objVenta.create({ ...venta, estado });
+      const ventaCreada = await this.objVenta.create({ ...venta, completada });
       // Validamos si no se pudo crear el tipo de documento
       if (ventaCreada === null)
         return {
@@ -109,15 +109,15 @@ class VentaService {
         };
       }
 
-      const estado =
+      const completada =
         existente.total == Number(existente.monto) + Number(venta.monto)
-          ? "completada"
-          : "pendiente";
+          ? 1
+          : 0;
 
       // Llamamos el método actualizar
       const ventaActualizada = await this.objVenta.update(id, {
         ...venta,
-        estado,
+        completada,
       });
       // Validamos si no se pudo actualizar el tipo de documento
       if (ventaActualizada === null)

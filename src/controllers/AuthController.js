@@ -66,6 +66,8 @@ class AuthController {
       res.clearCookie("token");
       res.clearCookie("refreshToken");
       res.clearCookie("usuario");
+      res.clearCookie("permisos");
+      res.clearCookie("roles");
 
       // Si hubo error en el servicio, responde con error
       if (response.error) {

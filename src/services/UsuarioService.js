@@ -272,12 +272,13 @@ class UsuarioService {
             const rolesUsuario = await this.objRolUsuario.getAllByUsuarioId(
               usuario.id
             );
-            return rolesUsuario.some((rolUsuario) => rolUsuario.rol_id !== 3)
+
+            return rolesUsuario.every((rol) => rol.rol_id !== 3)
               ? usuario
               : null;
           })
         )
-      ).filter((usuario) => usuario);
+      ).filter(Boolean);
 
       // Retornamos los usuarios obtenidos
       return {
