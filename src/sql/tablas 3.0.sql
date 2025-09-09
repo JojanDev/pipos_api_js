@@ -124,7 +124,7 @@
     CREATE TABLE medicamentos (
 		id INT AUTO_INCREMENT PRIMARY KEY,
 		info_medicamento_id INT NOT NULL,
-		precio DECIMAL(10,2) NOT NULL,
+		precio DECIMAL NOT NULL,
 		fecha_caducidad DATE,
 		cantidad INT NOT NULL,
 		numero_lote VARCHAR(100),
@@ -136,14 +136,14 @@
 		id INT AUTO_INCREMENT PRIMARY KEY,
 		nombre VARCHAR(255) NOT NULL,
 		descripcion TEXT NOT NULL,
-		precio DECIMAL(10,2) NOT NULL
+		precio DECIMAL NOT NULL
 	);
 
 	-- Productos en inventario
 	CREATE TABLE productos (	
 		id INT AUTO_INCREMENT PRIMARY KEY,
 		nombre VARCHAR(255) NOT NULL,
-		precio DECIMAL(10,2) NOT NULL,
+		precio DECIMAL NOT NULL,
 		descripcion TEXT,
 		fecha_caducidad DATE,
 		tipo_producto_id INT NOT NULL,
@@ -170,7 +170,7 @@ CREATE TABLE ventas (
 	monto DECIMAL(10,2) NOT NULL,	
     vendedor_id INT NOT NULL,
     comprador_id INT NOT NULL,
-    estado ENUM('completada', 'pendiente'),
+    completada boolean not null,
 	FOREIGN KEY (vendedor_id) REFERENCES usuarios(id),
     FOREIGN KEY (comprador_id) REFERENCES usuarios(id)
 );

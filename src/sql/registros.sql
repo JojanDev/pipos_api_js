@@ -49,98 +49,6 @@ INSERT INTO credenciales (usuario_id, usuario, contrasena) VALUES
   (2, 'maria', '$2b$10$Byf1iv5eLpzZ5qA79r2U2.TP6YmqqxhwPr5RlW0CdTKNheKny06yW'),
   (3, 'martinez', '$2b$10$Byf1iv5eLpzZ5qA79r2U2.TP6YmqqxhwPr5RlW0CdTKNheKny06yW');
 
-INSERT INTO permisos_roles (permiso_id, rol_id) VALUES
-  (6, 1),   -- mascota.*
-(7, 1),   -- usuario.view
-(8, 1),   -- usuario.read
-(9, 1),   -- usuario.create
-(11, 1),  -- usuario.create-client
-(12, 1),  -- usuario.create-personal
-(13, 1),  -- usuario.disable
-(14, 1),  -- usuario.change-state
-(16, 1),  -- credencial.read
-(17, 1),  -- credencial.create
-(24, 1),  -- rol-usuario.*
-(29, 1),  -- rol.*
-(34, 1),  -- permiso.*
-(39, 1),  -- permiso-rol.*
-(45, 1),  -- tratamiento.*
-(51, 1),  -- venta.*
-(56, 1),  -- medicamento-venta.*
-(61, 1),  -- producto-venta.*
-(66, 1),  -- servicio-venta.*
-(72, 1),  -- medicamento.*
-(78, 1),  -- antecedente.*
-(84, 1),  -- medicamento-tratamiento.*
-(90, 1),  -- info-medicamento.*
-(96, 1),  -- producto.*
-(102, 1), -- servicio.*
-(108, 1), -- raza.*
-(114, 1), -- especie.*
-(119, 1), -- tipo-documento.*
-(124, 1), -- tipo-producto.*
-(125, 1), -- usuario.update-client
-(126, 1), -- usuario.view-client
-
--- Todos los .read (incluidos credenciales, permisos y permisos-roles)
-(5, 1),   -- mascota.read
-(20, 1),  -- rol-usuario.read
-(25, 1),  -- rol.read
-(30, 1),  -- permiso.read
-(35, 1),  -- permiso-rol.read
-(41, 1),  -- tratamiento.read
-(47, 1),  -- venta.read
-(52, 1),  -- medicamento-venta.read
-(57, 1),  -- producto-venta.read
-(62, 1),  -- servicio-venta.read
-(68, 1),  -- medicamento.read
-(74, 1),  -- antecedente.read
-(80, 1),  -- medicamento-tratamiento.read
-(86, 1),  -- info-medicamento.read
-(92, 1),  -- producto.read
-(98, 1),  -- servicio.read
-(104, 1), -- raza.read
-(110, 1), -- especie.read
-(115, 1), -- tipo-documento.read
-(127, 1),
-
-  (6, 2), (126,2), (11,2),(125,2),
-(40,2),(41,2),(42,2),(43,2),(46,2),(47,2),(48,2),(49,2),
-(52,2),(53,2),
-(57,2), (58,2),
-(62,2), (63,2),
-(67,2), (68,2),
-(73,2), (74,2),(75,2),(76,2),
-(79,2),(80,2),(81,2),(82,2),
-(85,2), (86,2),(87,2),(88,2),
-(91,2), (92,2),
-(97,2), (98,2),
-(104,2),
-(110,2),
-(115,2),
-(127,2),
-
--- Todos los permisos .read que faltaban (excepto credenciales, permisos y permisos-roles)
-(5, 2),   -- mascota.read
-(8, 2),   -- usuario.read
-(20, 2),  -- rol-usuario.read
-(25, 2),  -- rol.read
-(41, 2),  -- tratamiento.read (ya estaba arriba, pero lo dejo claro)
-(47, 2),  -- venta.read (ya estaba arriba, pero lo dejo claro)
-(52, 2),  -- medicamento-venta.read (ya estaba arriba)
-(57, 2),  -- producto-venta.read (ya estaba arriba)
-(62, 2),  -- servicio-venta.read (ya estaba arriba)
-(68, 2),  
-(74, 2),  
-(80, 2),  
-(86, 2),
-(92, 2),  
-(98, 2),  
-(104, 2), 
-(110, 2),
-(115, 2), 
-(127, 2); 
-
 select * from permisos;
 use veterinaria_pipos;
 INSERT INTO razas (nombre, especie_id) VALUES
@@ -199,12 +107,12 @@ INSERT INTO medicamentos_tratamientos (tratamiento_id, info_medicamento_id, dosi
   (4, 3, '50 mg', 'Cada 8 horas', 10),
   (5, 2, '5 ml', 'Cada 12 horas', 3);
 
-INSERT INTO ventas (total, monto, estado, vendedor_id, comprador_id) VALUES
-  (95.00, 95.00, 'completada',1,2),
-  (150.00, 150.00, 'pendiente',2,3),
-  (200.00, 200.00, 'completada',3,4),
-  (60.00, 60.00, 'completada',4,5),
-  (300.00, 300.00, 'pendiente',1,3);
+INSERT INTO ventas (total, monto, completada, vendedor_id, comprador_id) VALUES
+  (95.00, 95.00, 1,1,2),
+  (150.00, 150.00, 1,2,3),
+  (200.00, 200.00,1,3,4),
+  (60.00, 60.00, 1,4,5),
+  (300.00, 300.00,1,1,3);
 
 
 INSERT INTO medicamentos_ventas (venta_id, medicamento_id, precio, valor_adicional, cantidad, subtotal) VALUES
@@ -227,3 +135,5 @@ INSERT INTO productos_ventas (venta_id, producto_id, precio, valor_adicional, ca
   (3, 3, 200.00, 0.00, 1, 200.00),
   (4, 4, 350.00, 0.00, 1, 350.00),
   (5, 5, 15.00, 0.00, 3, 45.00);
+
+select * from vent
