@@ -141,7 +141,7 @@ class InfoMedicamentoService {
           error: true,
           code: 400,
           message:
-            "Error al eliminar la informacion, tiene medicamentos asociadas",
+            "Error al eliminar la informacion, tiene medicamentos en inventario asociados",
         };
 
       const medicamentosTratamientosAsociados =

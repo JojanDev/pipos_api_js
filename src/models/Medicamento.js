@@ -126,6 +126,22 @@ class Medicamento extends Modelo {
       );
     }
   }
+
+  /**
+   * Obtiene todos los tipos de documentos de la base de datos
+   * @returns {Promise<Array>} Lista de todos los tipos de documentos
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getAllByCantidadPositiva() {
+    try {
+      const [rows] = await connection.query(
+        `SELECT * FROM ${this.#tableName} WHERE cantidad > 0 ORDER BY id DESC`
+      );
+      return rows;
+    } catch (error) {
+      throw new Error(`Error al obtener todas los productos: ${error.message}`);
+    }
+  }
 }
 
 export default Medicamento;

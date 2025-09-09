@@ -61,7 +61,7 @@ class MedicamentoVentaService {
   static async createMedicamentoVenta(medicamentoVenta) {
     try {
       const ventaExistente = await VentaService.getVentaById(
-        productoVenta.venta_id
+        medicamentoVenta.venta_id
       );
 
       if (ventaExistente.error) return ventaExistente;
@@ -83,6 +83,15 @@ class MedicamentoVentaService {
           code: 400,
           message: "Error al crear la venta del medicamento",
         };
+
+      const cantidad =
+        medicamentoExistente.data.cantidad - medicamentoVenta.cantidad;
+      console.log(cantidad);
+
+      const medicamentoStock = await MedicamentoService.updateMedicamento(
+        medicamentoVenta.medicamento_id,
+        { cantidad }
+      );
 
       // Retornamos el tipo de producto creado
       return {

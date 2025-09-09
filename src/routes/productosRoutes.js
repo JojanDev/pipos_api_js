@@ -12,6 +12,13 @@ const router = express.Router();
 // Obtener todos los tipos de documentos
 router.get("/", authorize("producto.read"), ProductoController.getAllProductos);
 
+// Obtener todos los tipos de documentos
+router.get(
+  "/stock",
+  authorize("producto.read"),
+  ProductoController.getAllProductosByStockPositivo
+);
+
 // Obtener un tipo de documento por ID
 router.get(
   "/:id",

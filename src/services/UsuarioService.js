@@ -149,12 +149,6 @@ class UsuarioService {
           message: "Usuario no encontrado",
         };
 
-      // const usuariosTipo = await this.objUsuario.getAllByUsuarioId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
-      // }
-
       // Llamamos el método eliminar
       const usuarioEliminado = await this.objUsuario.delete(id);
       // Validamos si no se pudo eliminar el tipo de producto
@@ -285,14 +279,79 @@ class UsuarioService {
         error: false,
         code: 200,
         message: `Usuarios clientes obtenidos correctamente`,
-        data: usuariosNoClientes.map(
-          (usuario) => usuario
-          // ({
-          //   id: usuario.id,
-          //   documento: usuario.documento,
-          //   nombre: usuario.nombres.split(" ")[0] + " " + usuario.apellidos.split(" ")[0]
-          // })
-        ),
+        data: usuariosNoClientes,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      console.log(error);
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async getAllUsuariosEmpleados() {
+    try {
+      // Llamamos el método listar
+      const usuarios = await this.getAllUsuarios();
+      // Validamos si no hay usuarios
+      if (usuarios.error) return usuarios;
+
+      const usuariosEmpleados = (
+        await Promise.all(
+          usuarios.data.map(async (usuario) => {
+            const rolesUsuario = await this.objRolUsuario.getAllByUsuarioId(
+              usuario.id
+            );
+
+            return rolesUsuario.some(
+              (rol) => rol.rol_id !== 3 && rol.rol_id !== 1
+            )
+              ? usuario
+              : null;
+          })
+        )
+      ).filter(Boolean);
+
+      // Retornamos los usuarios obtenidos
+      return {
+        error: false,
+        code: 200,
+        message: `Usuarios empleados obtenidos correctamente`,
+        data: usuariosEmpleados,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      console.log(error);
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async getAllUsuariosNoEmpleados() {
+    try {
+      // Llamamos el método listar
+      const usuarios = await this.getAllUsuarios();
+      // Validamos si no hay usuarios
+      if (usuarios.error) return usuarios;
+
+      const usuariosNoEmpleados = (
+        await Promise.all(
+          usuarios.data.map(async (usuario) => {
+            const rolesUsuario = await this.objRolUsuario.getAllByUsuarioId(
+              usuario.id
+            );
+
+            return rolesUsuario.every((rol) => rol.rol_id !== 2)
+              ? usuario
+              : null;
+          })
+        )
+      ).filter(Boolean);
+
+      // Retornamos los usuarios obtenidos
+      return {
+        error: false,
+        code: 200,
+        message: `Usuarios no empleados obtenidos correctamente`,
+        data: usuariosNoEmpleados,
       };
     } catch (error) {
       // Retornamos un error en caso de excepción

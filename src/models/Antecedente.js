@@ -104,6 +104,28 @@ class Antecedente extends Modelo {
       );
     }
   }
+
+  /**
+   * Obtiene un tipo de documento específico por su ID
+   * @param {number} mascotaId - ID del tipo de documento
+   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * @throws {Error} Si ocurre un error en la consulta
+   */
+  async getUltimoByMascotaId(mascotaId) {
+    try {
+      const [row] = await connection.query(
+        `SELECT fecha_creado FROM ${
+          this.#tableName
+        } WHERE mascota_id = ? ORDER BY fecha_creado DESC LIMIT 1`,
+        [mascotaId]
+      );
+      return row[0];
+    } catch (error) {
+      throw new Error(
+        `Error al obtener la fecha del ultimo antecedente de la mascota con ID ${mascotaId}: ${error.message}`
+      );
+    }
+  }
 }
 
 export default Antecedente;

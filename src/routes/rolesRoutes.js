@@ -13,6 +13,13 @@ const router = express.Router();
 router.get("/", authorize("rol.read"), RolController.getAllRoles);
 
 // Obtener un tipo de documento por ID
+router.get(
+  "/empleados",
+  authorize("rol.read"),
+  RolController.getAllRolesEmpleados
+);
+
+// Obtener un tipo de documento por ID
 router.get("/:id", authorize("rol.read"), RolController.getRolById);
 
 // Crear un nuevo tipo de documento

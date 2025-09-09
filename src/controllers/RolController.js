@@ -50,9 +50,7 @@ class RolController {
     const rol = req.body;
     try {
       // Llamamos el método crear del modelo
-      const response = await RolService.createRol(
-        rol
-      );
+      const response = await RolService.createRol(rol);
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -77,10 +75,7 @@ class RolController {
     const rol = req.body;
     try {
       // Llamamos al método actualizar del modelo
-      const response = await RolService.updateRol(
-        id,
-        rol
-      );
+      const response = await RolService.updateRol(id, rol);
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -120,6 +115,25 @@ class RolController {
       );
     } catch (error) {
       // Llamamos el provider para centralizar los mensajes de respuesta
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
+
+  static getAllRolesEmpleados = async (req, res) => {
+    try {
+      const response = await RolService.getAllRolesEmpleados();
+      // Validamos si no hay tipos de documentos
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(
+        res,
+        response.data,
+        response.message,
+        response.code
+      );
+    } catch (error) {
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };

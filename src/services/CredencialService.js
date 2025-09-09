@@ -220,6 +220,31 @@ class CredencialService {
       return { error: true, code: 500, message: error.message };
     }
   }
+
+  static async getCredencialByUsuario(usuario) {
+    try {
+      // Llamamos el método consultar por ID
+      const credencial = await this.objCredencial.getByUsuario(usuario);
+      // Validamos si no hay credencial
+      if (!credencial)
+        return {
+          error: true,
+          code: 404,
+          message: "Credencial de usuario no encontrada",
+        };
+
+      // Retornamos la credencial obtenida
+      return {
+        error: false,
+        code: 200,
+        message: "Credencial obtenida correctamente",
+        data: credencial,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
 }
 
 export default CredencialService;

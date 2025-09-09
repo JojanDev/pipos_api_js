@@ -19,6 +19,18 @@ router.get(
 );
 
 router.get(
+  "/empleados",
+  authorize("usuario.read"),
+  UsuarioController.getAllUsuariosEmpleados
+);
+
+router.get(
+  "/no-empleados",
+  authorize("usuario.read"),
+  UsuarioController.getAllUsuariosNoEmpleados
+);
+
+router.get(
   "/no-clientes",
   authorize("usuario.read"),
   UsuarioController.getAllUsuariosNoClientes

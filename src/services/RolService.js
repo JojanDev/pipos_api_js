@@ -18,8 +18,6 @@ class RolService {
           message: "No hay roles registrados",
         };
 
-
-
       // Retornamos las tipos de productos obtenidas
       return {
         error: false,
@@ -62,9 +60,7 @@ class RolService {
   static async createRol(rol) {
     try {
       // Llamamos el método crear
-      const rolCreado = await this.objRol.create(
-        rol
-      );
+      const rolCreado = await this.objRol.create(rol);
       // Validamos si no se pudo crear el tipo de producto
       if (rolCreado === null)
         return {
@@ -100,10 +96,7 @@ class RolService {
       }
 
       // Llamamos el método actualizar
-      const rolActualizado = await this.objRol.update(
-        id,
-        rol
-      );
+      const rolActualizado = await this.objRol.update(id, rol);
       // Validamos si no se pudo actualizar el tipo de producto
       if (rolActualizado === null)
         return {
@@ -161,6 +154,37 @@ class RolService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async getAllRolesEmpleados() {
+    try {
+      // Llamamos el método listar
+      const roles = await this.objRol.getAll();
+
+      // Validamos si no hay tipos de productos
+      if (!roles || roles.length === 0)
+        return {
+          error: true,
+          code: 404,
+          message: "No hay roles registrados",
+        };
+
+      const rolesEmpleados = roles.filter(
+        (rol) => rol.id !== 3 && rol.id !== 1
+      );
+
+      // Retornamos las tipos de productos obtenidas
+      return {
+        error: false,
+        code: 200,
+        message: "Roles empleados obtenidos correctamente",
+        data: rolesEmpleados,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      console.log(error);
       return { error: true, code: 500, message: error.message };
     }
   }

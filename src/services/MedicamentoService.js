@@ -81,7 +81,7 @@ class MedicamentoService {
         medicamento.numero_lote
       );
       // Validamos si no se pudo crear el tipo de producto
-      if (loteExistente || loteExistente.length !== 0)
+      if (loteExistente && loteExistente.length !== 0)
         return {
           error: true,
           code: 400,
@@ -124,6 +124,22 @@ class MedicamentoService {
           message: "Medicamento no encontrado",
         };
       }
+
+      const loteExistente = await this.objMedicamento.getByNumeroLote(
+        medicamento.numero_lote
+      );
+      // Validamos si no se pudo crear el tipo de producto
+      if (
+        loteExistente &&
+        loteExistente.length !== 0 &&
+        loteExistente[0].id != id
+      )
+        return {
+          error: true,
+          code: 400,
+          message:
+            "Este lote ya está registrado para el medicamento seleccionado",
+        };
 
       // Llamamos el método actualizar
       const medicamentoActualizado = await this.objMedicamento.update(
@@ -198,6 +214,43 @@ class MedicamentoService {
           error: true,
           code: 404,
           message: "No hay medicamentos registrados con esa informacion",
+        };
+
+      const infoMedicamentos = await Promise.all(
+        medicamentos.map(async (medicamento) => {
+          const { data: infoMedicamento } =
+            await InfoMedicamentoService.getInfoMedicamentoById(
+              medicamento.info_medicamento_id
+            );
+          return { ...medicamento, nombre: infoMedicamento.nombre };
+        })
+      );
+
+      // Retornamos las tipos de productos obtenidas
+      return {
+        error: false,
+        code: 200,
+        message: "Medicamentos obtenidos correctamente",
+        data: infoMedicamentos,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      console.log(error);
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
+  static async getAllMedicamentosByCantidadPositiva() {
+    try {
+      // Llamamos el método listar
+      const medicamentos = await this.objMedicamento.getAllByCantidadPositiva();
+
+      // Validamos si no hay tipos de productos
+      if (!medicamentos || medicamentos.length === 0)
+        return {
+          error: true,
+          code: 404,
+          message: "No hay medicamentos registrados con cantidad positiva",
         };
 
       const infoMedicamentos = await Promise.all(

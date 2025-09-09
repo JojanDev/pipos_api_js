@@ -16,6 +16,12 @@ router.get(
   CredencialController.getAllCredenciales
 );
 
+router.get(
+  "/nickname/:usuario",
+  authorize("credencial.read"),
+  CredencialController.getCredencialByUsuario
+);
+
 // Obtener un tipo de documento por ID
 router.get(
   "/usuario/:id",

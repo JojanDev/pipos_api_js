@@ -85,6 +85,14 @@ class ProductoVentaService {
           message: "Error al crear la venta del producto",
         };
 
+      const stock = productoExistente.data.stock - productoVentaCreado.cantidad;
+      console.log(stock);
+
+      const productoStock = await ProductoService.updateProducto(
+        productoVenta.producto_id,
+        { stock }
+      );
+
       // Retornamos el tipo de producto creado
       return {
         error: false,
@@ -178,7 +186,7 @@ class ProductoVentaService {
         venta_id
       );
       // Validamos si no hay productoVenta
-      if (!productosVenta)
+      if (!productosVenta || productosVenta.length === 0)
         return {
           error: true,
           code: 404,

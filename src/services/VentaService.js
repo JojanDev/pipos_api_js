@@ -109,11 +109,10 @@ class VentaService {
         };
       }
 
-      const completada =
-        existente.total == Number(existente.monto) + Number(venta.monto)
-          ? 1
-          : 0;
+      const montoNuevo = Number(existente.monto) + Number(venta.monto);
+      const completada = existente.total == montoNuevo ? 1 : 0;
 
+      venta.monto = montoNuevo;
       // Llamamos el método actualizar
       const ventaActualizada = await this.objVenta.update(id, {
         ...venta,

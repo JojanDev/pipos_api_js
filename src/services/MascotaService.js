@@ -1,3 +1,4 @@
+import Antecedente from "../models/Antecedente.js";
 import Especie from "../models/Especie.js";
 import Mascota from "../models/Mascota.js";
 import Raza from "../models/Raza.js";
@@ -10,6 +11,7 @@ class MascotaService {
   static objUsuario = new Usuario();
   static objRaza = new Raza();
   static objEspecie = new Especie();
+  static objAntecedente = new Antecedente();
 
   static async getAllMascotas() {
     try {
@@ -31,6 +33,12 @@ class MascotaService {
           );
           const raza = await this.objRaza.getById(mascota.raza_id);
           const especie = await this.objEspecie.getById(raza.especie_id);
+          const ultimoAntecedente =
+            await this.objAntecedente.getUltimoByMascotaId(mascota.id);
+
+          const fecha_creado = ultimoAntecedente
+            ? ultimoAntecedente.fecha_creado
+            : null;
 
           return {
             ...mascota,
@@ -38,6 +46,7 @@ class MascotaService {
             telefono,
             raza: raza.nombre,
             especie: especie.nombre,
+            ultimo_antecedente: fecha_creado || null,
           };
         })
       );

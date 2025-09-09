@@ -141,6 +141,29 @@ class CredencialController {
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
+
+  // Obtener un tipo de documento por su ID
+  static getCredencialByUsuario = async (req, res) => {
+    const { usuario } = req.params;
+    try {
+      // Llamamos al servicio para obtener el tipo de documento por su ID
+      const response = await CredencialService.getCredencialByUsuario(usuario);
+      // Validamos si no hay tipo de documento
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(
+        res,
+        response.data,
+        response.message,
+        response.code
+      );
+    } catch (error) {
+      // Llamamos el provider para centralizar los mensajes de respuesta
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
 }
 
 export default CredencialController;

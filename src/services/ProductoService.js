@@ -198,6 +198,43 @@ class ProductoService {
       return { error: true, code: 500, message: error.message };
     }
   }
+
+  static async getAllProductosByStockPositivo() {
+    try {
+      // Llamamos el método listar
+      const productos = await this.objProducto.getAllByStockPositivo();
+
+      // Validamos si no hay tipos de productos
+      if (!productos || productos.length === 0)
+        return {
+          error: true,
+          code: 404,
+          message: "No hay productos registrados con stock positivo",
+        };
+
+      const infoProductos = await Promise.all(
+        productos.map(async (producto) => {
+          const { data: tipoProducto } =
+            await TipoProductoService.getTipoProductoById(
+              producto.tipo_producto_id
+            );
+          return { ...producto, tipo_producto: tipoProducto.nombre };
+        })
+      );
+
+      // Retornamos las tipos de productos obtenidas
+      return {
+        error: false,
+        code: 200,
+        message: "Productos obtenidos correctamente",
+        data: infoProductos,
+      };
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      console.log(error);
+      return { error: true, code: 500, message: error.message };
+    }
+  }
 }
 
 export default ProductoService;

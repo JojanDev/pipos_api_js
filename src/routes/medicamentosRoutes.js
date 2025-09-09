@@ -16,6 +16,12 @@ router.get(
   MedicamentoController.getAllMedicamentos
 );
 
+router.get(
+  "/stock",
+  authorize("medicamento.read"),
+  MedicamentoController.getAllMedicamentosByCantidadPositiva
+);
+
 // Obtener un tipo de documento por ID
 router.get(
   "/:id",
