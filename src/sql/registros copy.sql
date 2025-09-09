@@ -1,24 +1,4 @@
--- Limpiar datos existentes y reiniciar
-DELETE FROM productos_ventas;
-DELETE FROM servicios_ventas;
-DELETE FROM medicamentos_ventas;
-DELETE FROM ventas;
-DELETE FROM medicamentos_tratamientos;
-DELETE FROM productos;
-DELETE FROM servicios;
-DELETE FROM medicamentos;
-DELETE FROM tratamientos;
-DELETE FROM antecedentes;
-DELETE FROM mascotas;
-DELETE FROM razas;
-DELETE FROM credenciales;
-DELETE FROM roles_usuarios;
-DELETE FROM usuarios;
-DELETE FROM info_medicamentos;
-DELETE FROM tipos_productos;
-DELETE FROM especies;
-DELETE FROM roles;
-DELETE FROM tipos_documentos;
+
 
 -- ============================================
 -- DATOS BÁSICOS
@@ -335,6 +315,7 @@ INSERT INTO productos_ventas (venta_id, producto_id, precio, valor_adicional, ca
 (9, 10, 75000, 0, 1, 75000),     -- 75000 * 1 + 0 = 75000
 (10, 1, 85000, 5000, 1, 90000);  -- 85000 * 1 + 5000 = 90000
 
+SET SQL_SAFE_UPDATES = 0;
 -- ============================================
 -- ACTUALIZAR TOTALES DE VENTAS
 -- ============================================
