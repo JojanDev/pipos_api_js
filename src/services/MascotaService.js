@@ -28,7 +28,7 @@ class MascotaService {
 
       const mascotasInfo = await Promise.all(
         mascotas.map(async (mascota) => {
-          const { nombre, telefono } = await this.objUsuario.getById(
+          const { nombre, apellido, telefono } = await this.objUsuario.getById(
             mascota.usuario_id
           );
           const raza = await this.objRaza.getById(mascota.raza_id);
@@ -42,7 +42,7 @@ class MascotaService {
 
           return {
             ...mascota,
-            cliente: nombre,
+            cliente: `${nombre} ${apellido}`,
             telefono,
             raza: raza.nombre,
             especie: especie.nombre,
@@ -115,7 +115,7 @@ class MascotaService {
           message: "Error al crear la mascota",
         };
 
-      const { nombre, telefono } = await this.objUsuario.getById(
+      const { nombre, apellido, telefono } = await this.objUsuario.getById(
         mascotaCreado.usuario_id
       );
       const raza = await this.objRaza.getById(mascotaCreado.raza_id);
@@ -123,7 +123,7 @@ class MascotaService {
 
       const mascotaInfo = {
         ...mascotaCreado,
-        cliente: nombre,
+        cliente: `${nombre} ${apellido}`,
         telefono,
         raza: raza.nombre,
         especie: especie.nombre,

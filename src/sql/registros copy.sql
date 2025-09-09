@@ -130,17 +130,18 @@ INSERT INTO razas (nombre, especie_id) VALUES
 -- ============================================
 -- MASCOTAS (10 registros - usuarios clientes)
 -- ============================================
-INSERT INTO mascotas (usuario_id, nombre, raza_id, edad_semanas, sexo) VALUES
-(4, 'Max', 1, 52, 'macho'),           -- Ana (cliente)
-(5, 'Luna', 9, 40, 'hembra'),         -- Carlos (cliente)
-(6, 'Rocky', 3, 78, 'macho'),         -- Laura (cliente)
-(8, 'Bella', 2, 65, 'hembra'),        -- Daniela (cliente)
-(9, 'Simba', 10, 45, 'macho'),        -- Roberto (cliente)
-(10, 'Nala', 5, 30, 'hembra'),        -- Camila (cliente)
-(4, 'Coco', 14, 20, 'macho'),         -- Ana (cliente) - segunda mascota
-(5, 'Pipo', 16, 15, 'macho'),         -- Carlos (cliente) - segunda mascota
-(6, 'Mimi', 11, 35, 'hembra'),        -- Laura (cliente) - segunda mascota
-(8, 'Goldie', 24, 10, 'desconocido'); -- Daniela (cliente) - segunda mascota
+INSERT INTO mascotas (usuario_id, nombre, raza_id, fecha_nacimiento, sexo) VALUES
+(4, 'Max', 1,  '2024-09-10', 'macho'),       -- 52 semanas (~1 año)
+(5, 'Luna', 9, '2024-12-10', 'hembra'),      -- 40 semanas (~9 meses)
+(6, 'Rocky', 3, '2023-03-12', 'macho'),      -- 78 semanas (~1 año 6 meses)
+(8, 'Bella', 2, '2024-01-21', 'hembra'),     -- 65 semanas (~1 año 3 meses)
+(9, 'Simba', 10, '2024-11-26', 'macho'),     -- 45 semanas (~10 meses)
+(10, 'Nala', 5, '2025-02-26', 'hembra'),     -- 30 semanas (~7 meses)
+(4, 'Coco', 14, '2025-04-22', 'macho'),      -- 20 semanas (~5 meses)
+(5, 'Pipo', 16, '2025-05-27', 'macho'),      -- 15 semanas (~3.5 meses)
+(6, 'Mimi', 11, '2024-12-31', 'hembra'),     -- 35 semanas (~8 meses)
+(8, 'Goldie', 24, '2025-07-01', 'desconocido'); -- 10 semanas (~2.5 meses)
+
 
 -- ============================================
 -- ANTECEDENTES 

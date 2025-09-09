@@ -22,13 +22,8 @@ export const campos = [
     maxLength: 11,
     type: "number",
   }, // FK a razas
-  {
-    name: "edad_semanas",
-    required: false,
-    minLength: 1,
-    maxLength: 11,
-    type: "number",
-  }, // edad en semanas
+  { name: "fecha_nacimiento", required: true, type: "date" }, // Puede ser NULL
+
   { name: "sexo", required: true, minLength: 5, maxLength: 11, type: "string" }, // 'macho', 'hembra' o 'desconocido'
   {
     name: "estado_vital",
