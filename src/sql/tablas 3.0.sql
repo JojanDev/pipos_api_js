@@ -48,7 +48,7 @@
 		tipo_documento_id INT NOT NULL,
 		numero_documento VARCHAR(50) NOT NULL,
 		nombre VARCHAR(255) NOT NULL,
-		apellido VARCHAR(255) NOT NULL,
+        apellido VARCHAR(255) NOT NULL,
 		telefono VARCHAR(20) NOT NULL,
 		correo VARCHAR(255),
 		direccion VARCHAR(255) NOT NULL,

@@ -51,17 +51,18 @@ INSERT INTO info_medicamentos (nombre, uso_general, via_administracion, presenta
 -- ============================================
 -- USUARIOS 
 -- ============================================
-INSERT INTO usuarios (tipo_documento_id, numero_documento, nombre, telefono, correo, direccion) VALUES
-(1, '12345678', 'Johan Sebastian Delgado Mantilla', '3121002001', 'johan@veterinaria.com', 'Calle 10 #20-30'),
-(1, '23456789', 'María García Rodríguez', '3165004002', 'maria@veterinaria.com', 'Carrera 5 #50-15'),
-(1, '34567890', 'Pedro Martínez López', '3107008003', 'pedro@veterinaria.com', 'Av. Colombia #100-40'),
-(2, '12345678', 'Ana Sofía Hernández', '3149001004', 'ana.hernandez@email.com', 'Diagonal 25 #75-60'),
-(1, '45678901', 'Carlos Ruiz Mendoza', '3153002005', 'carlos.ruiz@email.com', 'Transversal 8 #33-22'),
-(3, '98765432', 'Laura Jiménez Castro', '3162003006', 'laura.jimenez@email.com', 'Calle 45 #12-67'),
-(1, '56789012', 'Miguel Torres Vega', '3178004007', 'miguel.torres@email.com', 'Carrera 15 #89-34'),
-(2, '87654321', 'Daniela Moreno Silva', '3184005008', 'daniela.moreno@email.com', 'Avenida 6 #23-78'),
-(1, '67890123', 'Roberto Vargas Peña', '3195006009', 'roberto.vargas@email.com', 'Calle 78 #45-12'),
-(1, '78901234', 'Camila Rojas Ortega', '3146007010', 'camila.rojas@email.com', 'Diagonal 12 #56-90');
+INSERT INTO usuarios (tipo_documento_id, numero_documento, nombre, apellido, telefono, correo, direccion) VALUES
+(1, '12345678', 'Johan Sebastian', 'Delgado Mantilla', '3121002001', 'johan@veterinaria.com', 'Calle 10 #20-30'),
+(1, '23456789', 'María', 'García Rodríguez', '3165004002', 'maria@veterinaria.com', 'Carrera 5 #50-15'),
+(1, '34567890', 'Pedro', 'Martínez López', '3107008003', 'pedro@veterinaria.com', 'Av. Colombia #100-40'),
+(2, '12345678', 'Ana Sofía', 'Hernández', '3149001004', 'ana.hernandez@email.com', 'Diagonal 25 #75-60'),
+(1, '45678901', 'Carlos', 'Ruiz Mendoza', '3153002005', 'carlos.ruiz@email.com', 'Transversal 8 #33-22'),
+(3, '98765432', 'Laura', 'Jiménez Castro', '3162003006', 'laura.jimenez@email.com', 'Calle 45 #12-67'),
+(1, '56789012', 'Miguel', 'Torres Vega', '3178004007', 'miguel.torres@email.com', 'Carrera 15 #89-34'),
+(2, '87654321', 'Daniela', 'Moreno Silva', '3184005008', 'daniela.moreno@email.com', 'Avenida 6 #23-78'),
+(1, '67890123', 'Roberto', 'Vargas Peña', '3195006009', 'roberto.vargas@email.com', 'Calle 78 #45-12'),
+(1, '78901234', 'Camila', 'Rojas Ortega', '3146007010', 'camila.rojas@email.com', 'Diagonal 12 #56-90');
+
 
 -- ============================================
 -- ROLES USUARIOS
