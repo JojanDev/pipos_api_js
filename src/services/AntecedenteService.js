@@ -1,27 +1,32 @@
 import Antecedente from "../models/Antecedente.js";
-import Mascota from "../models/Mascota.js";
 import MascotaService from "./MascotaService.js";
 import TratamientoService from "./TratamientoService.js";
-// import Usuario from "../models/Usuario.js";
 
+/**
+ * Servicio de gestión de antecedentes de mascotas.
+ * Contiene métodos para CRUD y consultas específicas.
+ */
 class AntecedenteService {
   static objAntecedente = new Antecedente();
-  static objMascota = new Mascota();
 
+  /**
+   * Obtiene todos los antecedentes registrados en la base de datos.
+   * @returns {Promise<Object>} Objeto con información de error, código, mensaje y datos.
+   */
   static async getAllAntecedentes() {
     try {
-      // Llamamos el método listar
       const antecedentes = await this.objAntecedente.getAll();
 
-      // Validamos si no hay tipos de productos
-      if (!antecedentes || antecedentes.length === 0)
+      // Validamos si hay antecedentes
+      if (!antecedentes || antecedentes.length === 0) {
         return {
           error: true,
           code: 404,
           message: "No hay antecedentes registrados",
+          data: null,
         };
+      }
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -29,25 +34,30 @@ class AntecedenteService {
         data: antecedentes,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      console.log(error);
-      return { error: true, code: 500, message: error.message };
+      // Retorno en caso de excepción
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Obtiene un antecedente por su ID.
+   * @param {number} id - ID del antecedente a consultar
+   * @returns {Promise<Object>} Objeto con información de error, código, mensaje y datos.
+   */
   static async getAntecedenteById(id) {
     try {
-      // Llamamos el método consultar por ID
       const antecedente = await this.objAntecedente.getById(id);
-      // Validamos si no hay antecedente
-      if (!antecedente)
+
+      // Validamos si el antecedente existe
+      if (!antecedente) {
         return {
           error: true,
           code: 404,
           message: "Antecedente no encontrado",
+          data: null,
         };
+      }
 
-      // Retornamos la antecedente obtenida
       return {
         error: false,
         code: 200,
@@ -55,30 +65,35 @@ class AntecedenteService {
         data: antecedente,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Crea un nuevo antecedente asociado a una mascota.
+   * @param {Object} antecedente - Datos del antecedente a crear
+   * @returns {Promise<Object>} Objeto con información de error, código, mensaje y datos.
+   */
   static async createAntecedente(antecedente) {
     try {
+      // Validamos que la mascota exista
       const mascotaExistente = await MascotaService.getMascotaById(
         antecedente.mascota_id
       );
-
       if (mascotaExistente.error) return mascotaExistente;
 
-      // Llamamos el método crear
+      // Creamos el antecedente
       const antecedenteCreado = await this.objAntecedente.create(antecedente);
-      // Validamos si no se pudo crear el tipo de producto
-      if (antecedenteCreado === null)
+
+      if (!antecedenteCreado) {
         return {
           error: true,
           code: 400,
           message: "Error al crear el antecedente",
+          data: null,
         };
+      }
 
-      // Retornamos el tipo de producto creado
       return {
         error: false,
         code: 201,
@@ -86,38 +101,44 @@ class AntecedenteService {
         data: antecedenteCreado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Actualiza un antecedente existente.
+   * @param {number} id - ID del antecedente a actualizar
+   * @param {Object} antecedente - Nuevos datos del antecedente
+   * @returns {Promise<Object>} Objeto con información de error, código, mensaje y datos.
+   */
   static async updateAntecedente(id, antecedente) {
     try {
-      // Llamamos el método consultar por ID
+      // Verificamos que el antecedente exista
       const existente = await this.objAntecedente.getById(id);
-      // Validamos si el tipo de producto existe
       if (!existente) {
         return {
           error: true,
           code: 404,
-          message: "Antecedente no encontrada",
+          message: "Antecedente no encontrado",
+          data: null,
         };
       }
 
-      // Llamamos el método actualizar
+      // Actualizamos el antecedente
       const antecedenteActualizado = await this.objAntecedente.update(
         id,
         antecedente
       );
-      // Validamos si no se pudo actualizar el tipo de producto
-      if (antecedenteActualizado === null)
+
+      if (!antecedenteActualizado) {
         return {
           error: true,
           code: 400,
           message: "Error al actualizar el antecedente",
+          data: null,
         };
+      }
 
-      // Retornamos el tipo de producto actualizado
       return {
         error: false,
         code: 200,
@@ -125,77 +146,87 @@ class AntecedenteService {
         data: antecedenteActualizado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Elimina un antecedente.
+   * @param {number} id - ID del antecedente a eliminar
+   * @returns {Promise<Object>} Objeto con información de error, código, mensaje y datos.
+   */
   static async deleteAntecedente(id) {
     try {
-      // Llamamos el método consultar por ID
-      const antecedenteExistente = await AntecedenteService.getAntecedenteById(
-        id
-      );
-
+      // Verificamos que exista
+      const antecedenteExistente = await this.getAntecedenteById(id);
       if (antecedenteExistente.error) return antecedenteExistente;
 
+      // Revisamos si tiene tratamientos asociados
       const tratamientosAsociados =
         await TratamientoService.getAllTratamientosByAntecedenteId(id);
-
-      if (!tratamientosAsociados.error)
+      if (
+        !tratamientosAsociados.error &&
+        tratamientosAsociados.data.length > 0
+      ) {
         return {
           error: true,
           code: 400,
           message:
-            "Error al eliminar el antecedente, tiene tratamientos asociados",
+            "No se puede eliminar el antecedente, tiene tratamientos asociados",
+          data: null,
         };
+      }
 
-      // Llamamos el método eliminar
+      // Eliminamos el antecedente
       const antecedenteEliminado = await this.objAntecedente.delete(id);
-      // Validamos si no se pudo eliminar el tipo de producto
-      if (!antecedenteEliminado)
+      if (!antecedenteEliminado) {
         return {
           error: true,
           code: 400,
           message: "Error al eliminar el antecedente",
+          data: null,
         };
+      }
 
-      // Retornamos el tipo de producto eliminado
       return {
         error: false,
         code: 200,
         message: "Antecedente eliminado correctamente",
+        data: null,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Obtiene todos los antecedentes de una mascota.
+   * @param {number} mascotaId - ID de la mascota
+   * @returns {Promise<Object>} Objeto con información de error, código, mensaje y datos.
+   */
   static async getAntecedentesByMascotaId(mascotaId) {
     try {
-      // Llamamos el método consultar por ID
       const antecedentesMascota = await this.objAntecedente.getAllByMascotaId(
         mascotaId
       );
-      // Validamos si no hay antecedente
-      if (!antecedentesMascota || antecedentesMascota.length === 0)
+
+      if (!antecedentesMascota || antecedentesMascota.length === 0) {
         return {
           error: true,
           code: 404,
           message: "La mascota no tiene antecedentes registrados",
+          data: null,
         };
+      }
 
-      // Retornamos la antecedente obtenida
       return {
         error: false,
         code: 200,
-        message: "Antecedentes de mascota obtenidos correctamente",
+        message: "Antecedentes de la mascota obtenidos correctamente",
         data: antecedentesMascota,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 }

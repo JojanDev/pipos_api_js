@@ -150,93 +150,114 @@ INSERT INTO permisos (nombre, descripcion) VALUES
 ('tipo-producto.read', 'Permite crear tipos de producto');
 
 INSERT INTO permisos_roles (permiso_id, rol_id) VALUES
-  (6, 1),   -- mascota.*
-(7, 1),   -- usuario.view
-(8, 1),   -- usuario.read
-(9, 1),   -- usuario.create
-(11, 1),  -- usuario.create-client
-(12, 1),  -- usuario.create-personal
-(13, 1),  -- usuario.disable
-(14, 1),  -- usuario.change-state
-(16, 1),  -- credencial.read
-(17, 1),  -- credencial.create
-(24, 1),  -- rol-usuario.*
-(29, 1),  -- rol.*
-(34, 1),  -- permiso.*
-(39, 1),  -- permiso-rol.*
-(45, 1),  -- tratamiento.*
-(51, 1),  -- venta.*
-(56, 1),  -- medicamento-venta.*
-(61, 1),  -- producto-venta.*
-(66, 1),  -- servicio-venta.*
-(72, 1),  -- medicamento.*
-(78, 1),  -- antecedente.*
-(84, 1),  -- medicamento-tratamiento.*
-(90, 1),  -- info-medicamento.*
-(96, 1),  -- producto.*
-(102, 1), -- servicio.*
-(108, 1), -- raza.*
-(114, 1), -- especie.*
-(119, 1), -- tipo-documento.*
-(124, 1), -- tipo-producto.*
-(125, 1), -- usuario.update-client
-(126, 1), -- usuario.view-client
-
--- Todos los .read (incluidos credenciales, permisos y permisos-roles)
-(5, 1),   -- mascota.read
-(20, 1),  -- rol-usuario.read
-(25, 1),  -- rol.read
-(30, 1),  -- permiso.read
-(35, 1),  -- permiso-rol.read
-(41, 1),  -- tratamiento.read
-(47, 1),  -- venta.read
-(52, 1),  -- medicamento-venta.read
-(57, 1),  -- producto-venta.read
-(62, 1),  -- servicio-venta.read
-(68, 1),  -- medicamento.read
-(74, 1),  -- antecedente.read
-(80, 1),  -- medicamento-tratamiento.read
-(86, 1),  -- info-medicamento.read
-(92, 1),  -- producto.read
-(98, 1),  -- servicio.read
-(104, 1), -- raza.read
-(110, 1), -- especie.read
-(115, 1), -- tipo-documento.read
-(127, 1),
-
-  (6, 2), (126,2), (11,2),(125,2),
-(40,2),(41,2),(42,2),(43,2),(46,2),(47,2),(48,2),(49,2),
-(52,2),(53,2),
-(57,2), (58,2),
-(62,2), (63,2),
-(67,2), (68,2),
-(73,2), (74,2),(75,2),(76,2),
-(79,2),(80,2),(81,2),(82,2),
-(85,2), (86,2),(87,2),(88,2),
-(91,2), (92,2),
-(97,2), (98,2),
-(104,2),
-(110,2),
-(115,2),
-(127,2),
-
--- Todos los permisos .read que faltaban (excepto credenciales, permisos y permisos-roles)
-(5, 2),   -- mascota.read
-(8, 2),   -- usuario.read
-(20, 2),  -- rol-usuario.read
-(25, 2),  -- rol.read
-(41, 2),  -- tratamiento.read (ya estaba arriba, pero lo dejo claro)
-(47, 2),  -- venta.read (ya estaba arriba, pero lo dejo claro)
-(52, 2),  -- medicamento-venta.read (ya estaba arriba)
-(57, 2),  -- producto-venta.read (ya estaba arriba)
-(62, 2),  -- servicio-venta.read (ya estaba arriba)
-(68, 2),  
-(74, 2),  
-(80, 2),  
-(86, 2),
-(92, 2),  
-(98, 2),  
-(104, 2), 
-(110, 2),
-(115, 2), 
-(127, 2); 
+  (6, 1),
+  (7, 1),
+  (8, 1),
+  (9, 1),
+  (11, 1),
+  (12, 1),
+  (13, 1),
+  (14, 1),
+  (16, 1),
+  (17, 1),
+  (18, 1),
+  (24, 1),
+  (29, 1),
+  (34, 1),
+  (39, 1),
+  (45, 1),
+  (51, 1),
+  (56, 1),
+  (61, 1),
+  (66, 1),
+  (72, 1),
+  (78, 1),
+  (84, 1),
+  (90, 1),
+  (96, 1),
+  (102, 1),
+  (108, 1),
+  (114, 1),
+  (119, 1),
+  (124, 1),
+  (125, 1),
+  (126, 1),
+  (5, 1),
+  (20, 1),
+  (25, 1),
+  (30, 1),
+  (35, 1),
+  (41, 1),
+  (47, 1),
+  (52, 1),
+  (57, 1),
+  (62, 1),
+  (68, 1),
+  (74, 1),
+  (80, 1),
+  (86, 1),
+  (92, 1),
+  (98, 1),
+  (104, 1),
+  (110, 1),
+  (115, 1),
+  (127, 1),
+  (6, 2),
+  (126, 2),
+  (11, 2),
+  (125, 2),
+  (40, 2),
+  (41, 2),
+  (42, 2),
+  (43, 2),
+  (46, 2),
+  (47, 2),
+  (48, 2),
+  (49, 2),
+  (52, 2),
+  (53, 2),
+  (57, 2),
+  (58, 2),
+  (62, 2),
+  (63, 2),
+  (67, 2),
+  (68, 2),
+  (73, 2),
+  (74, 2),
+  (75, 2),
+  (76, 2),
+  (79, 2),
+  (80, 2),
+  (81, 2),
+  (82, 2),
+  (85, 2),
+  (86, 2),
+  (87, 2),
+  (88, 2),
+  (91, 2),
+  (92, 2),
+  (97, 2),
+  (98, 2),
+  (104, 2),
+  (110, 2),
+  (115, 2),
+  (127, 2),
+  (5, 2),
+  (8, 2),
+  (20, 2),
+  (25, 2),
+  (41, 2),
+  (47, 2),
+  (52, 2),
+  (57, 2),
+  (62, 2),
+  (68, 2),
+  (74, 2),
+  (80, 2),
+  (86, 2),
+  (92, 2),
+  (98, 2),
+  (104, 2),
+  (110, 2),
+  (115, 2),
+  (127, 2);

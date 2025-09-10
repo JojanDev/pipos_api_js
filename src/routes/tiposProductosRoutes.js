@@ -9,21 +9,21 @@ import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todos los tipos de producto
 router.get(
   "/",
   authorize("tipo-producto.read"),
   TipoProductoController.getAllTiposProductos
 );
 
-// Obtener un tipo de documento por ID
+// Obtener tipo de producto por ID
 router.get(
   "/:id",
   authorize("tipo-producto.read"),
   TipoProductoController.getTipoProductoById
 );
 
-// Crear un nuevo tipo de documento
+// Crear tipo de producto
 router.post(
   "/",
   authorize("tipo-producto.create"),
@@ -31,7 +31,7 @@ router.post(
   TipoProductoController.createTipoProducto
 );
 
-// Actualizar un tipo de documento
+// Actualizar tipo de producto (completo)
 router.put(
   "/:id",
   authorize("tipo-producto.update"),
@@ -39,7 +39,7 @@ router.put(
   TipoProductoController.updateTipoProducto
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar tipo de producto (parcial)
 router.patch(
   "/:id",
   authorize("tipo-producto.update"),
@@ -47,7 +47,7 @@ router.patch(
   TipoProductoController.updateTipoProducto
 );
 
-// Eliminar un tipo de documento
+// Eliminar tipo de producto
 router.delete(
   "/:id",
   authorize("tipo-producto.delete"),

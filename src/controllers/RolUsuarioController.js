@@ -1,16 +1,28 @@
 import { ResponseProvider } from "../providers/ResponseProvider.js";
 import RolUsuarioService from "../services/RolUsuarioService.js";
 
-class RolUsuarioControlUsuarioler {
-  // Obtener todos los tipos de documentos
+/**
+ * Controlador para las rutas de "roles de usuarios".
+ * Centraliza la gestión de peticiones HTTP y delega la lógica de negocio
+ * al servicio RolUsuarioService.
+ */
+class RolUsuarioController {
+  /**
+   * Obtiene todos los roles de usuario.
+   * Ruta: GET /roles-usuarios
+   *
+   * @param {import('express').Request}  req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static getAllRolesUsuarios = async (req, res) => {
     try {
       const response = await RolUsuarioService.getAllRolesUsuarios();
-      // Validamos si no hay tipos de documentos
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -18,21 +30,28 @@ class RolUsuarioControlUsuarioler {
         response.code
       );
     } catch (error) {
+      console.error("getAllRolesUsuarios error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Obtener un tipo de documento por su ID
+  /**
+   * Obtiene un rol de usuario por su ID.
+   * Ruta: GET /roles-usuarios/:id
+   *
+   * @param {import('express').Request}  req  – req.params.id
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static getRolUsuarioById = async (req, res) => {
     const { id } = req.params;
     try {
-      // Llamamos al servicio para obtener el tipo de documento por su ID
       const response = await RolUsuarioService.getRolUsuarioById(id);
-      // Validamos si no hay tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -40,23 +59,28 @@ class RolUsuarioControlUsuarioler {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`getRolUsuarioById error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Crear un nuevo tipo de documento
+  /**
+   * Crea un nuevo rol de usuario.
+   * Ruta: POST /roles-usuarios
+   *
+   * @param {import('express').Request}  req  – req.body con datos del rolUsuario
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static createRolUsuario = async (req, res) => {
     const rolUsuario = req.body;
     try {
-      // Llamamos el método crear del modelo
       const response = await RolUsuarioService.createRolUsuario(rolUsuario);
-      // Validamos que la respuesta no tenga error
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento creado
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -64,25 +88,29 @@ class RolUsuarioControlUsuarioler {
         201
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error("createRolUsuario error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Actualizar un tipo de documento
+  /**
+   * Actualiza un rol de usuario existente por su ID.
+   * Ruta: PUT /roles-usuarios/:id
+   *
+   * @param {import('express').Request}  req  – req.params.id y req.body con datos a actualizar
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static updateRolUsuario = async (req, res) => {
     const { id } = req.params;
     const rolUsuario = req.body;
     try {
-      // Llamamos al método actualizar del modelo
       const response = await RolUsuarioService.updateRolUsuario(id, rolUsuario);
-      // Validamos que la respuesta no tenga error
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
 
-      // Retornamos el tipo de documento actualizado
       return ResponseProvider.success(
         res,
         response.data,
@@ -90,23 +118,28 @@ class RolUsuarioControlUsuarioler {
         200
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`updateRolUsuario error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Eliminar un tipo de documento
+  /**
+   * Elimina un rol de usuario por su ID.
+   * Ruta: DELETE /roles-usuarios/:id
+   *
+   * @param {import('express').Request}  req  – req.params.id
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static deleteRolUsuario = async (req, res) => {
     const { id } = req.params;
     try {
-      // Llamamos al servicio para eliminar el tipo de documento por su ID
       const response = await RolUsuarioService.deleteRolUsuario(id);
-      // Validamos si no se pudo eliminar el tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento eliminado
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -114,23 +147,30 @@ class RolUsuarioControlUsuarioler {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`deleteRolUsuario error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
+  /**
+   * Obtiene todos los roles de un usuario específico.
+   * Ruta: GET /usuarios/:id/roles-usuarios
+   *
+   * @param {import('express').Request}  req  – req.params.id (ID del usuario)
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static getAllRolesUsuarioByUsuarioId = async (req, res) => {
     const { id } = req.params;
     try {
-      // Llamamos al servicio para obtener el tipo de documento por su ID
       const response = await RolUsuarioService.getAllRolesUsuarioByUsuarioId(
         id
       );
-      // Validamos si no hay tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -138,10 +178,13 @@ class RolUsuarioControlUsuarioler {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(
+        `getAllRolesUsuarioByUsuarioId error (usuarioId=${id}):`,
+        error
+      );
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 }
 
-export default RolUsuarioControlUsuarioler;
+export default RolUsuarioController;

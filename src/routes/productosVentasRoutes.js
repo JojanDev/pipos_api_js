@@ -1,5 +1,4 @@
 import express from "express";
-
 import {
   validarProductoVenta,
   validarProductoVentaParcial,
@@ -9,28 +8,28 @@ import ProductoVentaController from "../controllers/ProductoVentaController.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todos los productos-ventas
 router.get(
   "/",
   authorize("producto-venta.read"),
   ProductoVentaController.getAllProductosVentas
 );
 
-// Obtener un tipo de documento por ID
+// Obtener productos-ventas de una venta específica
 router.get(
   "/venta/:id",
   authorize("producto-venta.read"),
   ProductoVentaController.getAllProductoVentaByVentaId
 );
 
-// Obtener un tipo de documento por ID
+// Obtener un producto-venta por ID
 router.get(
   "/:id",
   authorize("producto-venta.read"),
   ProductoVentaController.getProductoVentaById
 );
 
-// Crear un nuevo tipo de documento
+// Crear un producto-venta
 router.post(
   "/",
   authorize("producto-venta.create"),
@@ -38,7 +37,7 @@ router.post(
   ProductoVentaController.createProductoVenta
 );
 
-// Actualizar un tipo de documento
+// Actualizar un producto-venta
 router.put(
   "/:id",
   authorize("producto-venta.update"),
@@ -46,7 +45,7 @@ router.put(
   ProductoVentaController.updateProductoVenta
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar parcialmente un producto-venta
 router.patch(
   "/:id",
   authorize("producto-venta.update"),
@@ -54,7 +53,7 @@ router.patch(
   ProductoVentaController.updateProductoVenta
 );
 
-// Eliminar un tipo de documento
+// Eliminar un producto-venta
 router.delete(
   "/:id",
   authorize("producto-venta.delete"),

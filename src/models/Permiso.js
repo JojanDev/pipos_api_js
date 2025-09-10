@@ -1,29 +1,31 @@
 import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
+/**
+ * Clase que representa el modelo de Permisos en la base de datos.
+ * Extiende de la clase genérica Modelo para reutilizar operaciones CRUD.
+ */
 class Permiso extends Modelo {
-  #tableName = "permisos";
+  #tableName = "permisos"; // Nombre de la tabla en la base de datos
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene todos los permisos de la base de datos.
+   * @returns {Promise<Array>} Lista de todos los permisos.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getAll() {
     try {
       return await super.getAll(this.#tableName);
     } catch (error) {
-      throw new Error(
-        `Error al obtener todas los permisos: ${error.message}`
-      );
+      throw new Error(`Error al obtener todos los permisos: ${error.message}`);
     }
   }
 
   /**
-   * Obtiene un tipo de documento específico por su ID
-   * @param {number} id - ID del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene un permiso específico por su ID.
+   * @param {number} id - ID del permiso.
+   * @returns {Promise<Object|null>} El permiso encontrado o null si no existe.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getById(id) {
     try {
@@ -36,10 +38,10 @@ class Permiso extends Modelo {
   }
 
   /**
-   * Crea un nuevo tipo de documento en la base de datos
-   * @param {Object} permiso - Objeto con los datos del tipo de documento {nombre}
-   * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló
-   * @throws {Error} Si ocurre un error en la inserción
+   * Crea un nuevo permiso en la base de datos.
+   * @param {Object} permiso - Objeto con los datos del permiso (ejemplo: {nombre, descripcion}).
+   * @returns {Promise<Object|null>} El permiso creado con su ID, o null si falló.
+   * @throws {Error} Si ocurre un error en la inserción.
    */
   async create(permiso) {
     try {
@@ -54,11 +56,11 @@ class Permiso extends Modelo {
   }
 
   /**
-   * Actualiza un tipo de documento existente
-   * @param {number} id - ID del tipo de documento a actualizar
-   * @param {Object} permiso - Objeto con los nuevos datos del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si falló
-   * @throws {Error} Si ocurre un error en la actualización
+   * Actualiza un permiso existente.
+   * @param {number} id - ID del permiso a actualizar.
+   * @param {Object} permiso - Objeto con los nuevos datos del permiso.
+   * @returns {Promise<Object|null>} El permiso actualizado, o null si falló.
+   * @throws {Error} Si ocurre un error en la actualización.
    */
   async update(id, permiso) {
     try {
@@ -74,10 +76,10 @@ class Permiso extends Modelo {
   }
 
   /**
-   * Elimina un tipo de documento de la base de datos
-   * @param {number} id - ID del tipo de documento a eliminar
-   * @returns {Promise<boolean>} true si se eliminó correctamente, false si no
-   * @throws {Error} Si ocurre un error en la eliminación
+   * Elimina un permiso de la base de datos.
+   * @param {number} id - ID del permiso a eliminar.
+   * @returns {Promise<boolean>} true si se eliminó correctamente, false si no.
+   * @throws {Error} Si ocurre un error en la eliminación.
    */
   async delete(id) {
     try {

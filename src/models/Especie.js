@@ -1,29 +1,36 @@
 import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
+/**
+ * Clase que representa el modelo de la tabla "especies".
+ * Hereda de la clase base Modelo para aprovechar los métodos genéricos de CRUD.
+ */
 class Especie extends Modelo {
+  // Nombre de la tabla asociada en la base de datos
   #tableName = "especies";
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene todas las especies de mascotas de la base de datos.
+   *
+   * @returns {Promise<Array>} Lista de todas las especies.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getAll() {
     try {
       return await super.getAll(this.#tableName);
     } catch (error) {
       throw new Error(
-        `Error al obtener todos las especies de mascotas: ${error.message}`
+        `Error al obtener todas las especies de mascotas: ${error.message}`
       );
     }
   }
 
   /**
-   * Obtiene un tipo de documento específico por su ID
-   * @param {number} id - ID del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene una especie específica por su ID.
+   *
+   * @param {number} id - ID de la especie.
+   * @returns {Promise<Object|null>} La especie encontrada o null si no existe.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getById(id) {
     try {
@@ -36,17 +43,22 @@ class Especie extends Modelo {
   }
 
   /**
-   * Crea un nuevo tipo de documento en la base de datos
-   * @param {Object} tipoDocumento - Objeto con los datos del tipo de documento {nombre}
-   * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló
-   * @throws {Error} Si ocurre un error en la inserción
+   * Crea una nueva especie en la base de datos.
+   *
+   * @param {Object} especie - Objeto con los datos de la especie (ej: { nombre }).
+   * @returns {Promise<Object|null>} La especie creada con su ID, o null si falló.
+   * @throws {Error} Si ocurre un error en la inserción.
    */
-  async create(tipoDocumento) {
+  async create(especie) {
     try {
-      const idCreado = await super.create(this.#tableName, tipoDocumento);
+      // Insertamos la especie y recuperamos el ID generado
+      const idCreado = await super.create(this.#tableName, especie);
+
+      // Si se creó correctamente, devolvemos la especie recién insertada
       if (idCreado) {
         return await this.getById(idCreado);
       }
+
       return null;
     } catch (error) {
       throw new Error(`Error al crear la especie de mascota: ${error.message}`);
@@ -54,17 +66,20 @@ class Especie extends Modelo {
   }
 
   /**
-   * Actualiza un tipo de documento existente
-   * @param {number} id - ID del tipo de documento a actualizar
-   * @param {Object} tipoDocumento - Objeto con los nuevos datos del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si falló
-   * @throws {Error} Si ocurre un error en la actualización
+   * Actualiza una especie existente.
+   *
+   * @param {number} id - ID de la especie a actualizar.
+   * @param {Object} especie - Objeto con los nuevos datos de la especie.
+   * @returns {Promise<Object|null>} La especie actualizada, o null si falló.
+   * @throws {Error} Si ocurre un error en la actualización.
    */
-  async update(id, tipoDocumento) {
+  async update(id, especie) {
     try {
-      if (await super.update(this.#tableName, id, tipoDocumento)) {
+      // Si la actualización fue exitosa, devolvemos la especie actualizada
+      if (await super.update(this.#tableName, id, especie)) {
         return await this.getById(id);
       }
+
       return null;
     } catch (error) {
       throw new Error(
@@ -74,10 +89,11 @@ class Especie extends Modelo {
   }
 
   /**
-   * Elimina un tipo de documento de la base de datos
-   * @param {number} id - ID del tipo de documento a eliminar
-   * @returns {Promise<boolean>} true si se eliminó correctamente, false si no
-   * @throws {Error} Si ocurre un error en la eliminación
+   * Elimina una especie de la base de datos.
+   *
+   * @param {number} id - ID de la especie a eliminar.
+   * @returns {Promise<boolean>} true si se eliminó correctamente, false si no.
+   * @throws {Error} Si ocurre un error en la eliminación.
    */
   async delete(id) {
     try {

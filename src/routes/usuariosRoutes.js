@@ -9,43 +9,48 @@ import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todos los usuarios
 router.get("/", authorize("usuario.read"), UsuarioController.getAllUsuarios);
 
+// Obtener usuarios con rol cliente
 router.get(
   "/clientes",
   authorize("usuario.read"),
   UsuarioController.getUsuariosClientes
 );
 
+// Obtener usuarios con rol empleado
 router.get(
   "/empleados",
   authorize("usuario.read"),
   UsuarioController.getAllUsuariosEmpleados
 );
 
+// Obtener usuarios sin rol empleado
 router.get(
   "/no-empleados",
   authorize("usuario.read"),
   UsuarioController.getAllUsuariosNoEmpleados
 );
 
+// Obtener usuarios sin rol cliente
 router.get(
   "/no-clientes",
   authorize("usuario.read"),
   UsuarioController.getAllUsuariosNoClientes
 );
 
+// Obtener usuarios con rol veterinario
 router.get(
   "/veterinarios",
   authorize("usuario.read"),
   UsuarioController.getUsuariosVeterinarios
 );
 
-// Obtener un tipo de documento por ID
+// Obtener un usuario por ID
 router.get("/:id", authorize("usuario.read"), UsuarioController.getUsuarioById);
 
-// Crear un nuevo tipo de documento
+// Crear un usuario (admin o cliente)
 router.post(
   "/",
   authorize("usuario.create", "usuario.create-client"),
@@ -53,7 +58,7 @@ router.post(
   UsuarioController.createUsuario
 );
 
-// Actualizar un tipo de documento
+// Actualizar un usuario (admin o cliente)
 router.put(
   "/:id",
   authorize("usuario.update", "usuario.update-client"),
@@ -61,7 +66,7 @@ router.put(
   UsuarioController.updateUsuario
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar un usuario parcialmente (incluye cambio de estado)
 router.patch(
   "/:id",
   authorize("usuario.update", "usuario.update-client", "usuario.change-state"),
@@ -69,7 +74,7 @@ router.patch(
   UsuarioController.updateUsuario
 );
 
-// Eliminar un tipo de documento
+// Eliminar un usuario
 router.delete("/:id", UsuarioController.deleteUsuario);
 
 export default router;

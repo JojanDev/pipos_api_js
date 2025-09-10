@@ -1,16 +1,32 @@
+/**
+ * MedicamentoVentaController
+ *
+ * Controlador encargado de recibir las peticiones HTTP relacionadas con
+ * las ventas de medicamentos y delegar la lógica al servicio correspondiente.
+ *
+ */
+
 import { ResponseProvider } from "../providers/ResponseProvider.js";
 import MedicamentoVentaService from "../services/MedicamentoVentaService.js";
 
 class MedicamentoVentaController {
-  // Obtener todos los tipos de documentos
+  /**
+   * Obtener todas las ventas de medicamentos
+   *
+   * @param {import("express").Request} req - petición entrante (no usada aquí)
+   * @param {import("express").Response} res - respuesta que se enviará al cliente
+   */
   static getAllMedicamentosVentas = async (req, res) => {
     try {
+      // Llamamos al servicio que devuelve todas las ventas de medicamentos
       const response = await MedicamentoVentaService.getAllMedicamentosVentas();
-      // Validamos si no hay tipos de documentos
+
+      // Si el servicio indica un error (por ejemplo 404), devolvemos ese error
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
+      // Respuesta exitosa: devolvemos datos y mensaje del servicio
       return ResponseProvider.success(
         res,
         response.data,
@@ -18,23 +34,32 @@ class MedicamentoVentaController {
         response.code
       );
     } catch (error) {
+      // Error inesperado -> 500
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Obtener un tipo de documento por su ID
+  /**
+   * Obtener una venta de medicamento por su ID
+   *
+   * @param {import("express").Request} req - petición entrante (req.params.id)
+   * @param {import("express").Response} res - respuesta que se enviará al cliente
+   */
   static getMedicamentoVentaById = async (req, res) => {
+    // Extraemos el id desde los parámetros de la ruta
     const { id } = req.params;
     try {
-      // Llamamos al servicio para obtener el tipo de documento por su ID
+      // Llamamos al servicio para obtener la venta por ID
       const response = await MedicamentoVentaService.getMedicamentoVentaById(
         id
       );
-      // Validamos si no hay tipo de documento
+
+      // Si el servicio devolvió un error (por ejemplo 404), lo propagamos
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
+      // Devolvemos la venta encontrada
       return ResponseProvider.success(
         res,
         response.data,
@@ -42,25 +67,32 @@ class MedicamentoVentaController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      // Error no controlado -> 500
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Crear un nuevo tipo de documento
+  /**
+   * Crear una nueva venta de medicamento
+   *
+   * @param {import("express").Request} req - petición entrante (req.body contiene los datos)
+   * @param {import("express").Response} res - respuesta que se enviará al cliente
+   */
   static createMedicamentoVenta = async (req, res) => {
+    // Payload con los datos de la venta
     const medicamentoVenta = req.body;
     try {
-      // Llamamos el método crear del modelo
+      // Llamamos al servicio que crea la venta
       const response = await MedicamentoVentaService.createMedicamentoVenta(
         medicamentoVenta
       );
-      // Validamos que la respuesta no tenga error
+
+      // Si el servicio reporta un error (validación, recursos inexistentes...), lo devolvemos
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento creado
+
+      // Creación exitosa -> 201 Created
       return ResponseProvider.success(
         res,
         response.data,
@@ -68,28 +100,34 @@ class MedicamentoVentaController {
         201
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      // Error no controlado -> 500
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Actualizar un tipo de documento
+  /**
+   * Actualizar una venta de medicamento existente
+   *
+   * @param {import("express").Request} req - petición entrante (req.params.id, req.body)
+   * @param {import("express").Response} res - respuesta que se enviará al cliente
+   */
   static updateMedicamentoVenta = async (req, res) => {
+    // Extraemos id y nuevo payload
     const { id } = req.params;
     const medicamentoVenta = req.body;
     try {
-      // Llamamos al método actualizar del modelo
+      // Llamamos al servicio que actualiza la venta
       const response = await MedicamentoVentaService.updateMedicamentoVenta(
         id,
         medicamentoVenta
       );
-      // Validamos que la respuesta no tenga error
+
+      // Si el servicio devuelve error (404, 400...), lo propagamos
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
 
-      // Retornamos el tipo de documento actualizado
+      // Actualización correcta -> 200 OK
       return ResponseProvider.success(
         res,
         response.data,
@@ -97,23 +135,30 @@ class MedicamentoVentaController {
         200
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      // Error no controlado -> 500
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Eliminar un tipo de documento
+  /**
+   * Eliminar una venta de medicamento por su ID
+   *
+   * @param {import("express").Request} req - petición entrante (req.params.id)
+   * @param {import("express").Response} res - respuesta que se enviará al cliente
+   */
   static deleteMedicamentoVenta = async (req, res) => {
+    // Obtenemos el id a eliminar
     const { id } = req.params;
     try {
-      // Llamamos al servicio para eliminar el tipo de documento por su ID
+      // Llamamos al servicio para eliminar la venta
       const response = await MedicamentoVentaService.deleteMedicamentoVenta(id);
-      // Validamos si no se pudo eliminar el tipo de documento
+
+      // Si ocurrió algún problema (por ejemplo 404 o 400), lo devolvemos
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento eliminado
+
+      // Eliminación correcta -> devolvemos el mensaje del servicio
       return ResponseProvider.success(
         res,
         response.data,
@@ -121,22 +166,31 @@ class MedicamentoVentaController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      // Error no controlado -> 500
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Obtener todos los tipos de documentos
+  /**
+   * Obtener todas las ventas de medicamentos asociadas a una venta (venta_id)
+   *
+   * @param {import("express").Request} req - petición entrante (req.params.id = venta_id)
+   * @param {import("express").Response} res - respuesta que se enviará al cliente
+   */
   static getAllMedicamentosVentasByVentaId = async (req, res) => {
+    // Extraemos el id de la venta
     const { id } = req.params;
     try {
+      // Llamamos al servicio que obtiene los medicamentos vendidos para la venta indicada
       const response =
         await MedicamentoVentaService.getAllMedicamentosVentasByVentaId(id);
-      // Validamos si no hay tipos de documentos
+
+      // Si el servicio devuelve error (por ejemplo 404), lo propagamos
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
+      // Respuesta exitosa con los datos
       return ResponseProvider.success(
         res,
         response.data,
@@ -144,6 +198,7 @@ class MedicamentoVentaController {
         response.code
       );
     } catch (error) {
+      // Error no controlado -> 500
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };

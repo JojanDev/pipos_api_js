@@ -1,5 +1,4 @@
 import express from "express";
-
 import {
   validarInfoMedicamento,
   validarInfoMedicamentoParcial,
@@ -9,21 +8,21 @@ import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todos los registros de información de medicamentos
 router.get(
   "/",
   authorize("info-medicamento.read"),
   InfoMedicamentoController.getAllInfosMedicamentos
 );
 
-// Obtener un tipo de documento por ID
+// Obtener información de medicamento por ID
 router.get(
   "/:id",
   authorize("info-medicamento.read"),
   InfoMedicamentoController.getInfoMedicamentoById
 );
 
-// Crear un nuevo tipo de documento
+// Crear nueva información de medicamento
 router.post(
   "/",
   authorize("info-medicamento.create"),
@@ -31,7 +30,7 @@ router.post(
   InfoMedicamentoController.createInfoMedicamento
 );
 
-// Actualizar un tipo de documento
+// Actualizar información de medicamento (completo)
 router.put(
   "/:id",
   authorize("info-medicamento.update"),
@@ -39,7 +38,7 @@ router.put(
   InfoMedicamentoController.updateInfoMedicamento
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar información de medicamento (parcial)
 router.patch(
   "/:id",
   authorize("info-medicamento.update"),
@@ -47,7 +46,7 @@ router.patch(
   InfoMedicamentoController.updateInfoMedicamento
 );
 
-// Eliminar un tipo de documento
+// Eliminar información de medicamento
 router.delete(
   "/:id",
   authorize("info-medicamento.delete"),

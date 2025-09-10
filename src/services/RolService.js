@@ -1,24 +1,28 @@
 import Rol from "../models/Rol.js";
-// import Usuario from "../models/Usuario.js";
 
+/**
+ * Servicio para gestionar roles.
+ * Incluye métodos CRUD y consultas específicas para roles de empleados.
+ */
 class RolService {
   static objRol = new Rol();
-  // static objUsuario = new Usuario();
 
+  /**
+   * Obtiene todos los roles registrados, excluyendo el rol con id 1 (superadministrador).
+   * @returns {Promise<Object>} Objeto con estado, código HTTP, mensaje y datos.
+   */
   static async getAllRoles() {
     try {
-      // Llamamos el método listar
       const roles = await this.objRol.getAll();
 
-      // Validamos si no hay tipos de productos
       if (!roles || roles.length === 0)
         return {
           error: true,
           code: 404,
           message: "No hay roles registrados",
+          data: null,
         };
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -26,25 +30,28 @@ class RolService {
         data: roles.filter((rol) => rol.id !== 1),
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      console.log(error);
-      return { error: true, code: 500, message: error.message };
+      console.error(error);
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Obtiene un rol por su ID.
+   * @param {number} id - ID del rol.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP, mensaje y datos.
+   */
   static async getRolById(id) {
     try {
-      // Llamamos el método consultar por ID
       const rol = await this.objRol.getById(id);
-      // Validamos si no hay rol
+
       if (!rol)
         return {
           error: true,
           code: 404,
           message: "Rol no encontrado",
+          data: null,
         };
 
-      // Retornamos la rol obtenida
       return {
         error: false,
         code: 200,
@@ -52,24 +59,27 @@ class RolService {
         data: rol,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Crea un nuevo rol.
+   * @param {Object} rol - Datos del rol a crear.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP, mensaje y datos.
+   */
   static async createRol(rol) {
     try {
-      // Llamamos el método crear
       const rolCreado = await this.objRol.create(rol);
-      // Validamos si no se pudo crear el tipo de producto
-      if (rolCreado === null)
+
+      if (!rolCreado)
         return {
           error: true,
           code: 400,
           message: "Error al crear el Rol",
+          data: null,
         };
 
-      // Retornamos el tipo de producto creado
       return {
         error: false,
         code: 201,
@@ -77,35 +87,36 @@ class RolService {
         data: rolCreado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Actualiza un rol existente por su ID.
+   * @param {number} id - ID del rol a actualizar.
+   * @param {Object} rol - Nuevos datos del rol.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP, mensaje y datos.
+   */
   static async updateRol(id, rol) {
     try {
-      // Llamamos el método consultar por ID
       const existente = await this.objRol.getById(id);
-      // Validamos si el tipo de producto existe
-      if (!existente) {
+      if (!existente)
         return {
           error: true,
           code: 404,
-          message: "Rol no encontrada",
+          message: "Rol no encontrado",
+          data: null,
         };
-      }
 
-      // Llamamos el método actualizar
       const rolActualizado = await this.objRol.update(id, rol);
-      // Validamos si no se pudo actualizar el tipo de producto
-      if (rolActualizado === null)
+      if (!rolActualizado)
         return {
           error: true,
           code: 400,
           message: "Error al actualizar el Rol",
+          data: null,
         };
 
-      // Retornamos el tipo de producto actualizado
       return {
         error: false,
         code: 200,
@@ -113,69 +124,66 @@ class RolService {
         data: rolActualizado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Elimina un rol por su ID.
+   * @param {number} id - ID del rol a eliminar.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP y mensaje.
+   */
   static async deleteRol(id) {
     try {
-      // Llamamos el método consultar por ID
       const rol = await this.objRol.getById(id);
-      // Validamos si el tipo de producto existe
       if (!rol)
         return {
           error: true,
           code: 404,
           message: "Rol no encontrado",
+          data: null,
         };
 
-      // const usuariosTipo = await this.objUsuario.getAllByRolId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
-      // }
-
-      // Llamamos el método eliminar
       const rolEliminado = await this.objRol.delete(id);
-      // Validamos si no se pudo eliminar el tipo de producto
       if (!rolEliminado)
         return {
           error: true,
           code: 400,
           message: "Error al eliminar el Rol",
+          data: null,
         };
 
-      // Retornamos el tipo de producto eliminado
       return {
         error: false,
         code: 200,
         message: "Rol eliminado correctamente",
+        data: null,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Obtiene todos los roles de empleados (excluye id 1 y 3).
+   * @returns {Promise<Object>} Objeto con estado, código HTTP, mensaje y datos.
+   */
   static async getAllRolesEmpleados() {
     try {
-      // Llamamos el método listar
       const roles = await this.objRol.getAll();
 
-      // Validamos si no hay tipos de productos
       if (!roles || roles.length === 0)
         return {
           error: true,
           code: 404,
           message: "No hay roles registrados",
+          data: null,
         };
 
       const rolesEmpleados = roles.filter(
         (rol) => rol.id !== 3 && rol.id !== 1
       );
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -183,9 +191,8 @@ class RolService {
         data: rolesEmpleados,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      console.log(error);
-      return { error: true, code: 500, message: error.message };
+      console.error(error);
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 }

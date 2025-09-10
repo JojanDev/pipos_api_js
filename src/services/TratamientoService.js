@@ -6,24 +6,30 @@ import MedicamentoTratamientoService from "./MedicamentoTratamientoService.js";
 import RolUsuarioService from "./RolUsuarioService.js";
 import UsuarioService from "./UsuarioService.js";
 
+/**
+ * Servicio para gestionar tratamientos médicos de mascotas.
+ * Incluye métodos CRUD y consultas específicas por antecedente.
+ */
 class TratamientoService {
   static objTratamiento = new Tratamiento();
   static objRolUsuario = new RolUsuario();
 
+  /**
+   * Obtiene todos los tratamientos registrados.
+   * @returns {Promise<Object>} Estado, código HTTP, mensaje y datos.
+   */
   static async getAllTratamientos() {
     try {
-      // Llamamos el método listar
       const tratamientos = await this.objTratamiento.getAll();
 
-      // Validamos si no hay tipos de productos
       if (!tratamientos || tratamientos.length === 0)
         return {
           error: true,
           code: 404,
           message: "No hay tratamientos registrados",
+          data: null,
         };
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -31,25 +37,28 @@ class TratamientoService {
         data: tratamientos,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      console.log(error);
-      return { error: true, code: 500, message: error.message };
+      console.error(error);
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Obtiene un tratamiento por su ID.
+   * @param {number} id - ID del tratamiento.
+   * @returns {Promise<Object>} Estado, código HTTP, mensaje y datos.
+   */
   static async getTratamientoById(id) {
     try {
-      // Llamamos el método consultar por ID
       const tratamiento = await this.objTratamiento.getById(id);
-      // Validamos si no hay tratamiento
+
       if (!tratamiento)
         return {
           error: true,
           code: 404,
           message: "Tratamiento no encontrado",
+          data: null,
         };
 
-      // Retornamos la tratamiento obtenida
       return {
         error: false,
         code: 200,
@@ -57,55 +66,54 @@ class TratamientoService {
         data: tratamiento,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Crea un nuevo tratamiento.
+   * Valida que el usuario asignado sea un veterinario y que el antecedente exista.
+   * @param {Object} tratamiento - Datos del tratamiento a crear.
+   * @returns {Promise<Object>} Estado, código HTTP, mensaje y datos.
+   */
   static async createTratamiento(tratamiento) {
     try {
       const usuarioExistente = await UsuarioService.getUsuarioById(
         tratamiento.usuario_id
       );
-
       if (usuarioExistente.error) return usuarioExistente;
 
       const rolesUsuario =
         await RolUsuarioService.getAllRolesUsuarioByUsuarioId(
           tratamiento.usuario_id
         );
-
       if (rolesUsuario.error) return usuarioExistente;
-      console.log(rolesUsuario);
 
       const isVeterinario = rolesUsuario.data.some(
-        (rolUsuario) => rolUsuario.rol_id == 2
+        (rolUsuario) => rolUsuario.rol_id === 2
       );
-
       if (!isVeterinario)
         return {
           error: true,
           code: 400,
           message: "El usuario asignado al tratamiento no es un veterinario",
+          data: null,
         };
 
       const antecedenteExistente = await AntecedenteService.getAntecedenteById(
         tratamiento.antecedente_id
       );
-
       if (antecedenteExistente.error) return antecedenteExistente;
 
-      // Llamamos el método crear
       const tratamientoCreado = await this.objTratamiento.create(tratamiento);
-      // Validamos si no se pudo crear el tipo de producto
-      if (tratamientoCreado === null)
+      if (!tratamientoCreado)
         return {
           error: true,
           code: 400,
           message: "Error al crear el tratamiento",
+          data: null,
         };
 
-      // Retornamos el tipo de producto creado
       return {
         error: false,
         code: 201,
@@ -113,38 +121,39 @@ class TratamientoService {
         data: tratamientoCreado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Actualiza un tratamiento existente.
+   * @param {number} id - ID del tratamiento.
+   * @param {Object} tratamiento - Nuevos datos del tratamiento.
+   * @returns {Promise<Object>} Estado, código HTTP, mensaje y datos.
+   */
   static async updateTratamiento(id, tratamiento) {
     try {
-      // Llamamos el método consultar por ID
       const existente = await this.objTratamiento.getById(id);
-      // Validamos si el tipo de producto existe
-      if (!existente) {
+      if (!existente)
         return {
           error: true,
           code: 404,
           message: "Tratamiento no encontrado",
+          data: null,
         };
-      }
 
-      // Llamamos el método actualizar
       const tratamientoActualizado = await this.objTratamiento.update(
         id,
         tratamiento
       );
-      // Validamos si no se pudo actualizar el tipo de producto
-      if (tratamientoActualizado === null)
+      if (!tratamientoActualizado)
         return {
           error: true,
           code: 400,
           message: "Error al actualizar el tratamiento",
+          data: null,
         };
 
-      // Retornamos el tipo de producto actualizado
       return {
         error: false,
         code: 200,
@@ -152,67 +161,71 @@ class TratamientoService {
         data: tratamientoActualizado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Elimina un tratamiento.
+   * Solo permite eliminar si no tiene medicamentos asociados.
+   * @param {number} id - ID del tratamiento.
+   * @returns {Promise<Object>} Estado, código HTTP y mensaje.
+   */
   static async deleteTratamiento(id) {
     try {
       const tratamiento = await this.getTratamientoById(id);
-
       if (tratamiento.error) return tratamiento;
 
       const medicamentosAsociados =
         await MedicamentoTratamientoService.getAllMedicamentosTratamientosByTratamientoId(
           id
         );
-
       if (!medicamentosAsociados.error)
         return {
           error: true,
           code: 400,
           message:
             "Error al eliminar el tratamiento, tiene medicamentos asociados",
+          data: null,
         };
 
-      // Llamamos el método eliminar
-      const tratamientoEliminado = await this.objTratamiento.delete(id);
-      // Validamos si no se pudo eliminar el tipo de producto
-      if (!tratamientoEliminado)
+      const eliminado = await this.objTratamiento.delete(id);
+      if (!eliminado)
         return {
           error: true,
           code: 400,
           message: "Error al eliminar el tratamiento",
+          data: null,
         };
 
-      // Retornamos el tipo de producto eliminado
       return {
         error: false,
         code: 200,
         message: "Tratamiento eliminado correctamente",
+        data: null,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Obtiene todos los tratamientos asociados a un antecedente específico.
+   * @param {number} antecedente_id - ID del antecedente.
+   * @returns {Promise<Object>} Estado, código HTTP, mensaje y datos.
+   */
   static async getAllTratamientosByAntecedenteId(antecedente_id) {
     try {
-      // Llamamos el método listar
       const tratamientosAntecedente =
         await this.objTratamiento.getAllByAntecedenteId(antecedente_id);
-
-      // Validamos si no hay tipos de productos
       if (!tratamientosAntecedente || tratamientosAntecedente.length === 0)
         return {
           error: true,
           code: 404,
           message: "No hay tratamientos registrados para el antecedente.",
+          data: null,
         };
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -220,9 +233,8 @@ class TratamientoService {
         data: tratamientosAntecedente,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      console.log(error);
-      return { error: true, code: 500, message: error.message };
+      console.error(error);
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 }

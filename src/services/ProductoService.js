@@ -1,24 +1,30 @@
 import Producto from "../models/Producto.js";
 import TipoProductoService from "./TipoProductoService.js";
-// import Usuario from "../models/Usuario.js";
 
+/**
+ * Servicio para gestionar productos.
+ * Incluye métodos CRUD y consultas por tipo de producto y stock.
+ */
 class ProductoService {
   static objProducto = new Producto();
-  // static objUsuario = new Usuario();
 
+  /**
+   * Obtiene todos los productos registrados.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP, mensaje y datos.
+   */
   static async getAllProductos() {
     try {
-      // Llamamos el método listar
       const productos = await this.objProducto.getAll();
 
-      // Validamos si no hay tipos de productos
       if (!productos || productos.length === 0)
         return {
           error: true,
           code: 404,
           message: "No hay productos registrados",
+          data: null,
         };
 
+      // Incluye información del tipo de producto en cada producto
       const infoProductos = await Promise.all(
         productos.map(async (producto) => {
           const { data: tipoProducto } =
@@ -29,7 +35,6 @@ class ProductoService {
         })
       );
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -37,25 +42,28 @@ class ProductoService {
         data: infoProductos,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      console.log(error);
-      return { error: true, code: 500, message: error.message };
+      console.error(error);
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Obtiene un producto por su ID.
+   * @param {number} id - ID del producto.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP, mensaje y datos.
+   */
   static async getProductoById(id) {
     try {
-      // Llamamos el método consultar por ID
       const producto = await this.objProducto.getById(id);
-      // Validamos si no hay producto
+
       if (!producto)
         return {
           error: true,
           code: 404,
           message: "Producto no encontrado",
+          data: null,
         };
 
-      // Retornamos la producto obtenida
       return {
         error: false,
         code: 200,
@@ -63,31 +71,33 @@ class ProductoService {
         data: producto,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Crea un nuevo producto.
+   * Valida que exista el tipo de producto asociado.
+   * @param {Object} producto - Datos del producto a crear.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP, mensaje y datos.
+   */
   static async createProducto(producto) {
     try {
       const tipoProductoExistente =
         await TipoProductoService.getTipoProductoById(
           producto.tipo_producto_id
         );
-
       if (tipoProductoExistente.error) return tipoProductoExistente;
 
-      // Llamamos el método crear
       const productoCreado = await this.objProducto.create(producto);
-      // Validamos si no se pudo crear el tipo de producto
-      if (productoCreado === null)
+      if (!productoCreado)
         return {
           error: true,
           code: 400,
           message: "Error al crear el Producto",
+          data: null,
         };
 
-      // Retornamos el tipo de producto creado
       return {
         error: false,
         code: 201,
@@ -95,35 +105,36 @@ class ProductoService {
         data: productoCreado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Actualiza un producto existente.
+   * @param {number} id - ID del producto a actualizar.
+   * @param {Object} producto - Nuevos datos del producto.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP, mensaje y datos.
+   */
   static async updateProducto(id, producto) {
     try {
-      // Llamamos el método consultar por ID
       const existente = await this.objProducto.getById(id);
-      // Validamos si el tipo de producto existe
-      if (!existente) {
+      if (!existente)
         return {
           error: true,
           code: 404,
           message: "Producto no encontrado",
+          data: null,
         };
-      }
 
-      // Llamamos el método actualizar
       const productoActualizado = await this.objProducto.update(id, producto);
-      // Validamos si no se pudo actualizar el tipo de producto
-      if (productoActualizado === null)
+      if (!productoActualizado)
         return {
           error: true,
           code: 400,
           message: "Error al actualizar el Producto",
+          data: null,
         };
 
-      // Retornamos el tipo de producto actualizado
       return {
         error: false,
         code: 200,
@@ -131,61 +142,65 @@ class ProductoService {
         data: productoActualizado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Elimina un producto por su ID.
+   * @param {number} id - ID del producto a eliminar.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP y mensaje.
+   */
   static async deleteProducto(id) {
     try {
-      // Llamamos el método consultar por ID
       const producto = await this.objProducto.getById(id);
-      // Validamos si el tipo de producto existe
       if (!producto)
         return {
           error: true,
           code: 404,
           message: "Producto no encontrado",
+          data: null,
         };
 
-      // Llamamos el método eliminar
       const productoEliminado = await this.objProducto.delete(id);
-      // Validamos si no se pudo eliminar el tipo de producto
       if (!productoEliminado)
         return {
           error: true,
           code: 400,
           message: "Error al eliminar el Producto",
+          data: null,
         };
 
-      // Retornamos el tipo de producto eliminado
       return {
         error: false,
         code: 200,
         message: "Producto eliminado correctamente",
+        data: null,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Obtiene todos los productos de un tipo de producto específico.
+   * @param {number} tipo_producto_id - ID del tipo de producto.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP, mensaje y datos.
+   */
   static async getAllProductosByTipoProductoId(tipo_producto_id) {
     try {
-      // Llamamos el método listar
       const productos = await this.objProducto.getAllByTipoProductoId(
         tipo_producto_id
       );
 
-      // Validamos si no hay tipos de productos
       if (!productos || productos.length === 0)
         return {
           error: true,
           code: 404,
           message: "No hay productos registrados para el tipo",
+          data: null,
         };
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -193,25 +208,28 @@ class ProductoService {
         data: productos,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      console.log(error);
-      return { error: true, code: 500, message: error.message };
+      console.error(error);
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Obtiene todos los productos que tienen stock positivo.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP, mensaje y datos.
+   */
   static async getAllProductosByStockPositivo() {
     try {
-      // Llamamos el método listar
       const productos = await this.objProducto.getAllByStockPositivo();
 
-      // Validamos si no hay tipos de productos
       if (!productos || productos.length === 0)
         return {
           error: true,
           code: 404,
           message: "No hay productos registrados con stock positivo",
+          data: null,
         };
 
+      // Incluye información del tipo de producto en cada producto
       const infoProductos = await Promise.all(
         productos.map(async (producto) => {
           const { data: tipoProducto } =
@@ -222,7 +240,6 @@ class ProductoService {
         })
       );
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -230,9 +247,8 @@ class ProductoService {
         data: infoProductos,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      console.log(error);
-      return { error: true, code: 500, message: error.message };
+      console.error(error);
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 }

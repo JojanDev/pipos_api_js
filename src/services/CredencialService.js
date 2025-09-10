@@ -2,19 +2,23 @@ import Credencial from "../models/Credencial.js";
 import Usuario from "../models/Usuario.js";
 import UsuarioService from "./UsuarioService.js";
 import bcrypt from "bcrypt";
-const saltRounds = 10;
+
+const saltRounds = 10; // Número de rondas para generar el hash de contraseñas
 
 class CredencialService {
   static objCredencial = new Credencial();
   static objUsuario = new Usuario();
-  // static objUsuario = new Usuario();
 
+  /**
+   * Obtiene todas las credenciales registradas en el sistema
+   * @returns {Promise<Object>} Respuesta con éxito o error y listado de credenciales
+   */
   static async getAllCredenciales() {
     try {
-      // Llamamos el método listar
+      // Consultamos todas las credenciales
       const credenciales = await this.objCredencial.getAll();
 
-      // Validamos si no hay tipos de productos
+      // Validamos si no existen registros
       if (!credenciales || credenciales.length === 0)
         return {
           error: true,
@@ -22,33 +26,34 @@ class CredencialService {
           message: "No hay credenciales registradas",
         };
 
-      // Retornamos las tipos de productos obtenidas
+      // Retornamos las credenciales encontradas
       return {
         error: false,
         code: 200,
-        message: "Credencials obtenidas correctamente",
+        message: "Credenciales obtenidas correctamente",
         data: credenciales,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       console.log(error);
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Obtiene una credencial específica por su ID
+   * @param {number} id - ID de la credencial
+   * @returns {Promise<Object>} Respuesta con éxito o error y la credencial encontrada
+   */
   static async getCredencialById(id) {
     try {
-      // Llamamos el método consultar por ID
+      // Buscamos credencial por su identificador
       const credencial = await this.objCredencial.getById(id);
-      // Validamos si no hay credencial
-      if (!credencial)
-        return {
-          error: true,
-          code: 404,
-          message: "Credencial no encontrada",
-        };
 
-      // Retornamos la credencial obtenida
+      // Si no existe, devolvemos error
+      if (!credencial)
+        return { error: true, code: 404, message: "Credencial no encontrada" };
+
+      // Si existe, retornamos la credencial
       return {
         error: false,
         code: 200,
@@ -56,61 +61,64 @@ class CredencialService {
         data: credencial,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Crea una nueva credencial para un usuario
+   * @param {Object} credencial - Datos de la credencial (usuario_id, usuario, contrasena, etc.)
+   * @returns {Promise<Object>} Respuesta con éxito o error y la credencial creada
+   */
   static async createCredencial(credencial) {
     try {
+      // Validamos que el usuario exista antes de asignarle credenciales
       const usuarioExistente = await UsuarioService.getUsuarioById(
         credencial.usuario_id
       );
-
       if (usuarioExistente.error) return usuarioExistente;
 
+      // Validamos si el usuario ya tiene credenciales registradas
       const credencialUsuario = await this.objCredencial.getByUsuarioId(
         credencial.usuario_id
       );
-
-      // Validamos si no hay tipos de documentos
-      if (!credencialUsuario || credencialUsuario.length !== 0)
+      if (credencialUsuario && credencialUsuario.length > 0)
         return {
           error: true,
           code: 409,
           message: "El usuario ya tiene credenciales registradas.",
         };
 
+      // Validamos si el nombre de usuario ya está en uso
       const nombreUsuarioExistente = await this.objCredencial.getByUsuario(
         credencial.usuario
       );
-
-      // Validamos si no hay tipos de documentos
       if (nombreUsuarioExistente)
         return {
           error: true,
           code: 409,
-          message: "El nombre de usuario ya esta registrado.",
+          message: "El nombre de usuario ya está registrado.",
         };
 
-      if (credencial.contrasena) {
+      // Encriptamos la contraseña antes de guardarla
+      if (credencial.contrasena)
         credencial.contrasena = await bcrypt.hash(
           credencial.contrasena,
           saltRounds
         );
-      }
 
-      // Llamamos el método crear
+      // Guardamos la credencial en la base de datos
       const credencialCreado = await this.objCredencial.create(credencial);
-      // Validamos si no se pudo crear el tipo de producto
-      if (credencialCreado === null)
+
+      // Validamos si no se pudo crear
+      if (!credencialCreado)
         return {
           error: true,
           code: 400,
           message: "Error al crear la credencial",
         };
 
-      // Retornamos el tipo de producto creado
+      // Retornamos credencial creada con éxito
       return {
         error: false,
         code: 201,
@@ -118,38 +126,36 @@ class CredencialService {
         data: credencialCreado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Actualiza una credencial existente
+   * @param {number} id - ID de la credencial
+   * @param {Object} credencial - Datos a actualizar
+   * @returns {Promise<Object>} Respuesta con éxito o error y credencial actualizada
+   */
   static async updateCredencial(id, credencial) {
     try {
-      // Llamamos el método consultar por ID
+      // Validamos que la credencial exista
       const existente = await this.objCredencial.getById(id);
-      // Validamos si el tipo de producto existe
-      if (!existente) {
-        return {
-          error: true,
-          code: 404,
-          message: "Credencial no encontrada",
-        };
-      }
+      if (!existente)
+        return { error: true, code: 404, message: "Credencial no encontrada" };
 
-      // Llamamos el método actualizar
+      // Actualizamos la credencial
       const credencialActualizado = await this.objCredencial.update(
         id,
         credencial
       );
-      // Validamos si no se pudo actualizar el tipo de producto
-      if (credencialActualizado === null)
+
+      if (!credencialActualizado)
         return {
           error: true,
           code: 400,
           message: "Error al actualizar la credencial",
         };
 
-      // Retornamos el tipo de producto actualizado
       return {
         error: false,
         code: 200,
@@ -157,50 +163,52 @@ class CredencialService {
         data: credencialActualizado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Elimina una credencial por ID
+   * @param {number} id - ID de la credencial
+   * @returns {Promise<Object>} Respuesta con éxito o error
+   */
   static async deleteCredencial(id) {
     try {
-      // Llamamos el método consultar por ID
+      // Validamos que la credencial exista antes de eliminar
       const credencial = await this.objCredencial.getById(id);
-      // Validamos si el tipo de producto existe
       if (!credencial)
-        return {
-          error: true,
-          code: 404,
-          message: "Credencial no encontrada",
-        };
+        return { error: true, code: 404, message: "Credencial no encontrada" };
 
-      // Llamamos el método eliminar
-      const credencialEliminado = await this.objCredencial.delete(id);
-      // Validamos si no se pudo eliminar el tipo de producto
-      if (!credencialEliminado)
+      // Ejecutamos eliminación
+      const eliminado = await this.objCredencial.delete(id);
+
+      if (!eliminado)
         return {
           error: true,
           code: 400,
           message: "Error al eliminar la credencial",
         };
 
-      // Retornamos el tipo de producto eliminado
       return {
         error: false,
         code: 200,
         message: "Credencial eliminada correctamente",
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Obtiene la credencial de un usuario por su ID
+   * @param {number} usuario_id - ID del usuario
+   * @returns {Promise<Object>} Respuesta con éxito o error y la credencial del usuario
+   */
   static async getCredencialByUsuarioId(usuario_id) {
     try {
-      // Llamamos el método consultar por ID
+      // Buscamos credencial vinculada a un usuario específico
       const credencial = await this.objCredencial.getByUsuarioId(usuario_id);
-      // Validamos si no hay credencial
+
       if (!credencial || credencial.length === 0)
         return {
           error: true,
@@ -208,7 +216,7 @@ class CredencialService {
           message: "Credencial de usuario no encontrada",
         };
 
-      // Retornamos la credencial obtenida
+      // Retornamos la primera credencial encontrada (suponiendo 1 por usuario)
       return {
         error: false,
         code: 200,
@@ -216,16 +224,20 @@ class CredencialService {
         data: credencial[0],
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Obtiene la credencial de un usuario por su nombre de usuario
+   * @param {string} usuario - Nombre de usuario
+   * @returns {Promise<Object>} Respuesta con éxito o error y credencial del usuario
+   */
   static async getCredencialByUsuario(usuario) {
     try {
-      // Llamamos el método consultar por ID
+      // Buscamos credencial según nombre de usuario
       const credencial = await this.objCredencial.getByUsuario(usuario);
-      // Validamos si no hay credencial
+
       if (!credencial)
         return {
           error: true,
@@ -233,7 +245,6 @@ class CredencialService {
           message: "Credencial de usuario no encontrada",
         };
 
-      // Retornamos la credencial obtenida
       return {
         error: false,
         code: 200,
@@ -241,7 +252,6 @@ class CredencialService {
         data: credencial,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }

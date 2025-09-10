@@ -1,29 +1,37 @@
-import connection from "../utils/db.js";
-import Modelo from "./Modelo.js";
+import connection from "../utils/db.js"; // Conexión a la base de datos
+import Modelo from "./Modelo.js"; // Clase base genérica para modelos
 
+/**
+ * Modelo que representa la tabla "antecedentes".
+ * Hereda de la clase genérica Modelo y extiende con métodos
+ * específicos relacionados a los antecedentes de una mascota.
+ */
 class Antecedente extends Modelo {
+  // Nombre de la tabla en la base de datos (privado)
   #tableName = "antecedentes";
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene todos los antecedentes de la base de datos.
+   *
+   * @returns {Promise<Array>} Lista de todos los antecedentes.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getAll() {
     try {
       return await super.getAll(this.#tableName);
     } catch (error) {
       throw new Error(
-        `Error al obtener todas los antecedentes: ${error.message}`
+        `Error al obtener todos los antecedentes: ${error.message}`
       );
     }
   }
 
   /**
-   * Obtiene un tipo de documento específico por su ID
-   * @param {number} id - ID del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene un antecedente específico por su ID.
+   *
+   * @param {number} id - ID del antecedente.
+   * @returns {Promise<Object|null>} El antecedente encontrado o null si no existe.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getById(id) {
     try {
@@ -36,17 +44,20 @@ class Antecedente extends Modelo {
   }
 
   /**
-   * Crea un nuevo tipo de documento en la base de datos
-   * @param {Object} antecedente - Objeto con los datos del tipo de documento {nombre}
-   * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló
-   * @throws {Error} Si ocurre un error en la inserción
+   * Crea un nuevo antecedente en la base de datos.
+   *
+   * @param {Object} antecedente - Objeto con los datos del antecedente.
+   * @returns {Promise<Object|null>} El antecedente creado con su ID, o null si falló.
+   * @throws {Error} Si ocurre un error en la inserción.
    */
   async create(antecedente) {
     try {
       const idCreado = await super.create(this.#tableName, antecedente);
+
       if (idCreado) {
-        return await this.getById(idCreado);
+        return await this.getById(idCreado); // Retorna el registro recién creado
       }
+
       return null;
     } catch (error) {
       throw new Error(`Error al crear el antecedente: ${error.message}`);
@@ -54,16 +65,17 @@ class Antecedente extends Modelo {
   }
 
   /**
-   * Actualiza un tipo de documento existente
-   * @param {number} id - ID del tipo de documento a actualizar
-   * @param {Object} antecedente - Objeto con los nuevos datos del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si falló
-   * @throws {Error} Si ocurre un error en la actualización
+   * Actualiza un antecedente existente.
+   *
+   * @param {number} id - ID del antecedente a actualizar.
+   * @param {Object} antecedente - Objeto con los nuevos datos del antecedente.
+   * @returns {Promise<Object|null>} El antecedente actualizado, o null si falló.
+   * @throws {Error} Si ocurre un error en la actualización.
    */
   async update(id, antecedente) {
     try {
       if (await super.update(this.#tableName, id, antecedente)) {
-        return await this.getById(id);
+        return await this.getById(id); // Devuelve el registro actualizado
       }
       return null;
     } catch (error) {
@@ -74,10 +86,11 @@ class Antecedente extends Modelo {
   }
 
   /**
-   * Elimina un tipo de documento de la base de datos
-   * @param {number} id - ID del tipo de documento a eliminar
-   * @returns {Promise<boolean>} true si se eliminó correctamente, false si no
-   * @throws {Error} Si ocurre un error en la eliminación
+   * Elimina un antecedente de la base de datos.
+   *
+   * @param {number} id - ID del antecedente a eliminar.
+   * @returns {Promise<boolean>} true si se eliminó correctamente, false si no.
+   * @throws {Error} Si ocurre un error en la eliminación.
    */
   async delete(id) {
     try {
@@ -90,10 +103,11 @@ class Antecedente extends Modelo {
   }
 
   /**
-   * Obtiene un tipo de documento específico por su ID
-   * @param {number} mascotaId - ID del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene todos los antecedentes de una mascota.
+   *
+   * @param {number} mascotaId - ID de la mascota.
+   * @returns {Promise<Array>} Lista de antecedentes asociados a la mascota.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getAllByMascotaId(mascotaId) {
     try {
@@ -106,23 +120,27 @@ class Antecedente extends Modelo {
   }
 
   /**
-   * Obtiene un tipo de documento específico por su ID
-   * @param {number} mascotaId - ID del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene la fecha del último antecedente registrado para una mascota.
+   *
+   * @param {number} mascotaId - ID de la mascota.
+   * @returns {Promise<Object|null>} Objeto con la fecha del último antecedente o null si no existe.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getUltimoByMascotaId(mascotaId) {
     try {
       const [row] = await connection.query(
-        `SELECT fecha_creado FROM ${
-          this.#tableName
-        } WHERE mascota_id = ? ORDER BY fecha_creado DESC LIMIT 1`,
+        `SELECT fecha_creado 
+         FROM ${this.#tableName} 
+         WHERE mascota_id = ? 
+         ORDER BY fecha_creado DESC 
+         LIMIT 1`,
         [mascotaId]
       );
-      return row[0];
+
+      return row[0] || null;
     } catch (error) {
       throw new Error(
-        `Error al obtener la fecha del ultimo antecedente de la mascota con ID ${mascotaId}: ${error.message}`
+        `Error al obtener la fecha del último antecedente de la mascota con ID ${mascotaId}: ${error.message}`
       );
     }
   }

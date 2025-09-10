@@ -9,13 +9,13 @@ import PermisoController from "../controllers/PermisoController.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todos los permisos
 router.get("/", authorize("permiso.read"), PermisoController.getAllPermisos);
 
-// Obtener un tipo de documento por ID
+// Obtener un permiso por ID
 router.get("/:id", authorize("permiso.read"), PermisoController.getPermisoById);
 
-// Crear un nuevo tipo de documento
+// Crear un permiso
 router.post(
   "/",
   authorize("permiso.create"),
@@ -23,7 +23,7 @@ router.post(
   PermisoController.createPermiso
 );
 
-// Actualizar un tipo de documento
+// Actualizar un permiso (completo)
 router.put(
   "/:id",
   authorize("permiso.update"),
@@ -31,7 +31,7 @@ router.put(
   PermisoController.updatePermiso
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar un permiso (parcial)
 router.patch(
   "/:id",
   authorize("permiso.update"),
@@ -39,7 +39,7 @@ router.patch(
   PermisoController.updatePermiso
 );
 
-// Eliminar un tipo de documento
+// Eliminar un permiso
 router.delete(
   "/:id",
   authorize("permiso.delete"),

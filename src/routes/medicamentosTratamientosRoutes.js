@@ -9,27 +9,28 @@ import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todos los medicamentos en tratamientos
 router.get(
   "/",
   authorize("medicamento-tratamiento.read"),
   MedicamentoTratamientoController.getAllMedicamentosTratamientos
 );
 
+// Obtener medicamentos por ID de tratamiento
 router.get(
   "/tratamiento/:id",
   authorize("medicamento-tratamiento.read"),
   MedicamentoTratamientoController.getAllMedicamentosTratamientosByTratamientoId
 );
 
-// Obtener un tipo de documento por ID
+// Obtener un medicamento en tratamiento por ID
 router.get(
   "/:id",
   authorize("medicamento-tratamiento.read"),
   MedicamentoTratamientoController.getMedicamentoTratamientoById
 );
 
-// Crear un nuevo tipo de documento
+// Crear medicamento en tratamiento
 router.post(
   "/",
   validarMedicamentoTratamiento,
@@ -37,7 +38,7 @@ router.post(
   MedicamentoTratamientoController.createMedicamentoTratamiento
 );
 
-// Actualizar un tipo de documento
+// Actualizar medicamento en tratamiento (completo)
 router.put(
   "/:id",
   validarMedicamentoTratamiento,
@@ -45,7 +46,7 @@ router.put(
   MedicamentoTratamientoController.updateMedicamentoTratamiento
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar medicamento en tratamiento (parcial)
 router.patch(
   "/:id",
   validarMedicamentoTratamientoParcial,
@@ -53,7 +54,7 @@ router.patch(
   MedicamentoTratamientoController.updateMedicamentoTratamiento
 );
 
-// Eliminar un tipo de documento
+// Eliminar medicamento en tratamiento
 router.delete(
   "/:id",
   authorize("medicamento-tratamiento.delete"),

@@ -1,18 +1,19 @@
 import PermisoRol from "../models/PermisoRol.js";
 import PermisoService from "./PermisoService.js";
 import RolService from "./RolService.js";
-// import Usuario from "../models/Usuario.js";
 
 class PermisoRolService {
   static objPermisoRol = new PermisoRol();
-  // static objUsuario = new Usuario();
 
+  /**
+   * Obtiene todos los permisos de roles registrados
+   * @returns {Promise<Object>} Respuesta con éxito o error y listado de permisos por rol
+   */
   static async getAllPermisosRoles() {
     try {
-      // Llamamos el método listar
+      // Obtenemos todos los permisos por rol
       const permisosRoles = await this.objPermisoRol.getAll();
 
-      // Validamos si no hay tipos de productos
       if (!permisosRoles || permisosRoles.length === 0)
         return {
           error: true,
@@ -20,7 +21,6 @@ class PermisoRolService {
           message: "No hay permisos de roles registrados",
         };
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -28,17 +28,20 @@ class PermisoRolService {
         data: permisosRoles,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       console.log(error);
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Obtiene un permiso de rol por su ID
+   * @param {number} id - ID del permiso por rol
+   * @returns {Promise<Object>} Respuesta con éxito o error y el permiso por rol
+   */
   static async getPermisoRolById(id) {
     try {
-      // Llamamos el método consultar por ID
       const permisoRol = await this.objPermisoRol.getById(id);
-      // Validamos si no hay permisoRol
+
       if (!permisoRol)
         return {
           error: true,
@@ -46,7 +49,6 @@ class PermisoRolService {
           message: "Permiso de rol no encontrado",
         };
 
-      // Retornamos la permisoRol obtenida
       return {
         error: false,
         code: 200,
@@ -54,29 +56,33 @@ class PermisoRolService {
         data: permisoRol,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Crea un nuevo permiso por rol
+   * @param {Object} permisoRol - Datos del permiso por rol a crear
+   * @returns {Promise<Object>} Respuesta con éxito o error y el permiso por rol creado
+   */
   static async createPermisoRol(permisoRol) {
     try {
+      // Validamos que el permiso exista
       const permisoExistente = await PermisoService.getPermisoById(
         permisoRol.permiso_id
       );
-
       if (permisoExistente.error) return permisoExistente;
 
+      // Validamos que el rol exista
       const rolExistente = await RolService.getRolById(permisoRol.rol_id);
-
       if (rolExistente.error) return rolExistente;
 
+      // Validamos que el permiso no haya sido asignado previamente al rol
       const permisoRolExistente =
         await this.objPermisoRol.getByPermisoRolExists(
           permisoRol.rol_id,
           permisoRol.permiso_id
         );
-
       if (permisoRolExistente && permisoRolExistente.length !== 0)
         return {
           error: true,
@@ -84,17 +90,15 @@ class PermisoRolService {
           message: "Este permiso ya ha sido asignado al rol",
         };
 
-      // Llamamos el método crear
+      // Creamos el permiso por rol
       const permisoRolCreado = await this.objPermisoRol.create(permisoRol);
-      // Validamos si no se pudo crear el tipo de producto
-      if (permisoRolCreado === null)
+      if (!permisoRolCreado)
         return {
           error: true,
           code: 400,
           message: "Error al crear el Permiso de rol",
         };
 
-      // Retornamos el tipo de producto creado
       return {
         error: false,
         code: 201,
@@ -102,38 +106,39 @@ class PermisoRolService {
         data: permisoRolCreado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Actualiza un permiso por rol existente
+   * @param {number} id - ID del permiso por rol a actualizar
+   * @param {Object} permisoRol - Datos a actualizar
+   * @returns {Promise<Object>} Respuesta con éxito o error y el permiso por rol actualizado
+   */
   static async updatePermisoRol(id, permisoRol) {
     try {
-      // Llamamos el método consultar por ID
+      // Validamos que el permiso por rol exista
       const existente = await this.objPermisoRol.getById(id);
-      // Validamos si el tipo de producto existe
-      if (!existente) {
+      if (!existente)
         return {
           error: true,
           code: 404,
-          message: "Permiso de rol no encontrada",
+          message: "Permiso de rol no encontrado",
         };
-      }
 
-      // Llamamos el método actualizar
+      // Actualizamos el permiso por rol
       const permisoRolActualizado = await this.objPermisoRol.update(
         id,
         permisoRol
       );
-      // Validamos si no se pudo actualizar el tipo de producto
-      if (permisoRolActualizado === null)
+      if (!permisoRolActualizado)
         return {
           error: true,
           code: 400,
           message: "Error al actualizar el Permiso de rol",
         };
 
-      // Retornamos el tipo de producto actualizado
       return {
         error: false,
         code: 200,
@@ -141,16 +146,19 @@ class PermisoRolService {
         data: permisoRolActualizado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Elimina un permiso por rol por su ID
+   * @param {number} id - ID del permiso por rol a eliminar
+   * @returns {Promise<Object>} Respuesta con éxito o error
+   */
   static async deletePermisoRol(id) {
     try {
-      // Llamamos el método consultar por ID
+      // Validamos que el permiso por rol exista
       const permisoRol = await this.objPermisoRol.getById(id);
-      // Validamos si el tipo de producto existe
       if (!permisoRol)
         return {
           error: true,
@@ -158,15 +166,8 @@ class PermisoRolService {
           message: "Permiso de rol no encontrado",
         };
 
-      // const usuariosTipo = await this.objUsuario.getAllByPermisoRolId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
-      // }
-
-      // Llamamos el método eliminar
+      // Eliminamos el permiso por rol
       const permisoRolEliminado = await this.objPermisoRol.delete(id);
-      // Validamos si no se pudo eliminar el tipo de producto
       if (!permisoRolEliminado)
         return {
           error: true,
@@ -174,14 +175,12 @@ class PermisoRolService {
           message: "Error al eliminar el Permiso de rol",
         };
 
-      // Retornamos el tipo de producto eliminado
       return {
         error: false,
         code: 200,
         message: "Permiso de rol eliminado correctamente",
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }

@@ -2,16 +2,25 @@ import Venta from "../models/Venta.js";
 import UsuarioService from "./UsuarioService.js";
 // import Usuario from "../models/Usuario.js";
 
+/**
+ * Servicio encargado de manejar la lógica de negocio
+ * relacionada con las ventas de la veterinaria.
+ *
+ * Se apoya en el modelo `Venta` para interactuar con la base de datos
+ * y en `UsuarioService` para validar la existencia de compradores y vendedores.
+ */
 class VentaService {
+  // Instancia única del modelo Venta
   static objVenta = new Venta();
-  // static objUsuario = new Usuario();
 
+  /**
+   * Obtiene todas las ventas registradas.
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async getAllVentas() {
     try {
-      // Llamamos el método listar
       const ventas = await this.objVenta.getAll();
 
-      // Validamos si no hay tipos de documentos
       if (!ventas || ventas.length === 0)
         return {
           error: true,
@@ -19,7 +28,6 @@ class VentaService {
           message: "No hay ventas registradas",
         };
 
-      // Retornamos las tipos de documentos obtenidas
       return {
         error: false,
         code: 200,
@@ -27,16 +35,19 @@ class VentaService {
         data: ventas,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Obtiene una venta por su ID.
+   * @param {number} id - ID de la venta
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async getVentaById(id) {
     try {
-      // Llamamos el método consultar por ID
       const venta = await this.objVenta.getById(id);
-      // Validamos si no hay venta
+
       if (!venta)
         return {
           error: true,
@@ -44,7 +55,6 @@ class VentaService {
           message: "Venta no encontrada",
         };
 
-      // Retornamos la venta obtenida
       return {
         error: false,
         code: 200,
@@ -52,30 +62,33 @@ class VentaService {
         data: venta,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Crea una nueva venta.
+   * @param {Object} venta - Datos de la venta a crear
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async createVenta(venta) {
     try {
+      // Validamos que existan el vendedor y el comprador
       const vendedorExistente = await UsuarioService.getUsuarioById(
         venta.vendedor_id
       );
-
       if (vendedorExistente.error) return vendedorExistente;
 
       const compradorExistente = await UsuarioService.getUsuarioById(
         venta.comprador_id
       );
-
       if (compradorExistente.error) return compradorExistente;
 
+      // Determinamos si la venta está completada
       const completada = venta.total == venta.monto ? 1 : 0;
 
-      // Llamamos el método crear
       const ventaCreada = await this.objVenta.create({ ...venta, completada });
-      // Validamos si no se pudo crear el tipo de documento
+
       if (ventaCreada === null)
         return {
           error: true,
@@ -83,7 +96,6 @@ class VentaService {
           message: "Error al crear la venta",
         };
 
-      // Retornamos el tipo de documento creado
       return {
         error: false,
         code: 201,
@@ -91,16 +103,19 @@ class VentaService {
         data: ventaCreada,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Actualiza una venta existente sumando el nuevo monto al existente.
+   * @param {number} id - ID de la venta a actualizar
+   * @param {Object} venta - Datos a actualizar (por ejemplo monto)
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async updateVenta(id, venta) {
     try {
-      // Llamamos el método consultar por ID
       const existente = await this.objVenta.getById(id);
-      // Validamos si el tipo de documento existe
       if (!existente) {
         return {
           error: true,
@@ -109,16 +124,17 @@ class VentaService {
         };
       }
 
+      // Sumamos el monto nuevo al existente
       const montoNuevo = Number(existente.monto) + Number(venta.monto);
       const completada = existente.total == montoNuevo ? 1 : 0;
 
       venta.monto = montoNuevo;
-      // Llamamos el método actualizar
+
       const ventaActualizada = await this.objVenta.update(id, {
         ...venta,
         completada,
       });
-      // Validamos si no se pudo actualizar el tipo de documento
+
       if (ventaActualizada === null)
         return {
           error: true,
@@ -126,7 +142,6 @@ class VentaService {
           message: "Error al actualizar la venta",
         };
 
-      // Retornamos el tipo de documento actualizado
       return {
         error: false,
         code: 200,
@@ -134,16 +149,18 @@ class VentaService {
         data: ventaActualizada,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Elimina una venta por su ID.
+   * @param {number} id - ID de la venta a eliminar
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message}
+   */
   static async deleteVenta(id) {
     try {
-      // Llamamos el método consultar por ID
       const venta = await this.objVenta.getById(id);
-      // Validamos si el tipo de documento existe
       if (!venta)
         return {
           error: true,
@@ -151,15 +168,7 @@ class VentaService {
           message: "Venta no encontrada",
         };
 
-      // const usuariosTipo = await this.objUsuario.getAllByVentasId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de documento porque tiene usuarios asociados" };
-      // }
-
-      // Llamamos el método eliminar
       const ventaEliminada = await this.objVenta.delete(id);
-      // Validamos si no se pudo eliminar el tipo de documento
       if (!ventaEliminada)
         return {
           error: true,
@@ -167,14 +176,12 @@ class VentaService {
           message: "Error al eliminar la venta",
         };
 
-      // Retornamos el tipo de documento eliminado
       return {
         error: false,
         code: 200,
         message: "Venta eliminada correctamente",
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }

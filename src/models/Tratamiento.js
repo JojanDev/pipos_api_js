@@ -1,12 +1,17 @@
 import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
+/**
+ * Clase que representa el modelo Tratamiento.
+ * Gestiona los tratamientos médicos de las mascotas en la base de datos.
+ * Extiende de la clase base Modelo, utilizando la tabla "tratamientos".
+ */
 class Tratamiento extends Modelo {
-  #tableName = "tratamientos";
+  #tableName = "tratamientos"; // Nombre de la tabla en la BD
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
+   * Obtiene todos los tratamientos de la base de datos.
+   * @returns {Promise<Array>} Lista de todos los tratamientos
    * @throws {Error} Si ocurre un error en la consulta
    */
   async getAll() {
@@ -20,9 +25,9 @@ class Tratamiento extends Modelo {
   }
 
   /**
-   * Obtiene un tipo de documento específico por su ID
-   * @param {number} id - ID del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * Obtiene un tratamiento específico por su ID.
+   * @param {number} id - ID del tratamiento
+   * @returns {Promise<Object|null>} El tratamiento encontrado o null si no existe
    * @throws {Error} Si ocurre un error en la consulta
    */
   async getById(id) {
@@ -36,9 +41,9 @@ class Tratamiento extends Modelo {
   }
 
   /**
-   * Crea un nuevo tipo de documento en la base de datos
-   * @param {Object} tratamiento - Objeto con los datos del tipo de documento {nombre}
-   * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló
+   * Crea un nuevo tratamiento en la base de datos.
+   * @param {Object} tratamiento - Objeto con los datos del tratamiento
+   * @returns {Promise<Object|null>} El tratamiento creado con su ID, o null si falló
    * @throws {Error} Si ocurre un error en la inserción
    */
   async create(tratamiento) {
@@ -54,10 +59,10 @@ class Tratamiento extends Modelo {
   }
 
   /**
-   * Actualiza un tipo de documento existente
-   * @param {number} id - ID del tipo de documento a actualizar
-   * @param {Object} tratamiento - Objeto con los nuevos datos del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si falló
+   * Actualiza un tratamiento existente.
+   * @param {number} id - ID del tratamiento a actualizar
+   * @param {Object} tratamiento - Objeto con los nuevos datos del tratamiento
+   * @returns {Promise<Object|null>} El tratamiento actualizado, o null si falló
    * @throws {Error} Si ocurre un error en la actualización
    */
   async update(id, tratamiento) {
@@ -74,8 +79,8 @@ class Tratamiento extends Modelo {
   }
 
   /**
-   * Elimina un tipo de documento de la base de datos
-   * @param {number} id - ID del tipo de documento a eliminar
+   * Elimina un tratamiento de la base de datos.
+   * @param {number} id - ID del tratamiento a eliminar
    * @returns {Promise<boolean>} true si se eliminó correctamente, false si no
    * @throws {Error} Si ocurre un error en la eliminación
    */
@@ -90,8 +95,9 @@ class Tratamiento extends Modelo {
   }
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
+   * Obtiene todos los tratamientos asociados a un antecedente específico.
+   * @param {number} antecedente_id - ID del antecedente médico
+   * @returns {Promise<Array>} Lista de tratamientos relacionados con ese antecedente
    * @throws {Error} Si ocurre un error en la consulta
    */
   async getAllByAntecedenteId(antecedente_id) {
@@ -103,14 +109,15 @@ class Tratamiento extends Modelo {
       );
     } catch (error) {
       throw new Error(
-        `Error al obtener todos los tratamientos: ${error.message}`
+        `Error al obtener los tratamientos del antecedente con ID ${antecedente_id}: ${error.message}`
       );
     }
   }
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
+   * Obtiene todos los tratamientos asociados a una información de medicamento específica.
+   * @param {number} info_medicamento_id - ID de la información del medicamento
+   * @returns {Promise<Array>} Lista de tratamientos relacionados con esa información de medicamento
    * @throws {Error} Si ocurre un error en la consulta
    */
   async getAllByInfoMedicamentoId(info_medicamento_id) {
@@ -122,7 +129,7 @@ class Tratamiento extends Modelo {
       );
     } catch (error) {
       throw new Error(
-        `Error al obtener todos los tratamientos: ${error.message}`
+        `Error al obtener los tratamientos con información de medicamento ID ${info_medicamento_id}: ${error.message}`
       );
     }
   }

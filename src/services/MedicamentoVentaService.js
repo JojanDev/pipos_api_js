@@ -1,25 +1,30 @@
 import MedicamentoVenta from "../models/MedicamentoVenta.js";
 import MedicamentoService from "./MedicamentoService.js";
 import VentaService from "./VentaService.js";
-// import Usuario from "../models/Usuario.js";
 
+/**
+ * Servicio para gestionar las ventas de medicamentos.
+ * Contiene métodos CRUD y consultas por relaciones con ventas y medicamentos.
+ */
 class MedicamentoVentaService {
   static objMedicamentoVenta = new MedicamentoVenta();
 
+  /**
+   * Obtiene todas las ventas de medicamentos registradas.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP, mensaje y datos.
+   */
   static async getAllMedicamentosVentas() {
     try {
-      // Llamamos el método listar
       const medicamentosVentas = await this.objMedicamentoVenta.getAll();
 
-      // Validamos si no hay tipos de productos
       if (!medicamentosVentas || medicamentosVentas.length === 0)
         return {
           error: true,
           code: 404,
           message: "No hay ventas de medicamentos registradas",
+          data: null,
         };
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -27,25 +32,28 @@ class MedicamentoVentaService {
         data: medicamentosVentas,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      console.log(error);
-      return { error: true, code: 500, message: error.message };
+      console.error(error);
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Obtiene una venta de medicamento por su ID.
+   * @param {number} id - ID del registro a consultar.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP, mensaje y datos.
+   */
   static async getMedicamentoVentaById(id) {
     try {
-      // Llamamos el método consultar por ID
       const medicamentoVenta = await this.objMedicamentoVenta.getById(id);
-      // Validamos si no hay medicamentoVenta
+
       if (!medicamentoVenta)
         return {
           error: true,
           code: 404,
           message: "Venta de medicamento no encontrada",
+          data: null,
         };
 
-      // Retornamos la medicamentoVenta obtenida
       return {
         error: false,
         code: 200,
@@ -53,47 +61,51 @@ class MedicamentoVentaService {
         data: medicamentoVenta,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Crea una nueva venta de medicamento.
+   * Valida que existan la venta y el medicamento asociados.
+   * Además actualiza el stock del medicamento.
+   * @param {Object} medicamentoVenta - Datos de la venta de medicamento.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP, mensaje y datos.
+   */
   static async createMedicamentoVenta(medicamentoVenta) {
     try {
+      // Validamos existencia de la venta
       const ventaExistente = await VentaService.getVentaById(
         medicamentoVenta.venta_id
       );
-
       if (ventaExistente.error) return ventaExistente;
 
+      // Validamos existencia del medicamento
       const medicamentoExistente = await MedicamentoService.getMedicamentoById(
         medicamentoVenta.medicamento_id
       );
-
       if (medicamentoExistente.error) return medicamentoExistente;
 
-      // Llamamos el método crear
+      // Creamos la venta de medicamento
       const medicamentoVentaCreado = await this.objMedicamentoVenta.create(
         medicamentoVenta
       );
-      // Validamos si no se pudo crear el tipo de producto
-      if (medicamentoVentaCreado === null)
+      if (!medicamentoVentaCreado)
         return {
           error: true,
           code: 400,
           message: "Error al crear la venta del medicamento",
+          data: null,
         };
 
+      // Actualizamos el stock del medicamento
       const cantidad =
         medicamentoExistente.data.cantidad - medicamentoVenta.cantidad;
-      console.log(cantidad);
-
-      const medicamentoStock = await MedicamentoService.updateMedicamento(
+      await MedicamentoService.updateMedicamento(
         medicamentoVenta.medicamento_id,
         { cantidad }
       );
 
-      // Retornamos el tipo de producto creado
       return {
         error: false,
         code: 201,
@@ -101,38 +113,39 @@ class MedicamentoVentaService {
         data: medicamentoVentaCreado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Actualiza una venta de medicamento existente.
+   * @param {number} id - ID del registro a actualizar.
+   * @param {Object} medicamentoVenta - Nuevos datos de la venta.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP, mensaje y datos.
+   */
   static async updateMedicamentoVenta(id, medicamentoVenta) {
     try {
-      // Llamamos el método consultar por ID
       const existente = await this.objMedicamentoVenta.getById(id);
-      // Validamos si el tipo de producto existe
-      if (!existente) {
+      if (!existente)
         return {
           error: true,
           code: 404,
           message: "Venta de medicamento no encontrada",
+          data: null,
         };
-      }
 
-      // Llamamos el método actualizar
       const medicamentoVentaActualizado = await this.objMedicamentoVenta.update(
         id,
         medicamentoVenta
       );
-      // Validamos si no se pudo actualizar el tipo de producto
-      if (medicamentoVentaActualizado === null)
+      if (!medicamentoVentaActualizado)
         return {
           error: true,
           code: 400,
           message: "Error al actualizar la venta del medicamento",
+          data: null,
         };
 
-      // Retornamos el tipo de producto actualizado
       return {
         error: false,
         code: 200,
@@ -140,63 +153,65 @@ class MedicamentoVentaService {
         data: medicamentoVentaActualizado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Elimina una venta de medicamento por su ID.
+   * @param {number} id - ID del registro a eliminar.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP y mensaje.
+   */
   static async deleteMedicamentoVenta(id) {
     try {
-      // Llamamos el método consultar por ID
       const medicamentoVenta = await this.objMedicamentoVenta.getById(id);
-      // Validamos si el tipo de producto existe
       if (!medicamentoVenta)
         return {
           error: true,
           code: 404,
           message: "Venta de medicamento no encontrada",
+          data: null,
         };
 
-      // Llamamos el método eliminar
-      const medicamentoVentaEliminado = await this.objMedicamentoVenta.delete(
-        id
-      );
-      // Validamos si no se pudo eliminar el tipo de producto
-      if (!medicamentoVentaEliminado)
+      const eliminado = await this.objMedicamentoVenta.delete(id);
+      if (!eliminado)
         return {
           error: true,
           code: 400,
           message: "Error al eliminar la venta del medicamento",
+          data: null,
         };
 
-      // Retornamos el tipo de producto eliminado
       return {
         error: false,
         code: 200,
         message: "Venta del medicamento eliminada correctamente",
+        data: null,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message };
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 
+  /**
+   * Obtiene todas las ventas de medicamentos asociadas a una venta específica.
+   * @param {number} venta_id - ID de la venta.
+   * @returns {Promise<Object>} Objeto con estado, código HTTP, mensaje y datos.
+   */
   static async getAllMedicamentosVentasByVentaId(venta_id) {
     try {
-      // Llamamos el método listar
       const medicamentosVenta = await this.objMedicamentoVenta.getAllByVentaId(
         venta_id
       );
 
-      // Validamos si no hay tipos de productos
       if (!medicamentosVenta || medicamentosVenta.length === 0)
         return {
           error: true,
           code: 404,
           message: "No hay medicamentos vendidos en la venta",
+          data: null,
         };
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -204,9 +219,8 @@ class MedicamentoVentaService {
         data: medicamentosVenta,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
-      console.log(error);
-      return { error: true, code: 500, message: error.message };
+      console.error(error);
+      return { error: true, code: 500, message: error.message, data: null };
     }
   }
 }

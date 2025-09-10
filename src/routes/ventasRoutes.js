@@ -9,13 +9,13 @@ import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todas las ventas
 router.get("/", authorize("venta.read"), VentaController.getAllVentas);
 
-// Obtener un tipo de documento por ID
+// Obtener una venta por ID
 router.get("/:id", authorize("venta.read"), VentaController.getVentaById);
 
-// Crear un nuevo tipo de documento
+// Crear una venta
 router.post(
   "/",
   authorize("venta.create"),
@@ -23,7 +23,7 @@ router.post(
   VentaController.createVenta
 );
 
-// Actualizar un tipo de documento
+// Actualizar una venta (completo)
 router.put(
   "/:id",
   authorize("venta.update"),
@@ -31,7 +31,7 @@ router.put(
   VentaController.updateVenta
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar una venta (parcial)
 router.patch(
   "/:id",
   authorize("venta.update"),
@@ -39,7 +39,7 @@ router.patch(
   VentaController.updateVenta
 );
 
-// Eliminar un tipo de documento
+// Eliminar una venta
 router.delete("/:id", authorize("venta.delete"), VentaController.deleteVenta);
 
 export default router;

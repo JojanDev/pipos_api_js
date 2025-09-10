@@ -1,16 +1,26 @@
 import { ResponseProvider } from "../providers/ResponseProvider.js";
 import ProductoService from "../services/ProductoService.js";
 
+/**
+ * Controlador para las rutas relacionadas con productos.
+ * Centraliza la comunicación entre Express y ProductoService.
+ */
 class ProductoController {
-  // Obtener todos los tipos de documentos
+  /**
+   * Obtiene todos los productos registrados.
+   * Ruta: GET /productos
+   *
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
   static getAllProductos = async (req, res) => {
     try {
       const response = await ProductoService.getAllProductos();
-      // Validamos si no hay tipos de documentos
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -22,17 +32,23 @@ class ProductoController {
     }
   };
 
-  // Obtener un tipo de documento por su ID
+  /**
+   * Obtiene un producto por su ID.
+   * Ruta: GET /productos/:id
+   *
+   * @param {import('express').Request} req - req.params.id
+   * @param {import('express').Response} res
+   */
   static getProductoById = async (req, res) => {
     const { id } = req.params;
+
     try {
-      // Llamamos al producto para obtener el tipo de documento por su ID
       const response = await ProductoService.getProductoById(id);
-      // Validamos si no hay tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -40,23 +56,27 @@ class ProductoController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Crear un nuevo tipo de documento
+  /**
+   * Crea un nuevo producto.
+   * Ruta: POST /productos
+   *
+   * @param {import('express').Request} req - req.body contiene los datos del producto
+   * @param {import('express').Response} res
+   */
   static createProducto = async (req, res) => {
     const producto = req.body;
+
     try {
-      // Llamamos el método crear del modelo
       const response = await ProductoService.createProducto(producto);
-      // Validamos que la respuesta no tenga error
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento creado
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -64,25 +84,28 @@ class ProductoController {
         201
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Actualizar un tipo de documento
+  /**
+   * Actualiza un producto existente por su ID.
+   * Ruta: PUT /productos/:id
+   *
+   * @param {import('express').Request} req - req.params.id y req.body con datos a actualizar
+   * @param {import('express').Response} res
+   */
   static updateProducto = async (req, res) => {
     const { id } = req.params;
     const producto = req.body;
+
     try {
-      // Llamamos al método actualizar del modelo
       const response = await ProductoService.updateProducto(id, producto);
-      // Validamos que la respuesta no tenga error
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
 
-      // Retornamos el tipo de documento actualizado
       return ResponseProvider.success(
         res,
         response.data,
@@ -90,23 +113,27 @@ class ProductoController {
         200
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Eliminar un tipo de documento
+  /**
+   * Elimina un producto por su ID.
+   * Ruta: DELETE /productos/:id
+   *
+   * @param {import('express').Request} req - req.params.id
+   * @param {import('express').Response} res
+   */
   static deleteProducto = async (req, res) => {
     const { id } = req.params;
+
     try {
-      // Llamamos al producto para eliminar el tipo de documento por su ID
       const response = await ProductoService.deleteProducto(id);
-      // Validamos si no se pudo eliminar el tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento eliminado
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -114,19 +141,25 @@ class ProductoController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
+  /**
+   * Obtiene todos los productos con stock positivo.
+   * Ruta: GET /productos/stock
+   *
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
   static getAllProductosByStockPositivo = async (req, res) => {
     try {
       const response = await ProductoService.getAllProductosByStockPositivo();
-      // Validamos si no hay tipos de documentos
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,

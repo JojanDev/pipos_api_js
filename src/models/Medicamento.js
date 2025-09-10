@@ -1,29 +1,33 @@
 import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
+/**
+ * Clase que representa el modelo de Medicamentos en la base de datos.
+ * Extiende de la clase genérica Modelo para reutilizar operaciones CRUD.
+ */
 class Medicamento extends Modelo {
-  #tableName = "medicamentos";
+  #tableName = "medicamentos"; // Nombre de la tabla en la base de datos
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene todos los medicamentos de la base de datos.
+   * @returns {Promise<Array>} Lista de todos los medicamentos.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getAll() {
     try {
       return await super.getAll(this.#tableName);
     } catch (error) {
       throw new Error(
-        `Error al obtener todas los medicamentos: ${error.message}`
+        `Error al obtener todos los medicamentos: ${error.message}`
       );
     }
   }
 
   /**
-   * Obtiene un tipo de documento específico por su ID
-   * @param {number} id - ID del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene un medicamento específico por su ID.
+   * @param {number} id - ID del medicamento.
+   * @returns {Promise<Object|null>} El medicamento encontrado o null si no existe.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getById(id) {
     try {
@@ -36,10 +40,10 @@ class Medicamento extends Modelo {
   }
 
   /**
-   * Crea un nuevo tipo de documento en la base de datos
-   * @param {Object} medicamento - Objeto con los datos del tipo de documento {nombre}
-   * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló
-   * @throws {Error} Si ocurre un error en la inserción
+   * Crea un nuevo medicamento en la base de datos.
+   * @param {Object} medicamento - Objeto con los datos del medicamento.
+   * @returns {Promise<Object|null>} El medicamento creado con su ID, o null si falló.
+   * @throws {Error} Si ocurre un error en la inserción.
    */
   async create(medicamento) {
     try {
@@ -54,11 +58,11 @@ class Medicamento extends Modelo {
   }
 
   /**
-   * Actualiza un tipo de documento existente
-   * @param {number} id - ID del tipo de documento a actualizar
-   * @param {Object} medicamento - Objeto con los nuevos datos del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si falló
-   * @throws {Error} Si ocurre un error en la actualización
+   * Actualiza un medicamento existente.
+   * @param {number} id - ID del medicamento a actualizar.
+   * @param {Object} medicamento - Objeto con los nuevos datos del medicamento.
+   * @returns {Promise<Object|null>} El medicamento actualizado, o null si falló.
+   * @throws {Error} Si ocurre un error en la actualización.
    */
   async update(id, medicamento) {
     try {
@@ -74,10 +78,10 @@ class Medicamento extends Modelo {
   }
 
   /**
-   * Elimina un tipo de documento de la base de datos
-   * @param {number} id - ID del tipo de documento a eliminar
-   * @returns {Promise<boolean>} true si se eliminó correctamente, false si no
-   * @throws {Error} Si ocurre un error en la eliminación
+   * Elimina un medicamento de la base de datos.
+   * @param {number} id - ID del medicamento a eliminar.
+   * @returns {Promise<boolean>} true si se eliminó correctamente, false si no.
+   * @throws {Error} Si ocurre un error en la eliminación.
    */
   async delete(id) {
     try {
@@ -90,9 +94,10 @@ class Medicamento extends Modelo {
   }
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene medicamentos filtrados por número de lote.
+   * @param {string} numero_lote - Número de lote del medicamento.
+   * @returns {Promise<Array>} Lista de medicamentos con ese número de lote.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getByNumeroLote(numero_lote) {
     try {
@@ -103,15 +108,16 @@ class Medicamento extends Modelo {
       );
     } catch (error) {
       throw new Error(
-        `Error al obtener todas los medicamentos: ${error.message}`
+        `Error al obtener medicamentos por número de lote: ${error.message}`
       );
     }
   }
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene medicamentos relacionados a un ID de información de medicamento.
+   * @param {number} info_medicamento_id - ID de la información del medicamento.
+   * @returns {Promise<Array>} Lista de medicamentos asociados.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getAllByInfoMedicamentoId(info_medicamento_id) {
     try {
@@ -122,15 +128,15 @@ class Medicamento extends Modelo {
       );
     } catch (error) {
       throw new Error(
-        `Error al obtener todas los medicamentos: ${error.message}`
+        `Error al obtener medicamentos por info_medicamento_id: ${error.message}`
       );
     }
   }
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene todos los medicamentos cuya cantidad sea mayor a cero.
+   * @returns {Promise<Array>} Lista de medicamentos con stock positivo.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getAllByCantidadPositiva() {
     try {
@@ -139,7 +145,9 @@ class Medicamento extends Modelo {
       );
       return rows;
     } catch (error) {
-      throw new Error(`Error al obtener todas los productos: ${error.message}`);
+      throw new Error(
+        `Error al obtener medicamentos con cantidad positiva: ${error.message}`
+      );
     }
   }
 }

@@ -9,17 +9,17 @@ import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todos los servicios
 router.get("/", authorize("servicio.read"), ServicioController.getAllServicios);
 
-// Obtener un tipo de documento por ID
+// Obtener un servicio por ID
 router.get(
   "/:id",
   authorize("servicio.read"),
   ServicioController.getServicioById
 );
 
-// Crear un nuevo tipo de documento
+// Crear un servicio
 router.post(
   "/",
   authorize("servicio.create"),
@@ -27,7 +27,7 @@ router.post(
   ServicioController.createServicio
 );
 
-// Actualizar un tipo de documento
+// Actualizar un servicio (completo)
 router.put(
   "/:id",
   authorize("servicio.update"),
@@ -35,7 +35,7 @@ router.put(
   ServicioController.updateServicio
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar un servicio (parcial)
 router.patch(
   "/:id",
   authorize("servicio.update"),
@@ -43,7 +43,7 @@ router.patch(
   ServicioController.updateServicio
 );
 
-// Eliminar un tipo de documento
+// Eliminar un servicio
 router.delete(
   "/:id",
   authorize("servicio.delete"),

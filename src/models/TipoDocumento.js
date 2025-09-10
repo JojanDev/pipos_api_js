@@ -1,13 +1,18 @@
 import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
+/**
+ * Clase que gestiona las operaciones relacionadas con la tabla `tipos_documentos`.
+ * Extiende de la clase base Modelo para reutilizar las operaciones CRUD genéricas.
+ */
 class TipoDocumento extends Modelo {
+  // Nombre de la tabla en la base de datos
   #tableName = "tipos_documentos";
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene todos los tipos de documentos registrados en la base de datos.
+   * @returns {Promise<Array>} Lista de objetos con los tipos de documentos.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getAll() {
     try {
@@ -20,10 +25,10 @@ class TipoDocumento extends Modelo {
   }
 
   /**
-   * Obtiene un tipo de documento específico por su ID
-   * @param {number} id - ID del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
-   * @throws {Error} Si ocurre un error en la consulta
+   * Busca un tipo de documento específico por su ID.
+   * @param {number} id - ID del tipo de documento.
+   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getById(id) {
     try {
@@ -36,10 +41,10 @@ class TipoDocumento extends Modelo {
   }
 
   /**
-   * Crea un nuevo tipo de documento en la base de datos
-   * @param {Object} tipoDocumento - Objeto con los datos del tipo de documento {nombre}
-   * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló
-   * @throws {Error} Si ocurre un error en la inserción
+   * Inserta un nuevo tipo de documento en la base de datos.
+   * @param {Object} tipoDocumento - Objeto con los datos del tipo de documento. Ej: { nombre: "CC" }.
+   * @returns {Promise<Object|null>} El tipo de documento creado con su ID asignado, o null si falló.
+   * @throws {Error} Si ocurre un error en la inserción.
    */
   async create(tipoDocumento) {
     try {
@@ -54,11 +59,11 @@ class TipoDocumento extends Modelo {
   }
 
   /**
-   * Actualiza un tipo de documento existente
-   * @param {number} id - ID del tipo de documento a actualizar
-   * @param {Object} tipoDocumento - Objeto con los nuevos datos del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si falló
-   * @throws {Error} Si ocurre un error en la actualización
+   * Actualiza los datos de un tipo de documento existente.
+   * @param {number} id - ID del tipo de documento a actualizar.
+   * @param {Object} tipoDocumento - Objeto con los nuevos datos. Ej: { nombre: "Pasaporte" }.
+   * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si no existe.
+   * @throws {Error} Si ocurre un error en la actualización.
    */
   async update(id, tipoDocumento) {
     try {
@@ -74,10 +79,10 @@ class TipoDocumento extends Modelo {
   }
 
   /**
-   * Elimina un tipo de documento de la base de datos
-   * @param {number} id - ID del tipo de documento a eliminar
-   * @returns {Promise<boolean>} true si se eliminó correctamente, false si no
-   * @throws {Error} Si ocurre un error en la eliminación
+   * Elimina un tipo de documento de la base de datos.
+   * @param {number} id - ID del tipo de documento a eliminar.
+   * @returns {Promise<boolean>} true si se eliminó correctamente, false si no existe.
+   * @throws {Error} Si ocurre un error en la eliminación.
    */
   async delete(id) {
     try {

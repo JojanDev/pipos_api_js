@@ -1,16 +1,29 @@
 import { ResponseProvider } from "../providers/ResponseProvider.js";
 import InfoMedicamentoService from "../services/InfoMedicamentoService.js";
 
+/**
+ * Controlador para manejar las rutas relacionadas con la información de medicamentos.
+ * Centraliza la comunicación entre la capa de rutas (Express) y el servicio InfoMedicamento.
+ *
+ * Cada método recibe los objetos estándar de Express: (req, res).
+ * Las respuestas se devuelven usando ResponseProvider para mantener formato uniforme.
+ */
 class InfoMedicamentoController {
-  // Obtener todos los tipos de documentos
+  /**
+   * Obtiene toda la información de medicamentos registrada.
+   *
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static getAllInfosMedicamentos = async (req, res) => {
     try {
       const response = await InfoMedicamentoService.getAllInfosMedicamentos();
-      // Validamos si no hay tipos de documentos
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -18,21 +31,27 @@ class InfoMedicamentoController {
         response.code
       );
     } catch (error) {
+      console.error("getAllInfosMedicamentos error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Obtener un tipo de documento por su ID
+  /**
+   * Obtiene una información de medicamento por su ID.
+   *
+   * @param {import('express').Request} req - params: { id }
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static getInfoMedicamentoById = async (req, res) => {
     const { id } = req.params;
     try {
-      // Llamamos al servicio para obtener el tipo de documento por su ID
       const response = await InfoMedicamentoService.getInfoMedicamentoById(id);
-      // Validamos si no hay tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -40,25 +59,30 @@ class InfoMedicamentoController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`getInfoMedicamentoById error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Crear un nuevo tipo de documento
+  /**
+   * Crea una nueva información de medicamento.
+   *
+   * @param {import('express').Request} req - body: infoMedicamento
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static createInfoMedicamento = async (req, res) => {
-    const tipoProducto = req.body;
+    const infoMedicamento = req.body;
     try {
-      // Llamamos el método crear del modelo
       const response = await InfoMedicamentoService.createInfoMedicamento(
-        tipoProducto
+        infoMedicamento
       );
-      // Validamos que la respuesta no tenga error
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento creado
+
+      // Creación exitosa -> 201
       return ResponseProvider.success(
         res,
         response.data,
@@ -66,28 +90,32 @@ class InfoMedicamentoController {
         201
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error("createInfoMedicamento error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Actualizar un tipo de documento
+  /**
+   * Actualiza una información de medicamento existente.
+   *
+   * @param {import('express').Request} req - params: { id }, body: infoMedicamento
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static updateInfoMedicamento = async (req, res) => {
     const { id } = req.params;
-    const tipoProducto = req.body;
+    const infoMedicamento = req.body;
     try {
-      // Llamamos al método actualizar del modelo
       const response = await InfoMedicamentoService.updateInfoMedicamento(
         id,
-        tipoProducto
+        infoMedicamento
       );
-      // Validamos que la respuesta no tenga error
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
 
-      // Retornamos el tipo de documento actualizado
+      // Actualización exitosa -> 200
       return ResponseProvider.success(
         res,
         response.data,
@@ -95,23 +123,27 @@ class InfoMedicamentoController {
         200
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`updateInfoMedicamento error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Eliminar un tipo de documento
+  /**
+   * Elimina una información de medicamento por su ID.
+   *
+   * @param {import('express').Request} req - params: { id }
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static deleteInfoMedicamento = async (req, res) => {
     const { id } = req.params;
     try {
-      // Llamamos al servicio para eliminar el tipo de documento por su ID
       const response = await InfoMedicamentoService.deleteInfoMedicamento(id);
-      // Validamos si no se pudo eliminar el tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento eliminado
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -119,7 +151,7 @@ class InfoMedicamentoController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`deleteInfoMedicamento error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };

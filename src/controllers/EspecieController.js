@@ -1,16 +1,29 @@
 import { ResponseProvider } from "../providers/ResponseProvider.js";
 import EspecieService from "../services/EspecieService.js";
 
+/**
+ * Controlador para las operaciones HTTP relacionadas con especies.
+ * Cada método usa EspecieService para la lógica de negocio y ResponseProvider
+ * para centralizar las respuestas HTTP.
+ */
 class EspecieController {
-  // Obtener todos los tipos de documentos
+  /**
+   * Obtiene todas las especies.
+   * Ruta típica: GET /especies
+   *
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
   static getAllEspecies = async (req, res) => {
     try {
       const response = await EspecieService.getAllEspecies();
-      // Validamos si no hay tipos de documentos
+
+      // Si el servicio devuelve un error, delegamos al ResponseProvider
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
+      // Respuesta exitosa con la lista de especies
       return ResponseProvider.success(
         res,
         response.data,
@@ -18,21 +31,28 @@ class EspecieController {
         response.code
       );
     } catch (error) {
+      // Error interno no esperado
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Obtener un tipo de documento por su ID
+  /**
+   * Obtiene una especie por su ID.
+   * Ruta típica: GET /especies/:id
+   *
+   * @param {import('express').Request} req - req.params.id contiene el ID
+   * @param {import('express').Response} res
+   */
   static getEspecieById = async (req, res) => {
     const { id } = req.params;
+
     try {
-      // Llamamos al servicio para obtener el tipo de documento por su ID
       const response = await EspecieService.getEspecieById(id);
-      // Validamos si no hay tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -40,23 +60,28 @@ class EspecieController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Crear un nuevo tipo de documento
+  /**
+   * Crea una nueva especie.
+   * Ruta típica: POST /especies
+   *
+   * @param {import('express').Request} req - req.body contiene los datos de la especie
+   * @param {import('express').Response} res
+   */
   static createEspecie = async (req, res) => {
     const especie = req.body;
+
     try {
-      // Llamamos el método crear del modelo
       const response = await EspecieService.createEspecie(especie);
-      // Validamos que la respuesta no tenga error
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento creado
+
+      // Recurso creado -> 201
       return ResponseProvider.success(
         res,
         response.data,
@@ -64,25 +89,28 @@ class EspecieController {
         201
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Actualizar un tipo de documento
+  /**
+   * Actualiza una especie existente.
+   * Ruta típica: PUT /especies/:id
+   *
+   * @param {import('express').Request} req - req.params.id y req.body con datos a actualizar
+   * @param {import('express').Response} res
+   */
   static updateEspecie = async (req, res) => {
     const { id } = req.params;
     const especie = req.body;
+
     try {
-      // Llamamos al método actualizar del modelo
       const response = await EspecieService.updateEspecie(id, especie);
-      // Validamos que la respuesta no tenga error
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
 
-      // Retornamos el tipo de documento actualizado
       return ResponseProvider.success(
         res,
         response.data,
@@ -90,31 +118,38 @@ class EspecieController {
         200
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Eliminar un tipo de documento
+  /**
+   * Elimina una especie.
+   * Ruta típica: DELETE /especies/:id
+   *
+   * Nota: el servicio puede devolver sólo mensaje y código, por eso aquí
+   * devolvemos `null` como data cuando la eliminación es exitosa.
+   *
+   * @param {import('express').Request} req - req.params.id contiene el ID
+   * @param {import('express').Response} res
+   */
   static deleteEspecie = async (req, res) => {
     const { id } = req.params;
+
     try {
-      // Llamamos al servicio para eliminar el tipo de documento por su ID
       const response = await EspecieService.deleteEspecie(id);
-      // Validamos si no se pudo eliminar el tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento eliminado
+
+      // Retornamos null en data para dejar explícito que no hay payload
       return ResponseProvider.success(
         res,
-        response.data,
+        null,
         response.message,
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };

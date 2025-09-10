@@ -1,53 +1,52 @@
-import tiposDocumentos from "./tiposDocumentosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import especies from "./especiesRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import tiposProductos from "./tiposProductosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import infoMedicamentos from "./infosMedicamentosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import mascotas from "./mascotasRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import antecedentes from "./antecedentesRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import tratamientos from "./tratamientosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import medicamentosTratamientos from "./medicamentosTratamientosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import razas from "./razasRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import ventas from "./ventasRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import medicamentosVentas from "./medicamentosVentasRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import roles from "./rolesRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import permisos from "./permisosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import permisosRoles from "./permisosRolesRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import usuarios from "./usuariosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import rolesUsuarios from "./rolesUsuariosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import medicamentos from "./medicamentosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import servicios from "./serviciosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import productosVentas from "./productosVentasRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import serviciosVentas from "./serviciosVentasRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import productos from "./productosRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import auth from "./authRoutes.js"; // Rutas para la entidad 'tipos de documentos'
-import credenciales from "./credencialesRoutes.js"; // Rutas para la entidad 'tipos de documentos'
+import tiposDocumentos from "./tiposDocumentosRoutes.js";
+import especies from "./especiesRoutes.js";
+import tiposProductos from "./tiposProductosRoutes.js";
+import infoMedicamentos from "./infosMedicamentosRoutes.js";
+import mascotas from "./mascotasRoutes.js";
+import antecedentes from "./antecedentesRoutes.js";
+import tratamientos from "./tratamientosRoutes.js";
+import medicamentosTratamientos from "./medicamentosTratamientosRoutes.js";
+import razas from "./razasRoutes.js";
+import ventas from "./ventasRoutes.js";
+import medicamentosVentas from "./medicamentosVentasRoutes.js";
+import roles from "./rolesRoutes.js";
+import permisos from "./permisosRoutes.js";
+import permisosRoles from "./permisosRolesRoutes.js";
+import usuarios from "./usuariosRoutes.js";
+import rolesUsuarios from "./rolesUsuariosRoutes.js";
+import medicamentos from "./medicamentosRoutes.js";
+import servicios from "./serviciosRoutes.js";
+import productosVentas from "./productosVentasRoutes.js";
+import serviciosVentas from "./serviciosVentasRoutes.js";
+import productos from "./productosRoutes.js";
+import auth from "./authRoutes.js";
+import credenciales from "./credencialesRoutes.js";
 
-// Definición de las rutas de la API
+// Array con todas las rutas base de la API
 const rutas = [
-  { path: "/tipos-documentos", router: tiposDocumentos }, // Ruta para manejar tipos de documentos
-  { path: "/especies", router: especies }, // Ruta para manejar tipos de documentos
-  { path: "/tipos-productos", router: tiposProductos }, // Ruta para manejar tipos de documentos
-  { path: "/info-medicamentos", router: infoMedicamentos }, // Ruta para manejar tipos de documentos
-  { path: "/mascotas", router: mascotas }, // Ruta para manejar tipos de documentos
-  { path: "/antecedentes", router: antecedentes }, // Ruta para manejar tipos de documentos
-  { path: "/tratamientos", router: tratamientos }, // Ruta para manejar tipos de documentos
-  { path: "/medicamentos-tratamientos", router: medicamentosTratamientos }, // Ruta para manejar tipos de documentos
-  { path: "/razas", router: razas }, // Ruta para manejar tipos de documentos
-  { path: "/ventas", router: ventas }, // Ruta para manejar tipos de documentos
-  { path: "/medicamentos-ventas", router: medicamentosVentas }, // Ruta para manejar tipos de documentos
-  { path: "/roles", router: roles }, // Ruta para manejar tipos de documentos
-  { path: "/permisos", router: permisos }, // Ruta para manejar tipos de documentos
-  { path: "/permisos-roles", router: permisosRoles }, // Ruta para manejar tipos de documentos
-  { path: "/usuarios", router: usuarios }, // Ruta para manejar tipos de documentos
-  { path: "/roles-usuarios", router: rolesUsuarios }, // Ruta para manejar tipos de documentos
-  { path: "/medicamentos", router: medicamentos }, // Ruta para manejar tipos de documentos
-  { path: "/servicios", router: servicios }, // Ruta para manejar tipos de documentos
-  { path: "/productos-ventas", router: productosVentas }, // Ruta para manejar tipos de documentos
-  { path: "/servicios-ventas", router: serviciosVentas }, // Ruta para manejar tipos de documentos
-  { path: "/productos", router: productos }, // Ruta para manejar tipos de documentos
-  { path: "/auth", router: auth, publico: true }, // Ruta para manejar tipos de documentos
-  { path: "/credenciales", router: credenciales }, // Ruta para manejar tipos de documentos
+  { path: "/tipos-documentos", router: tiposDocumentos }, // Rutas de tipos de documento
+  { path: "/especies", router: especies }, // Rutas de especies
+  { path: "/tipos-productos", router: tiposProductos }, // Rutas de tipos de producto
+  { path: "/info-medicamentos", router: infoMedicamentos }, // Rutas de información de medicamentos
+  { path: "/mascotas", router: mascotas }, // Rutas de mascotas
+  { path: "/antecedentes", router: antecedentes }, // Rutas de antecedentes
+  { path: "/tratamientos", router: tratamientos }, // Rutas de tratamientos
+  { path: "/medicamentos-tratamientos", router: medicamentosTratamientos }, // Rutas de medicamentos en tratamientos
+  { path: "/razas", router: razas }, // Rutas de razas
+  { path: "/ventas", router: ventas }, // Rutas de ventas
+  { path: "/medicamentos-ventas", router: medicamentosVentas }, // Rutas de medicamentos en ventas
+  { path: "/roles", router: roles }, // Rutas de roles
+  { path: "/permisos", router: permisos }, // Rutas de permisos
+  { path: "/permisos-roles", router: permisosRoles }, // Rutas de permisos-roles
+  { path: "/usuarios", router: usuarios }, // Rutas de usuarios
+  { path: "/roles-usuarios", router: rolesUsuarios }, // Rutas de roles-usuarios
+  { path: "/medicamentos", router: medicamentos }, // Rutas de medicamentos
+  { path: "/servicios", router: servicios }, // Rutas de servicios
+  { path: "/productos-ventas", router: productosVentas }, // Rutas de productos en ventas
+  { path: "/servicios-ventas", router: serviciosVentas }, // Rutas de servicios en ventas
+  { path: "/productos", router: productos }, // Rutas de productos
+  { path: "/auth", router: auth, publico: true }, // Rutas de autenticación (públicas)
+  { path: "/credenciales", router: credenciales }, // Rutas de credenciales
 ];
 
-// Exporta el array de rutas como valor por defecto del módulo
 export default rutas;

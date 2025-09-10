@@ -1,12 +1,17 @@
 import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
+/**
+ * Clase que representa el modelo de medicamentos asociados a ventas.
+ * Hereda métodos genéricos de la clase Modelo y los especializa
+ * para interactuar con la tabla `medicamentos_ventas`.
+ */
 class MedicamentoVenta extends Modelo {
   #tableName = "medicamentos_ventas";
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
+   * Obtiene todas las ventas de medicamentos registradas en la base de datos.
+   * @returns {Promise<Array>} Lista de todas las ventas de medicamentos
    * @throws {Error} Si ocurre un error en la consulta
    */
   async getAll() {
@@ -20,9 +25,9 @@ class MedicamentoVenta extends Modelo {
   }
 
   /**
-   * Obtiene un tipo de documento específico por su ID
-   * @param {number} id - ID del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * Obtiene una venta de medicamento específica por su ID.
+   * @param {number} id - ID de la venta de medicamento
+   * @returns {Promise<Object|null>} La venta encontrada o null si no existe
    * @throws {Error} Si ocurre un error en la consulta
    */
   async getById(id) {
@@ -30,15 +35,15 @@ class MedicamentoVenta extends Modelo {
       return await super.getById(this.#tableName, id);
     } catch (error) {
       throw new Error(
-        `Error al obtener la venta del medicamento con ID ${id}: ${error.message}`
+        `Error al obtener la venta de medicamento con ID ${id}: ${error.message}`
       );
     }
   }
 
   /**
-   * Crea un nuevo tipo de documento en la base de datos
-   * @param {Object} medicamentoVenta - Objeto con los datos del tipo de documento {nombre}
-   * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló
+   * Crea un nuevo registro de venta de medicamento en la base de datos.
+   * @param {Object} medicamentoVenta - Objeto con los datos de la venta de medicamento (ejemplo: { medicamento_id, venta_id, cantidad, precio })
+   * @returns {Promise<Object|null>} La venta de medicamento creada con su ID, o null si falló
    * @throws {Error} Si ocurre un error en la inserción
    */
   async create(medicamentoVenta) {
@@ -50,16 +55,16 @@ class MedicamentoVenta extends Modelo {
       return null;
     } catch (error) {
       throw new Error(
-        `Error al crear la venta del medicamento: ${error.message}`
+        `Error al crear la venta de medicamento: ${error.message}`
       );
     }
   }
 
   /**
-   * Actualiza un tipo de documento existente
-   * @param {number} id - ID del tipo de documento a actualizar
-   * @param {Object} medicamentoVenta - Objeto con los nuevos datos del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si falló
+   * Actualiza un registro de venta de medicamento existente.
+   * @param {number} id - ID de la venta de medicamento a actualizar
+   * @param {Object} medicamentoVenta - Objeto con los nuevos datos de la venta de medicamento
+   * @returns {Promise<Object|null>} La venta actualizada, o null si no existe
    * @throws {Error} Si ocurre un error en la actualización
    */
   async update(id, medicamentoVenta) {
@@ -70,14 +75,14 @@ class MedicamentoVenta extends Modelo {
       return null;
     } catch (error) {
       throw new Error(
-        `Error al actualizar la venta del medicamento con ID ${id}: ${error.message}`
+        `Error al actualizar la venta de medicamento con ID ${id}: ${error.message}`
       );
     }
   }
 
   /**
-   * Elimina un tipo de documento de la base de datos
-   * @param {number} id - ID del tipo de documento a eliminar
+   * Elimina un registro de venta de medicamento de la base de datos.
+   * @param {number} id - ID de la venta de medicamento a eliminar
    * @returns {Promise<boolean>} true si se eliminó correctamente, false si no
    * @throws {Error} Si ocurre un error en la eliminación
    */
@@ -86,14 +91,15 @@ class MedicamentoVenta extends Modelo {
       return await super.delete(this.#tableName, id);
     } catch (error) {
       throw new Error(
-        `Error al eliminar la venta del medicamento con ID ${id}: ${error.message}`
+        `Error al eliminar la venta de medicamento con ID ${id}: ${error.message}`
       );
     }
   }
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
+   * Obtiene todas las ventas de medicamentos asociadas a una venta en particular.
+   * @param {number} venta_id - ID de la venta
+   * @returns {Promise<Array>} Lista de medicamentos vendidos en esa venta
    * @throws {Error} Si ocurre un error en la consulta
    */
   async getAllByVentaId(venta_id) {
@@ -101,7 +107,7 @@ class MedicamentoVenta extends Modelo {
       return await super.getByField(this.#tableName, "venta_id", venta_id);
     } catch (error) {
       throw new Error(
-        `Error al obtener todas las ventas de medicamentos con ID de venta ${venta_id}: ${error.message}`
+        `Error al obtener los medicamentos asociados a la venta con ID ${venta_id}: ${error.message}`
       );
     }
   }

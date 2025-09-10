@@ -2,16 +2,25 @@ import Servicio from "../models/Servicio.js";
 import ServicioVentaService from "./ServicioVentaService.js";
 // import Usuario from "../models/Usuario.js";
 
+/**
+ * Servicio encargado de manejar la lógica de negocio
+ * relacionada con los servicios ofrecidos por la veterinaria.
+ *
+ * Se apoya en el modelo `Servicio` para interactuar con la base de datos
+ * y en `ServicioVentaService` para validar relaciones con ventas.
+ */
 class ServicioService {
+  // Instancia única del modelo Servicio
   static objServicio = new Servicio();
-  // static objUsuario = new Usuario();
 
+  /**
+   * Obtiene todos los servicios registrados.
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async getAllServicios() {
     try {
-      // Llamamos el método listar
       const servicios = await this.objServicio.getAll();
 
-      // Validamos si no hay tipos de productos
       if (!servicios || servicios.length === 0)
         return {
           error: true,
@@ -19,7 +28,6 @@ class ServicioService {
           message: "No hay servicios registrados",
         };
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -27,17 +35,20 @@ class ServicioService {
         data: servicios,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       console.log(error);
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Obtiene un servicio por su ID.
+   * @param {number} id - Identificador del servicio
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async getServicioById(id) {
     try {
-      // Llamamos el método consultar por ID
       const servicio = await this.objServicio.getById(id);
-      // Validamos si no hay servicio
+
       if (!servicio)
         return {
           error: true,
@@ -45,7 +56,6 @@ class ServicioService {
           message: "Servicio no encontrado",
         };
 
-      // Retornamos la servicio obtenida
       return {
         error: false,
         code: 200,
@@ -53,16 +63,19 @@ class ServicioService {
         data: servicio,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Crea un nuevo servicio.
+   * @param {Object} servicio - Datos del servicio a crear
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async createServicio(servicio) {
     try {
-      // Llamamos el método crear
       const servicioCreado = await this.objServicio.create(servicio);
-      // Validamos si no se pudo crear el tipo de producto
+
       if (servicioCreado === null)
         return {
           error: true,
@@ -70,7 +83,6 @@ class ServicioService {
           message: "Error al crear el Servicio",
         };
 
-      // Retornamos el tipo de producto creado
       return {
         error: false,
         code: 201,
@@ -78,16 +90,20 @@ class ServicioService {
         data: servicioCreado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Actualiza un servicio existente.
+   * @param {number} id - ID del servicio a actualizar
+   * @param {Object} servicio - Nuevos datos del servicio
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async updateServicio(id, servicio) {
     try {
-      // Llamamos el método consultar por ID
       const existente = await this.objServicio.getById(id);
-      // Validamos si el tipo de producto existe
+
       if (!existente) {
         return {
           error: true,
@@ -96,9 +112,8 @@ class ServicioService {
         };
       }
 
-      // Llamamos el método actualizar
       const servicioActualizado = await this.objServicio.update(id, servicio);
-      // Validamos si no se pudo actualizar el tipo de producto
+
       if (servicioActualizado === null)
         return {
           error: true,
@@ -106,7 +121,6 @@ class ServicioService {
           message: "Error al actualizar el Servicio",
         };
 
-      // Retornamos el tipo de producto actualizado
       return {
         error: false,
         code: 200,
@@ -114,20 +128,24 @@ class ServicioService {
         data: servicioActualizado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Elimina un servicio, previa validación de ventas asociadas.
+   * @param {number} id - ID del servicio a eliminar
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message}
+   */
   static async deleteServicio(id) {
     try {
+      // Validamos que el servicio exista
       const servicio = await this.getServicioById(id);
-      // Validamos si el tipo de producto existe
       if (servicio.error) return servicio;
 
+      // Validamos que no existan ventas asociadas
       const ventasAsociados =
         await ServicioVentaService.getAllServicioVentaByServicioId(id);
-      // Validamos si el tipo de producto existe
 
       if (!ventasAsociados.error)
         return {
@@ -136,9 +154,9 @@ class ServicioService {
           message: "Error al eliminar el servicio, tiene ventas asociadas",
         };
 
-      // Llamamos el método eliminar
+      // Eliminamos el servicio
       const servicioEliminado = await this.objServicio.delete(id);
-      // Validamos si no se pudo eliminar el tipo de producto
+
       if (!servicioEliminado)
         return {
           error: true,
@@ -146,14 +164,12 @@ class ServicioService {
           message: "Error al eliminar el Servicio",
         };
 
-      // Retornamos el tipo de producto eliminado
       return {
         error: false,
         code: 200,
         message: "Servicio eliminado correctamente",
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }

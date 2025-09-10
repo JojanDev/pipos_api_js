@@ -2,16 +2,25 @@ import TipoProducto from "../models/TipoProducto.js";
 import ProductoService from "./ProductoService.js";
 // import Usuario from "../models/Usuario.js";
 
+/**
+ * Servicio encargado de manejar la lógica de negocio
+ * relacionada con los tipos de productos de la veterinaria.
+ *
+ * Se apoya en el modelo `TipoProducto` para interactuar con la base de datos
+ * y en `ProductoService` para validar relaciones con productos asociados.
+ */
 class TipoProductoService {
+  // Instancia única del modelo TipoProducto
   static objTipoProducto = new TipoProducto();
-  // static objUsuario = new Usuario();
 
+  /**
+   * Obtiene todos los tipos de productos registrados.
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async getAllTiposProductos() {
     try {
-      // Llamamos el método listar
       const tiposProductos = await this.objTipoProducto.getAll();
 
-      // Validamos si no hay tipos de productos
       if (!tiposProductos || tiposProductos.length === 0)
         return {
           error: true,
@@ -19,7 +28,6 @@ class TipoProductoService {
           message: "No hay tipos de productos registradas",
         };
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -27,17 +35,20 @@ class TipoProductoService {
         data: tiposProductos,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       console.log(error);
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Obtiene un tipo de producto por su ID.
+   * @param {number} id - Identificador del tipo de producto
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async getTipoProductoById(id) {
     try {
-      // Llamamos el método consultar por ID
       const tipoProducto = await this.objTipoProducto.getById(id);
-      // Validamos si no hay tipoProducto
+
       if (!tipoProducto)
         return {
           error: true,
@@ -45,7 +56,6 @@ class TipoProductoService {
           message: "Tipo de producto no encontrado",
         };
 
-      // Retornamos la tipoProducto obtenida
       return {
         error: false,
         code: 200,
@@ -53,18 +63,21 @@ class TipoProductoService {
         data: tipoProducto,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Crea un nuevo tipo de producto.
+   * @param {Object} tipoProducto - Datos del tipo de producto a crear
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async createTipoProducto(tipoProducto) {
     try {
-      // Llamamos el método crear
       const tipoProductoCreado = await this.objTipoProducto.create(
         tipoProducto
       );
-      // Validamos si no se pudo crear el tipo de producto
+
       if (tipoProductoCreado === null)
         return {
           error: true,
@@ -72,7 +85,6 @@ class TipoProductoService {
           message: "Error al crear el tipo de producto",
         };
 
-      // Retornamos el tipo de producto creado
       return {
         error: false,
         code: 201,
@@ -80,16 +92,20 @@ class TipoProductoService {
         data: tipoProductoCreado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Actualiza un tipo de producto existente.
+   * @param {number} id - ID del tipo de producto a actualizar
+   * @param {Object} tipoProducto - Nuevos datos del tipo de producto
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async updateTipoProducto(id, tipoProducto) {
     try {
-      // Llamamos el método consultar por ID
       const existente = await this.objTipoProducto.getById(id);
-      // Validamos si el tipo de producto existe
+
       if (!existente) {
         return {
           error: true,
@@ -98,12 +114,11 @@ class TipoProductoService {
         };
       }
 
-      // Llamamos el método actualizar
       const tipoProductoActualizado = await this.objTipoProducto.update(
         id,
         tipoProducto
       );
-      // Validamos si no se pudo actualizar el tipo de producto
+
       if (tipoProductoActualizado === null)
         return {
           error: true,
@@ -111,7 +126,6 @@ class TipoProductoService {
           message: "Error al actualizar el tipo de producto",
         };
 
-      // Retornamos el tipo de producto actualizado
       return {
         error: false,
         code: 200,
@@ -119,21 +133,25 @@ class TipoProductoService {
         data: tipoProductoActualizado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Elimina un tipo de producto, previa validación de productos asociados.
+   * @param {number} id - ID del tipo de producto a eliminar
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message}
+   */
   static async deleteTipoProducto(id) {
     try {
-      // Llamamos el método consultar por ID
+      // Validamos que el tipo de producto exista
       const tipoProductoExistente = await this.getTipoProductoById(id);
-      // Validamos si el tipo de producto existe
       if (tipoProductoExistente.error) return tipoProductoExistente;
 
+      // Validamos que no existan productos asociados
       const productosAsociados =
         await ProductoService.getAllProductosByTipoProductoId(id);
-      // Validamos si el tipo de producto existe
+
       if (!productosAsociados.error)
         return {
           error: true,
@@ -142,15 +160,9 @@ class TipoProductoService {
             "Error al eliminar el tipo de producto, tiene productos asociados",
         };
 
-      // const usuariosTipo = await this.objUsuario.getAllByTipoProductoId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
-      // }
-
-      // Llamamos el método eliminar
+      // Eliminamos el tipo de producto
       const tipoProductoEliminado = await this.objTipoProducto.delete(id);
-      // Validamos si no se pudo eliminar el tipo de producto
+
       if (!tipoProductoEliminado)
         return {
           error: true,
@@ -158,14 +170,12 @@ class TipoProductoService {
           message: "Error al eliminar el tipo de producto",
         };
 
-      // Retornamos el tipo de producto eliminado
       return {
         error: false,
         code: 200,
         message: "Tipo de producto eliminado correctamente",
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }

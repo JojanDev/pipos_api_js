@@ -4,9 +4,6 @@ import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 
 // Importa modelos y servicios relacionados con usuarios, roles y permisos
-import Usuario from "../models/Usuario.js";
-import UsuarioService from "./UsuarioService.js";
-import RolUsuarioService from "./RolUsuarioService.js";
 import RolUsuario from "../models/RolUsuario.js";
 import PermisoRol from "../models/PermisoRol.js";
 import Permiso from "../models/Permiso.js";
@@ -68,48 +65,6 @@ class AuthService {
         code: 500,
         message: "Error al cerrar sesión",
       };
-    }
-  }
-
-  // Registra un nuevo usuario y lo autentica automáticamente
-  static async register(usuario) {
-    try {
-      const rol = 3; // ID del rol por defecto para nuevos usuarios
-
-      // Crea el usuario en la base de datos
-      const responseUsuario = await UsuarioService.createUsuario(usuario);
-      if (responseUsuario.error) return responseUsuario;
-
-      const usuarioCreado = responseUsuario.data;
-
-      // Asocia el rol al nuevo usuario
-      const responseRolUsuario = await RolUsuarioService.createRolUsuario({
-        rol_id: rol,
-        usuario_id: usuarioCreado.id,
-      });
-      if (responseRolUsuario.error) return responseRolUsuario;
-
-      // Configura los datos del usuario para el token y frontend
-      const usuarioCookie = await this.configurarUsuario(usuarioCreado);
-
-      // Genera tokens de autenticación
-      const token = await this.#genToken(usuarioCreado.id);
-      const refreshToken = await this.#genRefreshToken(usuarioCreado.id);
-
-      // Retorna tokens y datos del usuario
-      return {
-        error: false,
-        code: 201,
-        message: "Usuario creado y autenticado",
-        data: {
-          token,
-          refreshToken,
-          usuarioCookie,
-        },
-      };
-    } catch (error) {
-      console.error("Error en AuthService.register:", error);
-      return { error: true, code: 500, message: "Error al crear el usuario" };
     }
   }
 

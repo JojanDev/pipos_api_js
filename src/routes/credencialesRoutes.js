@@ -1,5 +1,4 @@
 import express from "express";
-
 import {
   validarCredencial,
   validarCredencialParcial,
@@ -9,34 +8,35 @@ import CredencialController from "../controllers/CredencialController.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todas las credenciales
 router.get(
   "/",
   authorize("credencial.read"),
   CredencialController.getAllCredenciales
 );
 
+// Obtener credencial por nickname
 router.get(
   "/nickname/:usuario",
   authorize("credencial.read"),
   CredencialController.getCredencialByUsuario
 );
 
-// Obtener un tipo de documento por ID
+// Obtener credencial por ID de usuario
 router.get(
   "/usuario/:id",
   authorize("credencial.read"),
   CredencialController.getCredencialByUsuarioId
 );
 
-// Obtener un tipo de documento por ID
+// Obtener credencial por ID
 router.get(
   "/:id",
   authorize("credencial.read"),
   CredencialController.getCredencialById
 );
 
-// Crear un nuevo tipo de documento
+// Crear credencial
 router.post(
   "/",
   authorize("credencial.create"),
@@ -44,7 +44,7 @@ router.post(
   CredencialController.createCredencial
 );
 
-// Actualizar un tipo de documento
+// Actualizar credencial (completo)
 router.put(
   "/:id",
   authorize("credencial.update"),
@@ -52,7 +52,7 @@ router.put(
   CredencialController.updateCredencial
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar credencial (parcial)
 router.patch(
   "/:id",
   authorize("credencial.update"),
@@ -60,7 +60,11 @@ router.patch(
   CredencialController.updateCredencial
 );
 
-// Eliminar un tipo de documento
-router.delete("/:id", CredencialController.deleteCredencial);
+// Eliminar credencial
+router.delete(
+  "/:id",
+  authorize("credencial.delete"),
+  CredencialController.deleteCredencial
+);
 
 export default router;

@@ -1,12 +1,17 @@
 import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
+/**
+ * Clase que representa el modelo de mascotas.
+ * Hereda métodos genéricos de la clase Modelo y los especializa
+ * para interactuar con la tabla `mascotas`.
+ */
 class Mascota extends Modelo {
   #tableName = "mascotas";
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
+   * Obtiene todas las mascotas registradas en la base de datos.
+   * @returns {Promise<Array>} Lista de todas las mascotas
    * @throws {Error} Si ocurre un error en la consulta
    */
   async getAll() {
@@ -18,9 +23,9 @@ class Mascota extends Modelo {
   }
 
   /**
-   * Obtiene un tipo de documento específico por su ID
-   * @param {number} id - ID del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * Obtiene una mascota específica por su ID.
+   * @param {number} id - ID de la mascota
+   * @returns {Promise<Object|null>} La mascota encontrada o null si no existe
    * @throws {Error} Si ocurre un error en la consulta
    */
   async getById(id) {
@@ -34,9 +39,9 @@ class Mascota extends Modelo {
   }
 
   /**
-   * Crea un nuevo tipo de documento en la base de datos
-   * @param {Object} mascota - Objeto con los datos del tipo de documento {nombre}
-   * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló
+   * Crea una nueva mascota en la base de datos.
+   * @param {Object} mascota - Objeto con los datos de la mascota (ejemplo: { nombre, edad, especie_id, raza_id, usuario_id })
+   * @returns {Promise<Object|null>} La mascota creada con su ID, o null si falló
    * @throws {Error} Si ocurre un error en la inserción
    */
   async create(mascota) {
@@ -52,10 +57,10 @@ class Mascota extends Modelo {
   }
 
   /**
-   * Actualiza un tipo de documento existente
-   * @param {number} id - ID del tipo de documento a actualizar
-   * @param {Object} mascota - Objeto con los nuevos datos del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si falló
+   * Actualiza una mascota existente.
+   * @param {number} id - ID de la mascota a actualizar
+   * @param {Object} mascota - Objeto con los nuevos datos de la mascota
+   * @returns {Promise<Object|null>} La mascota actualizada, o null si no existe
    * @throws {Error} Si ocurre un error en la actualización
    */
   async update(id, mascota) {
@@ -72,8 +77,8 @@ class Mascota extends Modelo {
   }
 
   /**
-   * Elimina un tipo de documento de la base de datos
-   * @param {number} id - ID del tipo de documento a eliminar
+   * Elimina una mascota de la base de datos.
+   * @param {number} id - ID de la mascota a eliminar
    * @returns {Promise<boolean>} true si se eliminó correctamente, false si no
    * @throws {Error} Si ocurre un error en la eliminación
    */
@@ -88,28 +93,34 @@ class Mascota extends Modelo {
   }
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
+   * Obtiene todas las mascotas asociadas a un usuario.
+   * @param {number} usuario_id - ID del usuario propietario
+   * @returns {Promise<Array>} Lista de mascotas del usuario
    * @throws {Error} Si ocurre un error en la consulta
    */
   async getAllByUsuarioId(usuario_id) {
     try {
       return await super.getByField(this.#tableName, "usuario_id", usuario_id);
     } catch (error) {
-      throw new Error(`Error al obtener todas las mascotas: ${error.message}`);
+      throw new Error(
+        `Error al obtener las mascotas del usuario con ID ${usuario_id}: ${error.message}`
+      );
     }
   }
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
+   * Obtiene todas las mascotas de una raza específica.
+   * @param {number} raza_id - ID de la raza
+   * @returns {Promise<Array>} Lista de mascotas de esa raza
    * @throws {Error} Si ocurre un error en la consulta
    */
   async getAllByRazaId(raza_id) {
     try {
       return await super.getByField(this.#tableName, "raza_id", raza_id);
     } catch (error) {
-      throw new Error(`Error al obtener todas las mascotas: ${error.message}`);
+      throw new Error(
+        `Error al obtener las mascotas de la raza con ID ${raza_id}: ${error.message}`
+      );
     }
   }
 }

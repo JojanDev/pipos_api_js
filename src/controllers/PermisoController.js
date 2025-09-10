@@ -1,16 +1,27 @@
 import { ResponseProvider } from "../providers/ResponseProvider.js";
 import PermisoService from "../services/PermisoService.js";
 
+/**
+ * Controlador para las rutas relacionadas con permisos.
+ * Usa PermisoService para la lógica de negocio y ResponseProvider
+ * para centralizar las respuestas HTTP.
+ */
 class PermisoController {
-  // Obtener todos los tipos de documentos
+  /**
+   * Obtiene todos los permisos.
+   * Ruta: GET /permisos
+   *
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
   static getAllPermisos = async (req, res) => {
     try {
       const response = await PermisoService.getAllPermisos();
-      // Validamos si no hay tipos de documentos
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -22,17 +33,23 @@ class PermisoController {
     }
   };
 
-  // Obtener un tipo de documento por su ID
+  /**
+   * Obtiene un permiso por su ID.
+   * Ruta: GET /permisos/:id
+   *
+   * @param {import('express').Request} req - req.params.id
+   * @param {import('express').Response} res
+   */
   static getPermisoById = async (req, res) => {
     const { id } = req.params;
+
     try {
-      // Llamamos al servicio para obtener el tipo de documento por su ID
       const response = await PermisoService.getPermisoById(id);
-      // Validamos si no hay tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -40,25 +57,27 @@ class PermisoController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Crear un nuevo tipo de documento
+  /**
+   * Crea un nuevo permiso.
+   * Ruta: POST /permisos
+   *
+   * @param {import('express').Request} req - req.body contiene los datos del permiso
+   * @param {import('express').Response} res
+   */
   static createPermiso = async (req, res) => {
     const permiso = req.body;
+
     try {
-      // Llamamos el método crear del modelo
-      const response = await PermisoService.createPermiso(
-        permiso
-      );
-      // Validamos que la respuesta no tenga error
+      const response = await PermisoService.createPermiso(permiso);
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento creado
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -66,28 +85,28 @@ class PermisoController {
         201
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Actualizar un tipo de documento
+  /**
+   * Actualiza un permiso existente.
+   * Ruta: PUT /permisos/:id
+   *
+   * @param {import('express').Request} req - req.params.id y req.body con datos a actualizar
+   * @param {import('express').Response} res
+   */
   static updatePermiso = async (req, res) => {
     const { id } = req.params;
     const permiso = req.body;
+
     try {
-      // Llamamos al método actualizar del modelo
-      const response = await PermisoService.updatePermiso(
-        id,
-        permiso
-      );
-      // Validamos que la respuesta no tenga error
+      const response = await PermisoService.updatePermiso(id, permiso);
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
 
-      // Retornamos el tipo de documento actualizado
       return ResponseProvider.success(
         res,
         response.data,
@@ -95,31 +114,37 @@ class PermisoController {
         200
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Eliminar un tipo de documento
+  /**
+   * Elimina un permiso.
+   * Ruta: DELETE /permisos/:id
+   *
+   * Nota: el servicio puede devolver sólo mensaje/código, por eso aquí
+   * devolvemos `null` como data cuando la eliminación es exitosa.
+   *
+   * @param {import('express').Request} req - req.params.id
+   * @param {import('express').Response} res
+   */
   static deletePermiso = async (req, res) => {
     const { id } = req.params;
+
     try {
-      // Llamamos al servicio para eliminar el tipo de documento por su ID
       const response = await PermisoService.deletePermiso(id);
-      // Validamos si no se pudo eliminar el tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento eliminado
+
       return ResponseProvider.success(
         res,
-        response.data,
+        null,
         response.message,
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };

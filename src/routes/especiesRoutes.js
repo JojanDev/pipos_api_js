@@ -9,13 +9,13 @@ import EspecieController from "../controllers/EspecieController.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todas las especies
 router.get("/", authorize("especie.read"), EspecieController.getAllEspecies);
 
-// Obtener un tipo de documento por ID
+// Obtener una especie por ID
 router.get("/:id", authorize("especie.read"), EspecieController.getEspecieById);
 
-// Crear un nuevo tipo de documento
+// Crear una especie
 router.post(
   "/",
   authorize("especie.create"),
@@ -23,7 +23,7 @@ router.post(
   EspecieController.createEspecie
 );
 
-// Actualizar un tipo de documento
+// Actualizar una especie (completo)
 router.put(
   "/:id",
   authorize("especie.update"),
@@ -31,7 +31,7 @@ router.put(
   EspecieController.updateEspecie
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar una especie (parcial)
 router.patch(
   "/:id",
   authorize("especie.update"),
@@ -39,7 +39,7 @@ router.patch(
   EspecieController.updateEspecie
 );
 
-// Eliminar un tipo de documento
+// Eliminar una especie
 router.delete(
   "/:id",
   authorize("especie.delete"),

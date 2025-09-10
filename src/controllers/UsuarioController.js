@@ -1,16 +1,28 @@
 import { ResponseProvider } from "../providers/ResponseProvider.js";
 import UsuarioService from "../services/UsuarioService.js";
 
+/**
+ * Controlador para las rutas de "usuarios".
+ * Centraliza la comunicación entre Express y UsuarioService,
+ * y unifica las respuestas HTTP con ResponseProvider.
+ */
 class UsuarioController {
-  // Obtener todos los tipos de documentos
+  /**
+   * Obtiene todos los usuarios.
+   * Ruta: GET /usuarios
+   *
+   * @param {import('express').Request}  req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static getAllUsuarios = async (req, res) => {
     try {
       const response = await UsuarioService.getAllUsuarios();
-      // Validamos si no hay tipos de documentos
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -18,21 +30,28 @@ class UsuarioController {
         response.code
       );
     } catch (error) {
+      console.error("getAllUsuarios error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Obtener un tipo de documento por su ID
+  /**
+   * Obtiene un usuario por su ID.
+   * Ruta: GET /usuarios/:id
+   *
+   * @param {import('express').Request}  req  – req.params.id
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static getUsuarioById = async (req, res) => {
     const { id } = req.params;
     try {
-      // Llamamos al servicio para obtener el tipo de documento por su ID
       const response = await UsuarioService.getUsuarioById(id);
-      // Validamos si no hay tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -40,23 +59,28 @@ class UsuarioController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`getUsuarioById error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Crear un nuevo tipo de documento
+  /**
+   * Crea un nuevo usuario.
+   * Ruta: POST /usuarios
+   *
+   * @param {import('express').Request}  req  – req.body con datos del usuario
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static createUsuario = async (req, res) => {
     const usuario = req.body;
     try {
-      // Llamamos el método crear del modelo
       const response = await UsuarioService.createUsuario(usuario);
-      // Validamos que la respuesta no tenga error
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento creado
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -64,25 +88,29 @@ class UsuarioController {
         201
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error("createUsuario error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Actualizar un tipo de documento
+  /**
+   * Actualiza un usuario existente por su ID.
+   * Ruta: PUT /usuarios/:id
+   *
+   * @param {import('express').Request}  req  – req.params.id y req.body con datos a actualizar
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static updateUsuario = async (req, res) => {
     const { id } = req.params;
     const usuario = req.body;
     try {
-      // Llamamos al método actualizar del modelo
       const response = await UsuarioService.updateUsuario(id, usuario);
-      // Validamos que la respuesta no tenga error
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
 
-      // Retornamos el tipo de documento actualizado
       return ResponseProvider.success(
         res,
         response.data,
@@ -90,23 +118,28 @@ class UsuarioController {
         200
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`updateUsuario error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Eliminar un tipo de documento
+  /**
+   * Elimina un usuario por su ID.
+   * Ruta: DELETE /usuarios/:id
+   *
+   * @param {import('express').Request}  req  – req.params.id
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static deleteUsuario = async (req, res) => {
     const { id } = req.params;
     try {
-      // Llamamos al servicio para eliminar el tipo de documento por su ID
       const response = await UsuarioService.deleteUsuario(id);
-      // Validamos si no se pudo eliminar el tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento eliminado
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -114,20 +147,27 @@ class UsuarioController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`deleteUsuario error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Obtener todos los usuarios administrativos
+  /**
+   * Obtiene todos los usuarios clientes.
+   * Ruta: GET /usuarios/clientes
+   *
+   * @param {import('express').Request}  req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static getUsuariosClientes = async (req, res) => {
     try {
       const response = await UsuarioService.getUsuariosClientes();
-      // Validamos si no hay usuarios
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -135,18 +175,27 @@ class UsuarioController {
         response.code
       );
     } catch (error) {
+      console.error("getUsuariosClientes error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
+  /**
+   * Obtiene todos los usuarios veterinarios.
+   * Ruta: GET /usuarios/veterinarios
+   *
+   * @param {import('express').Request}  req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static getUsuariosVeterinarios = async (req, res) => {
     try {
       const response = await UsuarioService.getUsuariosVeterinarios();
-      // Validamos si no hay usuarios
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -154,18 +203,27 @@ class UsuarioController {
         response.code
       );
     } catch (error) {
+      console.error("getUsuariosVeterinarios error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
+  /**
+   * Obtiene todos los usuarios que no son clientes.
+   * Ruta: GET /usuarios/no-clientes
+   *
+   * @param {import('express').Request}  req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static getAllUsuariosNoClientes = async (req, res) => {
     try {
       const response = await UsuarioService.getAllUsuariosNoClientes();
-      // Validamos si no hay usuarios
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -173,18 +231,27 @@ class UsuarioController {
         response.code
       );
     } catch (error) {
+      console.error("getAllUsuariosNoClientes error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
+  /**
+   * Obtiene todos los usuarios empleados.
+   * Ruta: GET /usuarios/empleados
+   *
+   * @param {import('express').Request}  req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static getAllUsuariosEmpleados = async (req, res) => {
     try {
       const response = await UsuarioService.getAllUsuariosEmpleados();
-      // Validamos si no hay usuarios
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -192,18 +259,27 @@ class UsuarioController {
         response.code
       );
     } catch (error) {
+      console.error("getAllUsuariosEmpleados error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
+  /**
+   * Obtiene todos los usuarios que no son empleados.
+   * Ruta: GET /usuarios/no-empleados
+   *
+   * @param {import('express').Request}  req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static getAllUsuariosNoEmpleados = async (req, res) => {
     try {
       const response = await UsuarioService.getAllUsuariosNoEmpleados();
-      // Validamos si no hay usuarios
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -211,6 +287,7 @@ class UsuarioController {
         response.code
       );
     } catch (error) {
+      console.error("getAllUsuariosNoEmpleados error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };

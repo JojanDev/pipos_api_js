@@ -9,24 +9,24 @@ import ProductoController from "../controllers/ProductoController.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todos los productos
 router.get("/", authorize("producto.read"), ProductoController.getAllProductos);
 
-// Obtener todos los tipos de documentos
+// Obtener productos con stock positivo
 router.get(
   "/stock",
   authorize("producto.read"),
   ProductoController.getAllProductosByStockPositivo
 );
 
-// Obtener un tipo de documento por ID
+// Obtener un producto por ID
 router.get(
   "/:id",
   authorize("producto.read"),
   ProductoController.getProductoById
 );
 
-// Crear un nuevo tipo de documento
+// Crear un producto
 router.post(
   "/",
   authorize("producto.create"),
@@ -34,7 +34,7 @@ router.post(
   ProductoController.createProducto
 );
 
-// Actualizar un tipo de documento
+// Actualizar un producto (completo)
 router.put(
   "/:id",
   authorize("producto.update"),
@@ -42,7 +42,7 @@ router.put(
   ProductoController.updateProducto
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar un producto (parcial)
 router.patch(
   "/:id",
   authorize("producto.update"),
@@ -50,7 +50,7 @@ router.patch(
   ProductoController.updateProducto
 );
 
-// Eliminar un tipo de documento
+// Eliminar un producto
 router.delete(
   "/:id",
   authorize("producto.delete"),

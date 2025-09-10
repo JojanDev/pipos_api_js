@@ -1,36 +1,35 @@
 import express from "express";
-
 import {
   validarAntecedente,
   validarAntecedenteParcial,
 } from "../middlewares/entities/antecedentes/antecedenteValidator.js";
-import AntecedenteController from "../controllers/AntecedenteController.js";
 import authorize from "../middlewares/auth/authorize.js";
+import AntecedenteController from "../controllers/AntecedenteController.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todos los antecedentes
 router.get(
   "/",
   authorize("antecedente.read"),
   AntecedenteController.getAllAntecedentes
 );
 
-// Obtener un tipo de documento por ID
+// Obtener antecedentes de una mascota
 router.get(
   "/mascota/:id",
   authorize("antecedente.read"),
   AntecedenteController.getAllAntecedentesByMascotaId
 );
 
-// Obtener un tipo de documento por ID
+// Obtener un antecedente por ID
 router.get(
   "/:id",
   authorize("antecedente.read"),
   AntecedenteController.getAntecedenteById
 );
 
-// Crear un nuevo tipo de documento
+// Crear un antecedente
 router.post(
   "/",
   authorize("antecedente.create"),
@@ -38,7 +37,7 @@ router.post(
   AntecedenteController.createAntecedente
 );
 
-// Actualizar un tipo de documento
+// Actualizar un antecedente completo
 router.put(
   "/:id",
   authorize("antecedente.update"),
@@ -46,7 +45,7 @@ router.put(
   AntecedenteController.updateAntecedente
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar un antecedente parcialmente
 router.patch(
   "/:id",
   authorize("antecedente.update"),
@@ -54,7 +53,7 @@ router.patch(
   AntecedenteController.updateAntecedente
 );
 
-// Eliminar un tipo de documento
+// Eliminar un antecedente
 router.delete(
   "/:id",
   authorize("antecedente.delete"),

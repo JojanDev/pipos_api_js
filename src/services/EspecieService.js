@@ -2,16 +2,28 @@ import Especie from "../models/Especie.js";
 import RazaService from "./RazaService.js";
 // import Usuario from "../models/Usuario.js";
 
+/**
+ * Servicio encargado de manejar la lógica de negocio
+ * relacionada con las especies.
+ *
+ * Se apoya en el modelo `Especie` para interactuar con la base de datos
+ * y en `RazaService` para validar dependencias de especies con razas.
+ */
 class EspecieService {
+  // Instancia única del modelo de especie para usar en todo el servicio
   static objEspecie = new Especie();
   // static objUsuario = new Usuario();
 
+  /**
+   * Obtiene todas las especies registradas en la base de datos.
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async getAllEspecies() {
     try {
-      // Llamamos el método listar
+      // Ejecutamos el método del modelo para traer todas las especies
       const especies = await this.objEspecie.getAll();
 
-      // Validamos si no hay tipos de documentos
+      // Validamos si no se encontraron especies
       if (!especies || especies.length === 0)
         return {
           error: true,
@@ -19,15 +31,7 @@ class EspecieService {
           message: "No hay especies registradas",
         };
 
-      // const especiesRazas = await Promise.all(
-      //   especies.map(async (especie) => {
-      //     const razas = await RazaService.getAllRazasByEspecieId(especie.id);
-      //     especie["razas"] = razas.data;
-      //     return especie;
-      //   })
-      // );
-
-      // Retornamos las tipos de documentos obtenidas
+      // Retornamos la lista de especies obtenida
       return {
         error: false,
         code: 200,
@@ -35,16 +39,22 @@ class EspecieService {
         data: especies,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
+      // Capturamos cualquier excepción y retornamos error genérico
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Obtiene una especie específica por su ID.
+   * @param {number} id - Identificador de la especie a consultar
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async getEspecieById(id) {
     try {
-      // Llamamos el método consultar por ID
+      // Consultamos la especie en el modelo
       const especie = await this.objEspecie.getById(id);
-      // Validamos si no hay especie
+
+      // Validamos si no existe
       if (!especie)
         return {
           error: true,
@@ -52,7 +62,7 @@ class EspecieService {
           message: "Especie no encontrada",
         };
 
-      // Retornamos la especie obtenida
+      // Retornamos la especie encontrada
       return {
         error: false,
         code: 200,
@@ -60,16 +70,22 @@ class EspecieService {
         data: especie,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
+      // Capturamos cualquier excepción y retornamos error genérico
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Crea una nueva especie en la base de datos.
+   * @param {Object} especie - Datos de la especie a registrar
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async createEspecie(especie) {
     try {
-      // Llamamos el método crear
+      // Ejecutamos el método crear del modelo
       const especieCreada = await this.objEspecie.create(especie);
-      // Validamos si no se pudo crear el tipo de documento
+
+      // Validamos si la creación falló
       if (especieCreada === null)
         return {
           error: true,
@@ -77,7 +93,7 @@ class EspecieService {
           message: "Error al crear la especie",
         };
 
-      // Retornamos el tipo de documento creado
+      // Retornamos la especie creada
       return {
         error: false,
         code: 201,
@@ -85,16 +101,21 @@ class EspecieService {
         data: especieCreada,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
+      // Capturamos cualquier excepción y retornamos error genérico
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Actualiza una especie existente por su ID.
+   * @param {number} id - Identificador de la especie a actualizar
+   * @param {Object} especie - Nuevos datos para la especie
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async updateEspecie(id, especie) {
     try {
-      // Llamamos el método consultar por ID
+      // Validamos si la especie existe antes de actualizar
       const existente = await this.objEspecie.getById(id);
-      // Validamos si el tipo de documento existe
       if (!existente) {
         return {
           error: true,
@@ -103,9 +124,10 @@ class EspecieService {
         };
       }
 
-      // Llamamos el método actualizar
+      // Ejecutamos la actualización
       const especieActualizada = await this.objEspecie.update(id, especie);
-      // Validamos si no se pudo actualizar el tipo de documento
+
+      // Validamos si la actualización falló
       if (especieActualizada === null)
         return {
           error: true,
@@ -113,7 +135,7 @@ class EspecieService {
           message: "Error al actualizar la especie",
         };
 
-      // Retornamos el tipo de documento actualizado
+      // Retornamos la especie actualizada
       return {
         error: false,
         code: 200,
@@ -121,19 +143,25 @@ class EspecieService {
         data: especieActualizada,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
+      // Capturamos cualquier excepción y retornamos error genérico
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Elimina una especie de la base de datos.
+   * Antes de eliminar, se valida que no tenga razas asociadas.
+   * @param {number} id - Identificador de la especie a eliminar
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message}
+   */
   static async deleteEspecie(id) {
     try {
+      // Validamos si la especie existe
       const especie = await this.getEspecieById(id);
-      // Validamos si el tipo de producto existe
       if (especie.error) return especie;
 
+      // Validamos si la especie tiene razas asociadas
       const razasAsociadas = await RazaService.getAllRazasByEspecieId(id);
-      // Validamos si el tipo de producto existe
       if (!razasAsociadas.error)
         return {
           error: true,
@@ -141,9 +169,10 @@ class EspecieService {
           message: "Error al eliminar la especie, tiene razas asociadas",
         };
 
-      // Llamamos el método eliminar
+      // Ejecutamos el método eliminar en el modelo
       const especieEliminada = await this.objEspecie.delete(id);
-      // Validamos si no se pudo eliminar el tipo de documento
+
+      // Validamos si no se eliminó correctamente
       if (!especieEliminada)
         return {
           error: true,
@@ -151,14 +180,14 @@ class EspecieService {
           message: "Error al eliminar la especie",
         };
 
-      // Retornamos el tipo de documento eliminado
+      // Retornamos confirmación de eliminación
       return {
         error: false,
         code: 200,
         message: "Especie eliminada correctamente",
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
+      // Capturamos cualquier excepción y retornamos error genérico
       return { error: true, code: 500, message: error.message };
     }
   }

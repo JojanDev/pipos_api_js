@@ -9,23 +9,23 @@ import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todos los roles
 router.get("/", authorize("rol.read"), RolController.getAllRoles);
 
-// Obtener un tipo de documento por ID
+// Obtener roles asignables a empleados
 router.get(
   "/empleados",
   authorize("rol.read"),
   RolController.getAllRolesEmpleados
 );
 
-// Obtener un tipo de documento por ID
+// Obtener un rol por ID
 router.get("/:id", authorize("rol.read"), RolController.getRolById);
 
-// Crear un nuevo tipo de documento
+// Crear un rol
 router.post("/", authorize("rol.create"), validarRol, RolController.createRol);
 
-// Actualizar un tipo de documento
+// Actualizar un rol (completo)
 router.put(
   "/:id",
   authorize("rol.update"),
@@ -33,7 +33,7 @@ router.put(
   RolController.updateRol
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar un rol (parcial)
 router.patch(
   "/:id",
   authorize("rol.update"),
@@ -41,7 +41,7 @@ router.patch(
   RolController.updateRol
 );
 
-// Eliminar un tipo de documento
+// Eliminar un rol
 router.delete("/:id", authorize("rol.delete"), RolController.deleteRol);
 
 export default router;

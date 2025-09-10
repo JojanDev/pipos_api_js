@@ -9,28 +9,28 @@ import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todos los servicios en ventas
 router.get(
   "/",
   authorize("servicio-venta.read"),
   ServicioVentaController.getAllServiciosVentas
 );
 
-// Obtener un tipo de documento por ID
+// Obtener servicios por ID de venta
 router.get(
   "/venta/:id",
   authorize("servicio-venta.read"),
   ServicioVentaController.getAllServicioVentaByVentaId
 );
 
-// Obtener un tipo de documento por ID
+// Obtener un servicio en venta por ID
 router.get(
   "/:id",
   authorize("servicio-venta.read"),
   ServicioVentaController.getServicioVentaById
 );
 
-// Crear un nuevo tipo de documento
+// Crear servicio en venta
 router.post(
   "/",
   authorize("servicio-venta.create"),
@@ -38,7 +38,7 @@ router.post(
   ServicioVentaController.createServicioVenta
 );
 
-// Actualizar un tipo de documento
+// Actualizar servicio en venta (completo)
 router.put(
   "/:id",
   authorize("servicio-venta.update"),
@@ -46,7 +46,7 @@ router.put(
   ServicioVentaController.updateServicioVenta
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar servicio en venta (parcial)
 router.patch(
   "/:id",
   authorize("servicio-venta.update"),
@@ -54,7 +54,7 @@ router.patch(
   ServicioVentaController.updateServicioVenta
 );
 
-// Eliminar un tipo de documento
+// Eliminar servicio en venta
 router.delete(
   "/:id",
   authorize("servicio-venta.delete"),

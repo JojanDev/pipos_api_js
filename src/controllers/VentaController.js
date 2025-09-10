@@ -1,16 +1,26 @@
 import { ResponseProvider } from "../providers/ResponseProvider.js";
 import VentaService from "../services/VentaService.js";
 
+/**
+ * Controlador para las rutas relacionadas con ventas.
+ * Centraliza la lógica HTTP y delega operaciones al VentaService.
+ */
 class VentaController {
-  // Obtener todos los tipos de documentos
+  /**
+   * Obtiene todas las ventas registradas.
+   * Ruta: GET /ventas
+   *
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
   static getAllVentas = async (req, res) => {
     try {
       const response = await VentaService.getAllVentas();
-      // Validamos si no hay tipos de documentos
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -18,21 +28,28 @@ class VentaController {
         response.code
       );
     } catch (error) {
+      console.error("getAllVentas error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Obtener un tipo de documento por su ID
+  /**
+   * Obtiene una venta por su ID.
+   * Ruta: GET /ventas/:id
+   *
+   * @param {import('express').Request} req - req.params.id
+   * @param {import('express').Response} res
+   */
   static getVentaById = async (req, res) => {
     const { id } = req.params;
+
     try {
-      // Llamamos al servicio para obtener el tipo de documento por su ID
       const response = await VentaService.getVentaById(id);
-      // Validamos si no hay tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -40,23 +57,28 @@ class VentaController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`getVentaById error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Crear un nuevo tipo de documento
+  /**
+   * Crea una nueva venta.
+   * Ruta: POST /ventas
+   *
+   * @param {import('express').Request} req - req.body contiene los datos de la venta
+   * @param {import('express').Response} res
+   */
   static createVenta = async (req, res) => {
     const venta = req.body;
+
     try {
-      // Llamamos el método crear del modelo
       const response = await VentaService.createVenta(venta);
-      // Validamos que la respuesta no tenga error
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento creado
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -64,25 +86,29 @@ class VentaController {
         201
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error("createVenta error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Actualizar un tipo de documento
+  /**
+   * Actualiza una venta existente por su ID.
+   * Ruta: PUT /ventas/:id
+   *
+   * @param {import('express').Request} req - req.params.id y req.body con datos a actualizar
+   * @param {import('express').Response} res
+   */
   static updateVenta = async (req, res) => {
     const { id } = req.params;
     const venta = req.body;
+
     try {
-      // Llamamos al método actualizar del modelo
       const response = await VentaService.updateVenta(id, venta);
-      // Validamos que la respuesta no tenga error
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
 
-      // Retornamos el tipo de documento actualizado
       return ResponseProvider.success(
         res,
         response.data,
@@ -90,23 +116,28 @@ class VentaController {
         200
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`updateVenta error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Eliminar un tipo de documento
+  /**
+   * Elimina una venta por su ID.
+   * Ruta: DELETE /ventas/:id
+   *
+   * @param {import('express').Request} req - req.params.id
+   * @param {import('express').Response} res
+   */
   static deleteVenta = async (req, res) => {
     const { id } = req.params;
+
     try {
-      // Llamamos al servicio para eliminar el tipo de documento por su ID
       const response = await VentaService.deleteVenta(id);
-      // Validamos si no se pudo eliminar el tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento eliminado
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -114,7 +145,7 @@ class VentaController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`deleteVenta error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };

@@ -1,44 +1,45 @@
 import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
+/**
+ * Clase que representa el modelo Rol.
+ * Extiende la funcionalidad de la clase base Modelo para interactuar
+ * con la tabla "roles" en la base de datos.
+ */
 class Rol extends Modelo {
-  #tableName = "roles";
+  #tableName = "roles"; // Nombre de la tabla asociada en la BD
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
+   * Obtiene todos los roles de la base de datos.
+   * @returns {Promise<Array>} Lista de todos los roles
    * @throws {Error} Si ocurre un error en la consulta
    */
   async getAll() {
     try {
       return await super.getAll(this.#tableName);
     } catch (error) {
-      throw new Error(
-        `Error al obtener todos los roles: ${error.message}`
-      );
+      throw new Error(`Error al obtener todos los roles: ${error.message}`);
     }
   }
 
   /**
-   * Obtiene un tipo de documento específico por su ID
-   * @param {number} id - ID del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * Obtiene un rol específico por su ID.
+   * @param {number} id - ID del rol
+   * @returns {Promise<Object|null>} El rol encontrado o null si no existe
    * @throws {Error} Si ocurre un error en la consulta
    */
   async getById(id) {
     try {
       return await super.getById(this.#tableName, id);
     } catch (error) {
-      throw new Error(
-        `Error al obtener el rol con ID ${id}: ${error.message}`
-      );
+      throw new Error(`Error al obtener el rol con ID ${id}: ${error.message}`);
     }
   }
 
   /**
-   * Crea un nuevo tipo de documento en la base de datos
-   * @param {Object} rol - Objeto con los datos del tipo de documento {nombre}
-   * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló
+   * Crea un nuevo rol en la base de datos.
+   * @param {Object} rol - Objeto con los datos del rol (ej. {nombre})
+   * @returns {Promise<Object|null>} El rol creado con su ID, o null si falló
    * @throws {Error} Si ocurre un error en la inserción
    */
   async create(rol) {
@@ -54,10 +55,10 @@ class Rol extends Modelo {
   }
 
   /**
-   * Actualiza un tipo de documento existente
-   * @param {number} id - ID del tipo de documento a actualizar
-   * @param {Object} rol - Objeto con los nuevos datos del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si falló
+   * Actualiza un rol existente en la base de datos.
+   * @param {number} id - ID del rol a actualizar
+   * @param {Object} rol - Objeto con los nuevos datos del rol
+   * @returns {Promise<Object|null>} El rol actualizado, o null si falló
    * @throws {Error} Si ocurre un error en la actualización
    */
   async update(id, rol) {
@@ -74,8 +75,8 @@ class Rol extends Modelo {
   }
 
   /**
-   * Elimina un tipo de documento de la base de datos
-   * @param {number} id - ID del tipo de documento a eliminar
+   * Elimina un rol de la base de datos.
+   * @param {number} id - ID del rol a eliminar
    * @returns {Promise<boolean>} true si se eliminó correctamente, false si no
    * @throws {Error} Si ocurre un error en la eliminación
    */

@@ -1,28 +1,31 @@
 import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
+/**
+ * Clase que representa el modelo Venta.
+ * Gestiona las ventas registradas en la base de datos.
+ * Extiende de la clase base Modelo, utilizando la tabla "ventas".
+ */
 class Venta extends Modelo {
-  #tableName = "ventas";
+  #tableName = "ventas"; // Nombre de la tabla en la BD
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
+   * Obtiene todas las ventas de la base de datos.
+   * @returns {Promise<Array>} Lista de todas las ventas
    * @throws {Error} Si ocurre un error en la consulta
    */
   async getAll() {
     try {
       return await super.getAll(this.#tableName);
     } catch (error) {
-      throw new Error(
-        `Error al obtener todas las ventas: ${error.message}`
-      );
+      throw new Error(`Error al obtener todas las ventas: ${error.message}`);
     }
   }
 
   /**
-   * Obtiene un tipo de documento específico por su ID
-   * @param {number} id - ID del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
+   * Obtiene una venta específica por su ID.
+   * @param {number} id - ID de la venta
+   * @returns {Promise<Object|null>} La venta encontrada o null si no existe
    * @throws {Error} Si ocurre un error en la consulta
    */
   async getById(id) {
@@ -36,9 +39,9 @@ class Venta extends Modelo {
   }
 
   /**
-   * Crea un nuevo tipo de documento en la base de datos
-   * @param {Object} venta - Objeto con los datos del tipo de documento {nombre}
-   * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló
+   * Crea una nueva venta en la base de datos.
+   * @param {Object} venta - Objeto con los datos de la venta
+   * @returns {Promise<Object|null>} La venta creada con su ID, o null si falló
    * @throws {Error} Si ocurre un error en la inserción
    */
   async create(venta) {
@@ -54,10 +57,10 @@ class Venta extends Modelo {
   }
 
   /**
-   * Actualiza un tipo de documento existente
-   * @param {number} id - ID del tipo de documento a actualizar
-   * @param {Object} venta - Objeto con los nuevos datos del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si falló
+   * Actualiza una venta existente.
+   * @param {number} id - ID de la venta a actualizar
+   * @param {Object} venta - Objeto con los nuevos datos de la venta
+   * @returns {Promise<Object|null>} La venta actualizada, o null si falló
    * @throws {Error} Si ocurre un error en la actualización
    */
   async update(id, venta) {
@@ -74,8 +77,8 @@ class Venta extends Modelo {
   }
 
   /**
-   * Elimina un tipo de documento de la base de datos
-   * @param {number} id - ID del tipo de documento a eliminar
+   * Elimina una venta de la base de datos.
+   * @param {number} id - ID de la venta a eliminar
    * @returns {Promise<boolean>} true si se eliminó correctamente, false si no
    * @throws {Error} Si ocurre un error en la eliminación
    */

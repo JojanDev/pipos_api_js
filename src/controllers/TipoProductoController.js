@@ -1,16 +1,26 @@
 import { ResponseProvider } from "../providers/ResponseProvider.js";
 import TipoProductoService from "../services/TipoProductoService.js";
 
+/**
+ * Controlador para las rutas relacionadas con tipos de productos.
+ * Centraliza la lógica HTTP y delega operaciones al TipoProductoService.
+ */
 class TipoProductoController {
-  // Obtener todos los tipos de documentos
+  /**
+   * Obtiene todos los tipos de productos registrados.
+   * Ruta: GET /tipos-productos
+   *
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
   static getAllTiposProductos = async (req, res) => {
     try {
       const response = await TipoProductoService.getAllTiposProductos();
-      // Validamos si no hay tipos de documentos
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -18,21 +28,28 @@ class TipoProductoController {
         response.code
       );
     } catch (error) {
+      console.error("getAllTiposProductos error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Obtener un tipo de documento por su ID
+  /**
+   * Obtiene un tipo de producto por su ID.
+   * Ruta: GET /tipos-productos/:id
+   *
+   * @param {import('express').Request} req - req.params.id
+   * @param {import('express').Response} res
+   */
   static getTipoProductoById = async (req, res) => {
     const { id } = req.params;
+
     try {
-      // Llamamos al servicio para obtener el tipo de documento por su ID
       const response = await TipoProductoService.getTipoProductoById(id);
-      // Validamos si no hay tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -40,25 +57,30 @@ class TipoProductoController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`getTipoProductoById error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Crear un nuevo tipo de documento
+  /**
+   * Crea un nuevo tipo de producto.
+   * Ruta: POST /tipos-productos
+   *
+   * @param {import('express').Request} req - req.body contiene los datos del tipo de producto
+   * @param {import('express').Response} res
+   */
   static createTipoProducto = async (req, res) => {
     const tipoProducto = req.body;
+
     try {
-      // Llamamos el método crear del modelo
       const response = await TipoProductoService.createTipoProducto(
         tipoProducto
       );
-      // Validamos que la respuesta no tenga error
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento creado
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -66,28 +88,32 @@ class TipoProductoController {
         201
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error("createTipoProducto error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Actualizar un tipo de documento
+  /**
+   * Actualiza un tipo de producto existente por su ID.
+   * Ruta: PUT /tipos-productos/:id
+   *
+   * @param {import('express').Request} req - req.params.id y req.body con datos a actualizar
+   * @param {import('express').Response} res
+   */
   static updateTipoProducto = async (req, res) => {
     const { id } = req.params;
     const tipoProducto = req.body;
+
     try {
-      // Llamamos al método actualizar del modelo
       const response = await TipoProductoService.updateTipoProducto(
         id,
         tipoProducto
       );
-      // Validamos que la respuesta no tenga error
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
 
-      // Retornamos el tipo de documento actualizado
       return ResponseProvider.success(
         res,
         response.data,
@@ -95,23 +121,28 @@ class TipoProductoController {
         200
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`updateTipoProducto error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Eliminar un tipo de documento
+  /**
+   * Elimina un tipo de producto por su ID.
+   * Ruta: DELETE /tipos-productos/:id
+   *
+   * @param {import('express').Request} req - req.params.id
+   * @param {import('express').Response} res
+   */
   static deleteTipoProducto = async (req, res) => {
     const { id } = req.params;
+
     try {
-      // Llamamos al servicio para eliminar el tipo de documento por su ID
       const response = await TipoProductoService.deleteTipoProducto(id);
-      // Validamos si no se pudo eliminar el tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento eliminado
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -119,7 +150,7 @@ class TipoProductoController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`deleteTipoProducto error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };

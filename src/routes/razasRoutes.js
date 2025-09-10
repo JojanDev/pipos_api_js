@@ -9,19 +9,20 @@ import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todas las razas
 router.get("/", authorize("raza.read"), RazaController.getAllRazas);
 
+// Obtener razas por especie
 router.get(
   "/especie/:especie_id",
   authorize("raza.read"),
   RazaController.getAllRazasByEspecieId
 );
 
-// Obtener un tipo de documento por ID
+// Obtener una raza por ID
 router.get("/:id", authorize("raza.read"), RazaController.getRazaById);
 
-// Crear un nuevo tipo de documento
+// Crear una raza
 router.post(
   "/",
   authorize("raza.create"),
@@ -29,7 +30,7 @@ router.post(
   RazaController.createRaza
 );
 
-// Actualizar un tipo de documento
+// Actualizar una raza (completo)
 router.put(
   "/:id",
   authorize("raza.update"),
@@ -37,7 +38,7 @@ router.put(
   RazaController.updateRaza
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar una raza (parcial)
 router.patch(
   "/:id",
   authorize("raza.update"),
@@ -45,7 +46,7 @@ router.patch(
   RazaController.updateRaza
 );
 
-// Eliminar un tipo de documento
+// Eliminar una raza
 router.delete("/:id", authorize("raza.delete"), RazaController.deleteRaza);
 
 export default router;

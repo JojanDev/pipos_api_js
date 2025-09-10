@@ -1,27 +1,31 @@
 import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
+/**
+ * Clase que representa el modelo de Productos.
+ * Se encarga de manejar las operaciones CRUD relacionadas con la tabla "productos".
+ */
 class Producto extends Modelo {
   #tableName = "productos";
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene todos los productos de la base de datos.
+   * @returns {Promise<Array>} Lista de todos los productos.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getAll() {
     try {
       return await super.getAll(this.#tableName);
     } catch (error) {
-      throw new Error(`Error al obtener todas los productos: ${error.message}`);
+      throw new Error(`Error al obtener todos los productos: ${error.message}`);
     }
   }
 
   /**
-   * Obtiene un tipo de documento específico por su ID
-   * @param {number} id - ID del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene un producto específico por su ID.
+   * @param {number} id - ID del producto.
+   * @returns {Promise<Object|null>} El producto encontrado o null si no existe.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getById(id) {
     try {
@@ -34,10 +38,10 @@ class Producto extends Modelo {
   }
 
   /**
-   * Crea un nuevo tipo de documento en la base de datos
-   * @param {Object} producto - Objeto con los datos del tipo de documento {nombre}
-   * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló
-   * @throws {Error} Si ocurre un error en la inserción
+   * Crea un nuevo producto en la base de datos.
+   * @param {Object} producto - Objeto con los datos del producto.
+   * @returns {Promise<Object|null>} El producto creado con su ID, o null si falló.
+   * @throws {Error} Si ocurre un error en la inserción.
    */
   async create(producto) {
     try {
@@ -52,11 +56,11 @@ class Producto extends Modelo {
   }
 
   /**
-   * Actualiza un tipo de documento existente
-   * @param {number} id - ID del tipo de documento a actualizar
-   * @param {Object} producto - Objeto con los nuevos datos del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si falló
-   * @throws {Error} Si ocurre un error en la actualización
+   * Actualiza un producto existente.
+   * @param {number} id - ID del producto a actualizar.
+   * @param {Object} producto - Objeto con los nuevos datos del producto.
+   * @returns {Promise<Object|null>} El producto actualizado, o null si falló.
+   * @throws {Error} Si ocurre un error en la actualización.
    */
   async update(id, producto) {
     try {
@@ -72,10 +76,10 @@ class Producto extends Modelo {
   }
 
   /**
-   * Elimina un tipo de documento de la base de datos
-   * @param {number} id - ID del tipo de documento a eliminar
-   * @returns {Promise<boolean>} true si se eliminó correctamente, false si no
-   * @throws {Error} Si ocurre un error en la eliminación
+   * Elimina un producto de la base de datos.
+   * @param {number} id - ID del producto a eliminar.
+   * @returns {Promise<boolean>} true si se eliminó correctamente, false si no.
+   * @throws {Error} Si ocurre un error en la eliminación.
    */
   async delete(id) {
     try {
@@ -88,9 +92,10 @@ class Producto extends Modelo {
   }
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene todos los productos de un tipo específico.
+   * @param {number} tipo_producto_id - ID del tipo de producto.
+   * @returns {Promise<Array>} Lista de productos filtrados por tipo.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getAllByTipoProductoId(tipo_producto_id) {
     try {
@@ -101,15 +106,15 @@ class Producto extends Modelo {
       );
     } catch (error) {
       throw new Error(
-        `Error al obtener todos los tipos de productos: ${error.message}`
+        `Error al obtener los productos por tipo: ${error.message}`
       );
     }
   }
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene todos los productos que tienen stock mayor a 0.
+   * @returns {Promise<Array>} Lista de productos con stock positivo.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getAllByStockPositivo() {
     try {
@@ -118,7 +123,9 @@ class Producto extends Modelo {
       );
       return rows;
     } catch (error) {
-      throw new Error(`Error al obtener todas los productos: ${error.message}`);
+      throw new Error(
+        `Error al obtener los productos con stock positivo: ${error.message}`
+      );
     }
   }
 }

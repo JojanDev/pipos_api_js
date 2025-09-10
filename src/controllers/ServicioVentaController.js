@@ -1,16 +1,26 @@
 import { ResponseProvider } from "../providers/ResponseProvider.js";
 import ServicioVentaService from "../services/ServicioVentaService.js";
 
+/**
+ * Controlador para las rutas relacionadas con servicios vendidos.
+ * Centraliza la lógica HTTP y delega operaciones al ServicioVentaService.
+ */
 class ServicioVentaController {
-  // Obtener todos los tipos de documentos
+  /**
+   * Obtiene todos los servicios registrados en ventas.
+   * Ruta: GET /servicios-ventas
+   *
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   */
   static getAllServiciosVentas = async (req, res) => {
     try {
       const response = await ServicioVentaService.getAllServiciosVentas();
-      // Validamos si no hay tipos de documentos
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -18,21 +28,28 @@ class ServicioVentaController {
         response.code
       );
     } catch (error) {
+      console.error("getAllServiciosVentas error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Obtener un tipo de documento por su ID
+  /**
+   * Obtiene un servicio vendido por su ID.
+   * Ruta: GET /servicios-ventas/:id
+   *
+   * @param {import('express').Request} req - req.params.id
+   * @param {import('express').Response} res
+   */
   static getServicioVentaById = async (req, res) => {
     const { id } = req.params;
+
     try {
-      // Llamamos al servicio para obtener el tipo de documento por su ID
       const response = await ServicioVentaService.getServicioVentaById(id);
-      // Validamos si no hay tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -40,25 +57,30 @@ class ServicioVentaController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`getServicioVentaById error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Crear un nuevo tipo de documento
+  /**
+   * Crea un nuevo servicio dentro de una venta.
+   * Ruta: POST /servicios-ventas
+   *
+   * @param {import('express').Request} req - req.body contiene los datos del servicio vendido
+   * @param {import('express').Response} res
+   */
   static createServicioVenta = async (req, res) => {
     const servicioVenta = req.body;
+
     try {
-      // Llamamos el método crear del modelo
       const response = await ServicioVentaService.createServicioVenta(
         servicioVenta
       );
-      // Validamos que la respuesta no tenga error
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento creado
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -66,28 +88,32 @@ class ServicioVentaController {
         201
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error("createServicioVenta error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Actualizar un tipo de documento
+  /**
+   * Actualiza un servicio vendido por su ID.
+   * Ruta: PUT /servicios-ventas/:id
+   *
+   * @param {import('express').Request} req - req.params.id y req.body con datos a actualizar
+   * @param {import('express').Response} res
+   */
   static updateServicioVenta = async (req, res) => {
     const { id } = req.params;
     const servicioVenta = req.body;
+
     try {
-      // Llamamos al método actualizar del modelo
       const response = await ServicioVentaService.updateServicioVenta(
         id,
         servicioVenta
       );
-      // Validamos que la respuesta no tenga error
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
 
-      // Retornamos el tipo de documento actualizado
       return ResponseProvider.success(
         res,
         response.data,
@@ -95,23 +121,28 @@ class ServicioVentaController {
         200
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`updateServicioVenta error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Eliminar un tipo de documento
+  /**
+   * Elimina un servicio vendido por su ID.
+   * Ruta: DELETE /servicios-ventas/:id
+   *
+   * @param {import('express').Request} req - req.params.id
+   * @param {import('express').Response} res
+   */
   static deleteServicioVenta = async (req, res) => {
     const { id } = req.params;
+
     try {
-      // Llamamos al servicio para eliminar el tipo de documento por su ID
       const response = await ServicioVentaService.deleteServicioVenta(id);
-      // Validamos si no se pudo eliminar el tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento eliminado
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -119,24 +150,30 @@ class ServicioVentaController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`deleteServicioVenta error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Obtener un tipo de documento por su ID
+  /**
+   * Obtiene todos los servicios vendidos asociados a una venta específica.
+   * Ruta: GET /ventas/:id/servicios
+   *
+   * @param {import('express').Request} req - req.params.id (ID de la venta)
+   * @param {import('express').Response} res
+   */
   static getAllServicioVentaByVentaId = async (req, res) => {
     const { id } = req.params;
+
     try {
-      // Llamamos al servicio para obtener el tipo de documento por su ID
       const response = await ServicioVentaService.getAllServicioVentaByVentaId(
         id
       );
-      // Validamos si no hay tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -144,7 +181,10 @@ class ServicioVentaController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(
+        `getAllServicioVentaByVentaId error (ventaId=${id}):`,
+        error
+      );
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };

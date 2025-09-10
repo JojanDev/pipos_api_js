@@ -1,5 +1,4 @@
 import express from "express";
-
 import {
   validarMedicamento,
   validarMedicamentoParcial,
@@ -9,27 +8,28 @@ import MedicamentoController from "../controllers/MedicamentoController.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todos los medicamentos
 router.get(
   "/",
   authorize("medicamento.read"),
   MedicamentoController.getAllMedicamentos
 );
 
+// Obtener medicamentos con stock positivo
 router.get(
   "/stock",
   authorize("medicamento.read"),
   MedicamentoController.getAllMedicamentosByCantidadPositiva
 );
 
-// Obtener un tipo de documento por ID
+// Obtener un medicamento por ID
 router.get(
   "/:id",
   authorize("medicamento.read"),
   MedicamentoController.getMedicamentoById
 );
 
-// Crear un nuevo tipo de documento
+// Crear un medicamento
 router.post(
   "/",
   authorize("medicamento.create"),
@@ -37,7 +37,7 @@ router.post(
   MedicamentoController.createMedicamento
 );
 
-// Actualizar un tipo de documento
+// Actualizar un medicamento
 router.put(
   "/:id",
   authorize("medicamento.update"),
@@ -45,7 +45,7 @@ router.put(
   MedicamentoController.updateMedicamento
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar parcialmente un medicamento
 router.patch(
   "/:id",
   authorize("medicamento.update"),
@@ -53,7 +53,7 @@ router.patch(
   MedicamentoController.updateMedicamento
 );
 
-// Eliminar un tipo de documento
+// Eliminar un medicamento
 router.delete(
   "/:id",
   authorize("medicamento.delete"),

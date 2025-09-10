@@ -9,26 +9,27 @@ import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todas las mascotas
 router.get("/", authorize("mascota.read"), MascotaController.getAllMascotas);
 
-// Obtener un tipo de documento por ID
+// Obtener mascotas por ID de usuario
 router.get(
   "/usuario/:id",
   authorize("mascota.read"),
   MascotaController.getAllMascotasByUsuarioId
 );
 
+// Obtener mascotas por ID de raza
 router.get(
   "/raza/:id",
   authorize("mascota.read"),
   MascotaController.getAllMascotasByRazaId
 );
 
-// Obtener un tipo de documento por ID
+// Obtener una mascota por ID
 router.get("/:id", authorize("mascota.read"), MascotaController.getMascotaById);
 
-// Crear un nuevo tipo de documento
+// Crear una mascota
 router.post(
   "/",
   validarMascota,
@@ -36,7 +37,7 @@ router.post(
   MascotaController.createMascota
 );
 
-// Actualizar un tipo de documento
+// Actualizar una mascota (completo)
 router.put(
   "/:id",
   validarMascota,
@@ -44,7 +45,7 @@ router.put(
   MascotaController.updateMascota
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar una mascota (parcial)
 router.patch(
   "/:id",
   validarMascotaParcial,
@@ -52,7 +53,7 @@ router.patch(
   MascotaController.updateMascota
 );
 
-// Eliminar un tipo de documento
+// Eliminar una mascota
 router.delete(
   "/:id",
   authorize("mascota.disable"),

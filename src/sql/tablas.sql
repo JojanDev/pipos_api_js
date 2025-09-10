@@ -13,12 +13,14 @@
 
 	CREATE TABLE roles(
 		id INT AUTO_INCREMENT PRIMARY KEY,
-		nombre varchar(255) NOT NULL
+		nombre varchar(30) NOT NULL,
+        descripcion varchar(100) NOT NULL
 	);
 
 	CREATE TABLE permisos (
 		id INT AUTO_INCREMENT PRIMARY KEY,
-		nombre VARCHAR(255) NOT NULL
+		nombre VARCHAR(255) NOT NULL,
+        descripcion varchar(100) NOT NULL
 	);
 
 	CREATE TABLE especies (
@@ -34,18 +36,10 @@
 	CREATE TABLE info_medicamentos (
 		id INT AUTO_INCREMENT PRIMARY KEY,
 		nombre VARCHAR(255) NOT NULL,              
-		uso_general VARCHAR(255),                  
-		via_administracion VARCHAR(100),           
-		presentacion VARCHAR(100),                 
-		informacion_adicional TEXT                 
-	);
-
-	CREATE TABLE elementos(
-		id INT AUTO_INCREMENT PRIMARY KEY,
-		tipo ENUM('medicamento','producto','servicio') NOT NULL,
-		nombre VARCHAR(255) NOT NULL,
-		descripcion TEXT,
-		precio DECIMAL(10,2)
+		uso_general VARCHAR(255) NOT NULL,                  
+		via_administracion VARCHAR(100) NOT NULL,           
+		presentacion VARCHAR(100) NOT NULL,                 
+		informacion_adicional TEXT                
 	);
 
 	-- Dependientes de las anteriores
@@ -54,6 +48,7 @@
 		tipo_documento_id INT NOT NULL,
 		numero_documento VARCHAR(50) NOT NULL,
 		nombre VARCHAR(255) NOT NULL,
+        apellido VARCHAR(255) NOT NULL,
 		telefono VARCHAR(20) NOT NULL,
 		correo VARCHAR(255),
 		direccion VARCHAR(255) NOT NULL,
@@ -61,6 +56,7 @@
 	);
 
 	CREATE TABLE roles_usuarios(
+    
 		id INT AUTO_INCREMENT PRIMARY KEY,
 		rol_id INT NOT NULL,
 		usuario_id INT NOT NULL,
@@ -73,9 +69,9 @@
 		usuario_id INT NOT NULL UNIQUE,
 		usuario VARCHAR(100) UNIQUE NOT NULL,
 		contrasena VARCHAR(255) NOT NULL,
+        activo BOOLEAN DEFAULT TRUE,
 		FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 	);
-
 
 	CREATE TABLE permisos_roles (
 		id INT AUTO_INCREMENT PRIMARY KEY,
@@ -97,7 +93,7 @@
 		usuario_id INT NOT NULL,
 		nombre VARCHAR(255) NOT NULL,
 		raza_id INT NOT NULL,
-		edad_semanas INT,
+		fecha_nacimiento DATE NOT NULL,
 		sexo ENUM('macho', 'hembra', 'desconocido') NOT NULL,
 		estado_vital BOOLEAN DEFAULT TRUE,
 		FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
@@ -125,29 +121,35 @@
 		FOREIGN KEY (antecedente_id) REFERENCES antecedentes(id),
 		FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 	);
-
-	CREATE TABLE medicamentos (
-		elemento_id INT PRIMARY KEY,                              
-		info_medicamento_id INT NOT NULL,                
+    
+    CREATE TABLE medicamentos (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		info_medicamento_id INT NOT NULL,
+		precio DECIMAL NOT NULL,
 		fecha_caducidad DATE,
 		cantidad INT NOT NULL,
 		numero_lote VARCHAR(100),
-		FOREIGN KEY (elemento_id) REFERENCES elementos(id),
 		FOREIGN KEY (info_medicamento_id) REFERENCES info_medicamentos(id)
 	);
 
-	CREATE TABLE productos (
-		elemento_id INT PRIMARY KEY, 
-		tipo_id INT NOT NULL,            
-		stock INT NOT NULL,
-		fecha_caducidad DATE,
-		FOREIGN KEY (elemento_id) REFERENCES elementos(id),
-		FOREIGN KEY (tipo_id)  REFERENCES tipos_productos(id)
+	-- Servicios ofrecidos
+	CREATE TABLE servicios (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		nombre VARCHAR(255) NOT NULL,
+		descripcion TEXT NOT NULL,
+		precio DECIMAL NOT NULL
 	);
 
-	CREATE TABLE servicios(
-		elemento_id INT PRIMARY KEY, 
-		FOREIGN KEY (elemento_id) REFERENCES elementos(id) ON DELETE CASCADE
+	-- Productos en inventario
+	CREATE TABLE productos (	
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		nombre VARCHAR(255) NOT NULL,
+		precio DECIMAL NOT NULL,
+		descripcion TEXT,
+		fecha_caducidad DATE,
+		tipo_producto_id INT NOT NULL,
+		stock INT NOT NULL,
+		FOREIGN KEY (tipo_producto_id) REFERENCES tipos_productos(id)
 	);
 
 	CREATE TABLE medicamentos_tratamientos (
@@ -155,33 +157,59 @@
 		tratamiento_id INT NOT NULL,
 		info_medicamento_id INT NOT NULL, 
 		dosis VARCHAR(100) DEFAULT 'No aplica',
-		frecuencia_aplicacion VARCHAR(100),
-		duracion INT,
+		frecuencia_aplicacion VARCHAR(100) NOT NULL,
+		duracion INT NOT NULL,
 		activo boolean default true,
 		FOREIGN KEY (tratamiento_id) REFERENCES tratamientos(id),	
 		FOREIGN KEY (info_medicamento_id) REFERENCES info_medicamentos(id)
 	);
 
-	CREATE TABLE ventas (
-		id INT AUTO_INCREMENT PRIMARY KEY,
-		usuario_cliente_id INT,
-		usuario_vendedor_id INT,
-		fecha_creado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-		total DECIMAL NOT NULL,	
-		monto DECIMAL NOT NULL,	
-		estado ENUM('completada', 'pendiente'),
-		FOREIGN KEY (usuario_cliente_id) REFERENCES usuarios(id),
-		FOREIGN KEY (usuario_vendedor_id) REFERENCES usuarios(id)
-	);
+CREATE TABLE ventas (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	fecha_creado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	total DECIMAL(10,2) NOT NULL,	
+	monto DECIMAL(10,2) NOT NULL,	
+    vendedor_id INT NOT NULL,
+    comprador_id INT NOT NULL,
+    completada boolean not null,
+	FOREIGN KEY (vendedor_id) REFERENCES usuarios(id),
+    FOREIGN KEY (comprador_id) REFERENCES usuarios(id)
+);
 
-	CREATE TABLE elementos_ventas (
+    
+	CREATE TABLE medicamentos_ventas (
 		id INT AUTO_INCREMENT PRIMARY KEY,
 		venta_id INT NOT NULL,
-		elemento_id INT,
+		medicamento_id INT NOT NULL,
 		precio DECIMAL NOT NULL,
 		valor_adicional DECIMAL DEFAULT 0,
 		cantidad INT NOT NULL,        
 		subtotal DECIMAL NOT NULL,
-		FOREIGN KEY (elemento_id) REFERENCES elementos(id),
+		FOREIGN KEY (medicamento_id) REFERENCES medicamentos(id),
+		FOREIGN KEY (venta_id) REFERENCES ventas(id)
+	);
+    
+    
+    CREATE TABLE servicios_ventas (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		venta_id INT NOT NULL,
+		servicio_id INT NOT NULL,
+		precio DECIMAL NOT NULL,
+		valor_adicional DECIMAL DEFAULT 0,
+		cantidad INT NOT NULL,        
+		subtotal DECIMAL NOT NULL,
+		FOREIGN KEY (servicio_id) REFERENCES servicios(id),
+		FOREIGN KEY (venta_id) REFERENCES ventas(id)
+	);
+    
+    CREATE TABLE productos_ventas (
+		id INT AUTO_INCREMENT PRIMARY KEY,
+		venta_id INT NOT NULL,
+		producto_id INT NOT NULL,
+		precio DECIMAL NOT NULL,
+		valor_adicional DECIMAL DEFAULT 0,
+		cantidad INT NOT NULL,        
+		subtotal DECIMAL NOT NULL,
+		FOREIGN KEY (producto_id) REFERENCES productos(id),
 		FOREIGN KEY (venta_id) REFERENCES ventas(id)
 	);

@@ -9,28 +9,28 @@ import MedicamentoVentaController from "../controllers/MedicamentoVentaControlle
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todos los medicamentos en ventas
 router.get(
   "/",
   authorize("medicamento-venta.read"),
   MedicamentoVentaController.getAllMedicamentosVentas
 );
 
-// Obtener un tipo de documento por ID
+// Obtener medicamentos por ID de venta
 router.get(
   "/venta/:id",
   authorize("medicamento-venta.read"),
   MedicamentoVentaController.getAllMedicamentosVentasByVentaId
 );
 
-// Obtener un tipo de documento por ID
+// Obtener un medicamento en venta por ID
 router.get(
   "/:id",
   authorize("medicamento-venta.read"),
   MedicamentoVentaController.getMedicamentoVentaById
 );
 
-// Crear un nuevo tipo de documento
+// Crear medicamento en venta
 router.post(
   "/",
   authorize("medicamento-venta.create"),
@@ -38,7 +38,7 @@ router.post(
   MedicamentoVentaController.createMedicamentoVenta
 );
 
-// Actualizar un tipo de documento
+// Actualizar medicamento en venta (completo)
 router.put(
   "/:id",
   authorize("medicamento-venta.update"),
@@ -46,7 +46,7 @@ router.put(
   MedicamentoVentaController.updateMedicamentoVenta
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar medicamento en venta (parcial)
 router.patch(
   "/:id",
   authorize("medicamento-venta.update"),
@@ -54,7 +54,7 @@ router.patch(
   MedicamentoVentaController.updateMedicamentoVenta
 );
 
-// Eliminar un tipo de documento
+// Eliminar medicamento en venta
 router.delete(
   "/:id",
   authorize("medicamento-venta.delete"),

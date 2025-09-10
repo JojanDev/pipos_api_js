@@ -13,12 +13,16 @@ class MascotaService {
   static objEspecie = new Especie();
   static objAntecedente = new Antecedente();
 
+  /**
+   * Obtiene todas las mascotas registradas y agrega información adicional
+   * como cliente, raza, especie y fecha del último antecedente.
+   * @returns {Promise<Object>} Respuesta con éxito o error y listado de mascotas
+   */
   static async getAllMascotas() {
     try {
-      // Llamamos el método listar
+      // Obtenemos todas las mascotas
       const mascotas = await this.objMascota.getAll();
 
-      // Validamos si no hay tipos de productos
       if (!mascotas || mascotas.length === 0)
         return {
           error: true,
@@ -26,16 +30,21 @@ class MascotaService {
           message: "No hay mascotas registradas",
         };
 
+      // Enriquecemos la información de cada mascota con datos relacionados
       const mascotasInfo = await Promise.all(
         mascotas.map(async (mascota) => {
+          // Obtenemos datos del usuario (cliente)
           const { nombre, apellido, telefono } = await this.objUsuario.getById(
             mascota.usuario_id
           );
+
+          // Obtenemos la raza y especie de la mascota
           const raza = await this.objRaza.getById(mascota.raza_id);
           const especie = await this.objEspecie.getById(raza.especie_id);
+
+          // Obtenemos la fecha del último antecedente médico registrado
           const ultimoAntecedente =
             await this.objAntecedente.getUltimoByMascotaId(mascota.id);
-
           const fecha_creado = ultimoAntecedente
             ? ultimoAntecedente.fecha_creado
             : null;
@@ -51,7 +60,6 @@ class MascotaService {
         })
       );
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -59,17 +67,19 @@ class MascotaService {
         data: mascotasInfo,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       console.log(error);
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Obtiene una mascota por su ID
+   * @param {number} id - ID de la mascota
+   * @returns {Promise<Object>} Respuesta con éxito o error y la mascota encontrada
+   */
   static async getMascotaById(id) {
     try {
-      // Llamamos el método consultar por ID
       const mascota = await this.objMascota.getById(id);
-      // Validamos si no hay mascota
       if (!mascota)
         return {
           error: true,
@@ -77,10 +87,10 @@ class MascotaService {
           message: "Mascota no encontrada",
         };
 
+      // Obtenemos información de la raza mediante el servicio
       const raza = await RazaService.getRazaById(mascota.raza_id);
       mascota["raza"] = raza.data;
 
-      // Retornamos la mascota obtenida
       return {
         error: false,
         code: 200,
@@ -88,33 +98,36 @@ class MascotaService {
         data: mascota,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Crea una nueva mascota
+   * @param {Object} mascota - Datos de la mascota a crear
+   * @returns {Promise<Object>} Respuesta con éxito o error y la mascota creada
+   */
   static async createMascota(mascota) {
     try {
+      // Validamos que el usuario y la raza existan
       const usuarioExistente = await UsuarioService.getUsuarioById(
         mascota.usuario_id
       );
-
       if (usuarioExistente.error) return usuarioExistente;
 
       const razaExistente = await RazaService.getRazaById(mascota.raza_id);
-
       if (razaExistente.error) return razaExistente;
 
-      // Llamamos el método crear
+      // Creamos la mascota
       const mascotaCreado = await this.objMascota.create(mascota);
-      // Validamos si no se pudo crear el tipo de producto
-      if (mascotaCreado === null)
+      if (!mascotaCreado)
         return {
           error: true,
           code: 400,
           message: "Error al crear la mascota",
         };
 
+      // Enriquecemos la información de la mascota creada
       const { nombre, apellido, telefono } = await this.objUsuario.getById(
         mascotaCreado.usuario_id
       );
@@ -129,7 +142,6 @@ class MascotaService {
         especie: especie.nombre,
       };
 
-      // Retornamos el tipo de producto creado
       return {
         error: false,
         code: 201,
@@ -137,45 +149,40 @@ class MascotaService {
         data: mascotaInfo,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Actualiza una mascota existente
+   * @param {number} id - ID de la mascota a actualizar
+   * @param {Object} mascota - Datos a actualizar
+   * @returns {Promise<Object>} Respuesta con éxito o error y mascota actualizada
+   */
   static async updateMascota(id, mascota) {
     try {
-      // Llamamos el método consultar por ID
       const existente = await this.objMascota.getById(id);
-      // Validamos si el tipo de producto existe
-      if (!existente) {
-        return {
-          error: true,
-          code: 404,
-          message: "Mascota no encontrada",
-        };
-      }
+      if (!existente)
+        return { error: true, code: 404, message: "Mascota no encontrada" };
 
+      // Validamos existencia del usuario y la raza
       const usuarioExistente = await UsuarioService.getUsuarioById(
         mascota.usuario_id
       );
-
       if (usuarioExistente.error) return usuarioExistente;
 
       const razaExistente = await RazaService.getRazaById(mascota.raza_id);
-
       if (razaExistente.error) return razaExistente;
 
-      // Llamamos el método actualizar
+      // Actualizamos la mascota
       const mascotaActualizado = await this.objMascota.update(id, mascota);
-      // Validamos si no se pudo actualizar el tipo de producto
-      if (mascotaActualizado === null)
+      if (!mascotaActualizado)
         return {
           error: true,
           code: 400,
           message: "Error al actualizar la mascota",
         };
 
-      // Retornamos el tipo de producto actualizado
       return {
         error: false,
         code: 200,
@@ -183,26 +190,22 @@ class MascotaService {
         data: mascotaActualizado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Elimina una mascota por su ID
+   * @param {number} id - ID de la mascota a eliminar
+   * @returns {Promise<Object>} Respuesta con éxito o error
+   */
   static async deleteMascota(id) {
     try {
-      // Llamamos el método consultar por ID
       const mascota = await this.objMascota.getById(id);
-      // Validamos si el tipo de producto existe
       if (!mascota)
-        return {
-          error: true,
-          code: 404,
-          message: "Mascota no encontrada",
-        };
+        return { error: true, code: 404, message: "Mascota no encontrada" };
 
-      // Llamamos el método eliminar
       const mascotaEliminado = await this.objMascota.delete(id);
-      // Validamos si no se pudo eliminar el tipo de producto
       if (!mascotaEliminado)
         return {
           error: true,
@@ -210,24 +213,25 @@ class MascotaService {
           message: "Error al eliminar la mascota",
         };
 
-      // Retornamos el tipo de producto eliminado
       return {
         error: false,
         code: 200,
         message: "Mascota eliminada correctamente",
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Obtiene todas las mascotas de un usuario por su ID
+   * @param {number} usuario_id - ID del usuario
+   * @returns {Promise<Object>} Respuesta con éxito o error y listado de mascotas del usuario
+   */
   static async getAllMascotasByUsuarioId(usuario_id) {
     try {
-      // Llamamos el método listar
       const mascotas = await this.objMascota.getAllByUsuarioId(usuario_id);
 
-      // Validamos si no hay tipos de productos
       if (!mascotas || mascotas.length === 0)
         return {
           error: true,
@@ -243,7 +247,6 @@ class MascotaService {
         })
       );
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -251,18 +254,20 @@ class MascotaService {
         data: mascotasInfo,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       console.log(error);
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Obtiene todas las mascotas de una raza específica
+   * @param {number} raza_id - ID de la raza
+   * @returns {Promise<Object>} Respuesta con éxito o error y listado de mascotas
+   */
   static async getAllMascotasByRazaId(raza_id) {
     try {
-      // Llamamos el método listar
       const mascotas = await this.objMascota.getAllByRazaId(raza_id);
 
-      // Validamos si no hay tipos de productos
       if (!mascotas || mascotas.length === 0)
         return {
           error: true,
@@ -278,7 +283,6 @@ class MascotaService {
         })
       );
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -286,7 +290,6 @@ class MascotaService {
         data: mascotasInfo,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       console.log(error);
       return { error: true, code: 500, message: error.message };
     }

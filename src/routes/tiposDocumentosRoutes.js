@@ -9,7 +9,7 @@ import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todos los tipos de documento
 router.get(
   "/",
   authorize("tipo-documento.read"),
@@ -23,7 +23,7 @@ router.get(
   TipoDocumentoController.getTipoDocumentoById
 );
 
-// Crear un nuevo tipo de documento
+// Crear un tipo de documento
 router.post(
   "/",
   authorize("tipo-documento.create"),
@@ -31,7 +31,7 @@ router.post(
   TipoDocumentoController.createTipoDocumento
 );
 
-// Actualizar un tipo de documento
+// Actualizar un tipo de documento (completo)
 router.put(
   "/:id",
   authorize("tipo-documento.update"),
@@ -39,7 +39,7 @@ router.put(
   TipoDocumentoController.updateTipoDocumento
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar un tipo de documento (parcial)
 router.patch(
   "/:id",
   authorize("tipo-documento.update"),

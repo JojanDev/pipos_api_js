@@ -1,100 +1,161 @@
 import { ResponseProvider } from "../providers/ResponseProvider.js";
 import TipoDocumentoService from "../services/TipoDocumentoService.js";
 
+/**
+ * Controlador para las rutas de "tipos de documento".
+ * Centraliza la comunicación entre Express y el servicio TipoDocumentoService,
+ * y unifica las respuestas HTTP mediante ResponseProvider.
+ */
 class TipoDocumentoController {
-
-  // Obtener todos los tipos de documentos
+  /**
+   * Obtiene todos los tipos de documento.
+   * Ruta: GET /tipos-documentos
+   *
+   * @param {import('express').Request}  req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static getAllTiposDocumentos = async (req, res) => {
     try {
       const response = await TipoDocumentoService.getAllTiposDocumentos();
-      // Validamos si no hay tipos de documentos
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      return ResponseProvider.success(res, response.data, response.message, response.code);
 
+      return ResponseProvider.success(
+        res,
+        response.data,
+        response.message,
+        response.code
+      );
     } catch (error) {
+      console.error("getAllTiposDocumentos error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Obtener un tipo de documento por su ID
+  /**
+   * Obtiene un tipo de documento por su ID.
+   * Ruta: GET /tipos-documentos/:id
+   *
+   * @param {import('express').Request}  req  – req.params.id
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static getTipoDocumentoById = async (req, res) => {
     const { id } = req.params;
     try {
-      // Llamamos al servicio para obtener el tipo de documento por su ID
       const response = await TipoDocumentoService.getTipoDocumentoById(id);
-      // Validamos si no hay tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      return ResponseProvider.success(res, response.data, response.message, response.code);
+
+      return ResponseProvider.success(
+        res,
+        response.data,
+        response.message,
+        response.code
+      );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`getTipoDocumentoById error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Crear un nuevo tipo de documento
+  /**
+   * Crea un nuevo tipo de documento.
+   * Ruta: POST /tipos-documentos
+   *
+   * @param {import('express').Request}  req  – req.body con los datos del tipo de documento
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static createTipoDocumento = async (req, res) => {
     const tipoDocumento = req.body;
     try {
-      // Llamamos el método crear del modelo
-      const response = await TipoDocumentoService.createTipoDocumento(tipoDocumento);
-      // Validamos que la respuesta no tenga error
+      const response = await TipoDocumentoService.createTipoDocumento(
+        tipoDocumento
+      );
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento creado
-      return ResponseProvider.success(res, response.data, response.message, 201);
+
+      return ResponseProvider.success(
+        res,
+        response.data,
+        response.message,
+        201
+      );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error("createTipoDocumento error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Actualizar un tipo de documento
+  /**
+   * Actualiza un tipo de documento existente por su ID.
+   * Ruta: PUT /tipos-documentos/:id
+   *
+   * @param {import('express').Request}  req  – req.params.id y req.body con datos a actualizar
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static updateTipoDocumento = async (req, res) => {
     const { id } = req.params;
     const tipoDocumento = req.body;
-    try {            
-      // Llamamos al método actualizar del modelo
-      const response = await TipoDocumentoService.updateTipoDocumento(id, tipoDocumento);
-      // Validamos que la respuesta no tenga error
-      if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
-        return ResponseProvider.error(res, response.message, response.code);
-      }      
+    try {
+      const response = await TipoDocumentoService.updateTipoDocumento(
+        id,
+        tipoDocumento
+      );
 
-      // Retornamos el tipo de documento actualizado
-      return ResponseProvider.success(res, response.data, response.message, 200);
+      if (response.error) {
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+
+      return ResponseProvider.success(
+        res,
+        response.data,
+        response.message,
+        200
+      );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`updateTipoDocumento error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Eliminar un tipo de documento
+  /**
+   * Elimina un tipo de documento por su ID.
+   * Ruta: DELETE /tipos-documentos/:id
+   *
+   * @param {import('express').Request}  req  – req.params.id
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static deleteTipoDocumento = async (req, res) => {
     const { id } = req.params;
     try {
-      // Llamamos al servicio para eliminar el tipo de documento por su ID
       const response = await TipoDocumentoService.deleteTipoDocumento(id);
-      // Validamos si no se pudo eliminar el tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento eliminado
-      return ResponseProvider.success(res, response.data, response.message ,response.code);
+
+      return ResponseProvider.success(
+        res,
+        response.data,
+        response.message,
+        response.code
+      );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`deleteTipoDocumento error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
-  }
+  };
 }
 
 export default TipoDocumentoController;

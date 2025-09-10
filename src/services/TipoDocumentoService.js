@@ -1,16 +1,16 @@
 import TipoDocumento from "../models/TipoDocumento.js";
-// import Usuario from "../models/Usuario.js";
 
 class TipoDocumentoService {
   static objTipoDocumento = new TipoDocumento();
-  // static objUsuario = new Usuario();
 
+  /**
+   * Obtiene todos los tipos de documentos registrados
+   * @returns {Promise<Object>} Respuesta con éxito o error y listado de tipos de documentos
+   */
   static async getAllTiposDocumentos() {
     try {
-      // Llamamos el método listar
       const tiposDocumentos = await this.objTipoDocumento.getAll();
 
-      // Validamos si no hay tipos de documentos
       if (!tiposDocumentos || tiposDocumentos.length === 0)
         return {
           error: true,
@@ -18,7 +18,6 @@ class TipoDocumentoService {
           message: "No hay tipos de documentos registradas",
         };
 
-      // Retornamos las tipos de documentos obtenidas
       return {
         error: false,
         code: 200,
@@ -26,17 +25,20 @@ class TipoDocumentoService {
         data: tiposDocumentos,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       console.log(error);
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Obtiene un tipo de documento por su ID
+   * @param {number} id - ID del tipo de documento
+   * @returns {Promise<Object>} Respuesta con éxito o error y el tipo de documento
+   */
   static async getTipoDocumentoById(id) {
     try {
-      // Llamamos el método consultar por ID
       const tipoDocumento = await this.objTipoDocumento.getById(id);
-      // Validamos si no hay tipoDocumento
+
       if (!tipoDocumento)
         return {
           error: true,
@@ -44,7 +46,6 @@ class TipoDocumentoService {
           message: "Tipo de documento no encontrado",
         };
 
-      // Retornamos la tipoDocumento obtenida
       return {
         error: false,
         code: 200,
@@ -52,26 +53,28 @@ class TipoDocumentoService {
         data: tipoDocumento,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Crea un nuevo tipo de documento
+   * @param {Object} tipoDocumento - Datos del tipo de documento a crear
+   * @returns {Promise<Object>} Respuesta con éxito o error y el tipo de documento creado
+   */
   static async createTipoDocumento(tipoDocumento) {
     try {
-      // Llamamos el método crear
       const tipoDocumentoCreado = await this.objTipoDocumento.create(
         tipoDocumento
       );
-      // Validamos si no se pudo crear el tipo de documento
-      if (tipoDocumentoCreado === null)
+
+      if (!tipoDocumentoCreado)
         return {
           error: true,
           code: 400,
           message: "Error al crear el tipo de documento",
         };
 
-      // Retornamos el tipo de documento creado
       return {
         error: false,
         code: 201,
@@ -79,38 +82,39 @@ class TipoDocumentoService {
         data: tipoDocumentoCreado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Actualiza un tipo de documento existente
+   * @param {number} id - ID del tipo de documento a actualizar
+   * @param {Object} tipoDocumento - Datos a actualizar
+   * @returns {Promise<Object>} Respuesta con éxito o error y el tipo de documento actualizado
+   */
   static async updateTipoDocumento(id, tipoDocumento) {
     try {
-      // Llamamos el método consultar por ID
       const existente = await this.objTipoDocumento.getById(id);
-      // Validamos si el tipo de documento existe
-      if (!existente) {
+
+      if (!existente)
         return {
           error: true,
           code: 404,
           message: "Tipo de documento no encontrado",
         };
-      }
 
-      // Llamamos el método actualizar
       const tipoDocumentoActualizado = await this.objTipoDocumento.update(
         id,
         tipoDocumento
       );
-      // Validamos si no se pudo actualizar el tipo de documento
-      if (tipoDocumentoActualizado === null)
+
+      if (!tipoDocumentoActualizado)
         return {
           error: true,
           code: 400,
           message: "Error al actualizar el tipo de documento",
         };
 
-      // Retornamos el tipo de documento actualizado
       return {
         error: false,
         code: 200,
@@ -118,16 +122,19 @@ class TipoDocumentoService {
         data: tipoDocumentoActualizado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Elimina un tipo de documento por su ID
+   * @param {number} id - ID del tipo de documento a eliminar
+   * @returns {Promise<Object>} Respuesta con éxito o error
+   */
   static async deleteTipoDocumento(id) {
     try {
-      // Llamamos el método consultar por ID
       const tipoDocumento = await this.objTipoDocumento.getById(id);
-      // Validamos si el tipo de documento existe
+
       if (!tipoDocumento)
         return {
           error: true,
@@ -135,15 +142,8 @@ class TipoDocumentoService {
           message: "Tipo de documento no encontrado",
         };
 
-      // const usuariosTipo = await this.objUsuario.getAllByTipoDocumentoId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de documento porque tiene usuarios asociados" };
-      // }
-
-      // Llamamos el método eliminar
       const tipoDocumentoEliminado = await this.objTipoDocumento.delete(id);
-      // Validamos si no se pudo eliminar el tipo de documento
+
       if (!tipoDocumentoEliminado)
         return {
           error: true,
@@ -151,14 +151,12 @@ class TipoDocumentoService {
           message: "Error al eliminar el tipo de documento",
         };
 
-      // Retornamos el tipo de documento eliminado
       return {
         error: false,
         code: 200,
         message: "Tipo de documento eliminado correctamente",
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }

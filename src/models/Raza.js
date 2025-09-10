@@ -1,13 +1,17 @@
 import connection from "../utils/db.js";
 import Modelo from "./Modelo.js";
 
+/**
+ * Clase que representa el modelo de Razas en la base de datos.
+ * Extiende de la clase genérica Modelo para reutilizar operaciones CRUD.
+ */
 class Raza extends Modelo {
-  #tableName = "razas";
+  #tableName = "razas"; // Nombre de la tabla en la base de datos
 
   /**
-   * Obtiene todos los tipos de documentos de la base de datos
-   * @returns {Promise<Array>} Lista de todos los tipos de documentos
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene todas las razas de la base de datos.
+   * @returns {Promise<Array>} Lista de todas las razas.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getAll() {
     try {
@@ -18,10 +22,10 @@ class Raza extends Modelo {
   }
 
   /**
-   * Obtiene un tipo de documento específico por su ID
-   * @param {number} id - ID del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene una raza específica por su ID.
+   * @param {number} id - ID de la raza.
+   * @returns {Promise<Object|null>} La raza encontrada o null si no existe.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getById(id) {
     try {
@@ -34,10 +38,10 @@ class Raza extends Modelo {
   }
 
   /**
-   * Crea un nuevo tipo de documento en la base de datos
-   * @param {Object} raza - Objeto con los datos del tipo de documento {nombre}
-   * @returns {Promise<Object|null>} El tipo de documento creado con su ID, o null si falló
-   * @throws {Error} Si ocurre un error en la inserción
+   * Crea una nueva raza en la base de datos.
+   * @param {Object} raza - Objeto con los datos de la raza (ejemplo: {nombre, especie_id}).
+   * @returns {Promise<Object|null>} La raza creada con su ID, o null si falló.
+   * @throws {Error} Si ocurre un error en la inserción.
    */
   async create(raza) {
     try {
@@ -52,11 +56,11 @@ class Raza extends Modelo {
   }
 
   /**
-   * Actualiza un tipo de documento existente
-   * @param {number} id - ID del tipo de documento a actualizar
-   * @param {Object} raza - Objeto con los nuevos datos del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento actualizado, o null si falló
-   * @throws {Error} Si ocurre un error en la actualización
+   * Actualiza una raza existente.
+   * @param {number} id - ID de la raza a actualizar.
+   * @param {Object} raza - Objeto con los nuevos datos de la raza.
+   * @returns {Promise<Object|null>} La raza actualizada, o null si falló.
+   * @throws {Error} Si ocurre un error en la actualización.
    */
   async update(id, raza) {
     try {
@@ -72,10 +76,10 @@ class Raza extends Modelo {
   }
 
   /**
-   * Elimina un tipo de documento de la base de datos
-   * @param {number} id - ID del tipo de documento a eliminar
-   * @returns {Promise<boolean>} true si se eliminó correctamente, false si no
-   * @throws {Error} Si ocurre un error en la eliminación
+   * Elimina una raza de la base de datos.
+   * @param {number} id - ID de la raza a eliminar.
+   * @returns {Promise<boolean>} true si se eliminó correctamente, false si no.
+   * @throws {Error} Si ocurre un error en la eliminación.
    */
   async delete(id) {
     try {
@@ -88,17 +92,17 @@ class Raza extends Modelo {
   }
 
   /**
-   * Obtiene un tipo de documento específico por su ID
-   * @param {number} id - ID del tipo de documento
-   * @returns {Promise<Object|null>} El tipo de documento encontrado o null si no existe
-   * @throws {Error} Si ocurre un error en la consulta
+   * Obtiene todas las razas pertenecientes a una especie.
+   * @param {number} especie_id - ID de la especie.
+   * @returns {Promise<Array>} Lista de razas de la especie indicada.
+   * @throws {Error} Si ocurre un error en la consulta.
    */
   async getAllByEspecieId(especie_id) {
     try {
       return await super.getByField(this.#tableName, "especie_id", especie_id);
     } catch (error) {
       throw new Error(
-        `Error al obtener la razas de la especie con ID ${especie_id}: ${error.message}`
+        `Error al obtener las razas de la especie con ID ${especie_id}: ${error.message}`
       );
     }
   }

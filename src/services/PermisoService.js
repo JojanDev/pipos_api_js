@@ -1,16 +1,27 @@
 import Permiso from "../models/Permiso.js";
 // import Usuario from "../models/Usuario.js";
 
+/**
+ * Servicio encargado de manejar la lógica de negocio
+ * relacionada con los permisos.
+ *
+ * Se apoya en el modelo `Permiso` para interactuar con la base de datos.
+ */
 class PermisoService {
+  // Instancia única del modelo Permiso
   static objPermiso = new Permiso();
   // static objUsuario = new Usuario();
 
+  /**
+   * Obtiene todos los permisos registrados.
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async getAllPermisos() {
     try {
-      // Llamamos el método listar
+      // Obtenemos todos los permisos
       const permisos = await this.objPermiso.getAll();
 
-      // Validamos si no hay tipos de productos
+      // Validamos si no hay permisos registrados
       if (!permisos || permisos.length === 0)
         return {
           error: true,
@@ -18,7 +29,6 @@ class PermisoService {
           message: "No hay permisos registrados",
         };
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -26,17 +36,20 @@ class PermisoService {
         data: permisos,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       console.log(error);
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Obtiene un permiso específico por su ID.
+   * @param {number} id - Identificador del permiso
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async getPermisoById(id) {
     try {
-      // Llamamos el método consultar por ID
       const permiso = await this.objPermiso.getById(id);
-      // Validamos si no hay permiso
+
       if (!permiso)
         return {
           error: true,
@@ -44,7 +57,6 @@ class PermisoService {
           message: "Permiso no encontrado",
         };
 
-      // Retornamos la permiso obtenida
       return {
         error: false,
         code: 200,
@@ -52,18 +64,20 @@ class PermisoService {
         data: permiso,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Crea un nuevo permiso en la base de datos.
+   * @param {Object} permiso - Datos del permiso a crear
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async createPermiso(permiso) {
     try {
-      // Llamamos el método crear
-      const permisoCreado = await this.objPermiso.create(
-        permiso
-      );
-      // Validamos si no se pudo crear el tipo de producto
+      // Creamos el permiso
+      const permisoCreado = await this.objPermiso.create(permiso);
+
       if (permisoCreado === null)
         return {
           error: true,
@@ -71,7 +85,6 @@ class PermisoService {
           message: "Error al crear el Permiso",
         };
 
-      // Retornamos el tipo de producto creado
       return {
         error: false,
         code: 201,
@@ -79,30 +92,31 @@ class PermisoService {
         data: permisoCreado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Actualiza un permiso existente.
+   * @param {number} id - ID del permiso a actualizar
+   * @param {Object} permiso - Nuevos datos del permiso
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async updatePermiso(id, permiso) {
     try {
-      // Llamamos el método consultar por ID
+      // Validamos que el permiso exista
       const existente = await this.objPermiso.getById(id);
-      // Validamos si el tipo de producto existe
       if (!existente) {
         return {
           error: true,
           code: 404,
-          message: "Permiso no encontrada",
+          message: "Permiso no encontrado",
         };
       }
 
-      // Llamamos el método actualizar
-      const permisoActualizado = await this.objPermiso.update(
-        id,
-        permiso
-      );
-      // Validamos si no se pudo actualizar el tipo de producto
+      // Ejecutamos la actualización
+      const permisoActualizado = await this.objPermiso.update(id, permiso);
+
       if (permisoActualizado === null)
         return {
           error: true,
@@ -110,7 +124,6 @@ class PermisoService {
           message: "Error al actualizar el Permiso",
         };
 
-      // Retornamos el tipo de producto actualizado
       return {
         error: false,
         code: 200,
@@ -118,16 +131,19 @@ class PermisoService {
         data: permisoActualizado,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Elimina un permiso de la base de datos.
+   * @param {number} id - ID del permiso a eliminar
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message}
+   */
   static async deletePermiso(id) {
     try {
-      // Llamamos el método consultar por ID
+      // Validamos que el permiso exista
       const permiso = await this.objPermiso.getById(id);
-      // Validamos si el tipo de producto existe
       if (!permiso)
         return {
           error: true,
@@ -135,15 +151,8 @@ class PermisoService {
           message: "Permiso no encontrado",
         };
 
-      // const usuariosTipo = await this.objUsuario.getAllByPermisoId(id);
-      // Validamos si no hay usuarios
-      // if (usuariosTipo && usuariosTipo.length > 0) {
-      //   return { error: true, code: 409, message: "No se puede eliminar el tipo de producto porque tiene usuarios asociados" };
-      // }
-
-      // Llamamos el método eliminar
+      // Ejecutamos la eliminación
       const permisoEliminado = await this.objPermiso.delete(id);
-      // Validamos si no se pudo eliminar el tipo de producto
       if (!permisoEliminado)
         return {
           error: true,
@@ -151,14 +160,12 @@ class PermisoService {
           message: "Error al eliminar el Permiso",
         };
 
-      // Retornamos el tipo de producto eliminado
       return {
         error: false,
         code: 200,
         message: "Permiso eliminado correctamente",
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }

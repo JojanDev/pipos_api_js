@@ -3,16 +3,26 @@ import Raza from "../models/Raza.js";
 import EspecieService from "./EspecieService.js";
 import MascotaService from "./MascotaService.js";
 
+/**
+ * Servicio encargado de manejar la lógica de negocio
+ * relacionada con las razas de mascotas.
+ *
+ * Se apoya en los modelos `Raza` y `Especie` para interactuar con la base de datos.
+ */
 class RazaService {
+  // Instancia única del modelo Raza
   static objRaza = new Raza();
+  // Instancia única del modelo Especie
   static objEspecie = new Especie();
 
+  /**
+   * Obtiene todas las razas registradas.
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async getAllRazas() {
     try {
-      // Llamamos el método listar
       const razas = await this.objRaza.getAll();
 
-      // Validamos si no hay tipos de productos
       if (!razas || razas.length === 0)
         return {
           error: true,
@@ -20,7 +30,6 @@ class RazaService {
           message: "No hay razas registradas",
         };
 
-      // Retornamos las tipos de productos obtenidas
       return {
         error: false,
         code: 200,
@@ -28,17 +37,20 @@ class RazaService {
         data: razas,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       console.log(error);
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Obtiene una raza por su ID.
+   * @param {number} id - Identificador de la raza
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async getRazaById(id) {
     try {
-      // Llamamos el método consultar por ID
       const raza = await this.objRaza.getById(id);
-      // Validamos si no hay raza
+
       if (!raza)
         return {
           error: true,
@@ -46,10 +58,10 @@ class RazaService {
           message: "Raza no encontrada",
         };
 
+      // Obtenemos la especie asociada a la raza
       const especie = await EspecieService.getEspecieById(raza.especie_id);
       raza["especie"] = especie.data;
 
-      // Retornamos la raza obtenida
       return {
         error: false,
         code: 200,
@@ -57,22 +69,27 @@ class RazaService {
         data: raza,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Crea una nueva raza en la base de datos.
+   * @param {Object} raza - Datos de la raza a crear
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async createRaza(raza) {
     try {
+      // Validamos que la especie asociada exista
       const especieExistente = await EspecieService.getEspecieById(
         raza.especie_id
       );
 
       if (especieExistente.error) return especieExistente;
 
-      // Llamamos el método crear
+      // Creamos la raza
       const razaCreada = await this.objRaza.create(raza);
-      // Validamos si no se pudo crear el tipo de producto
+
       if (razaCreada === null)
         return {
           error: true,
@@ -80,7 +97,6 @@ class RazaService {
           message: "Error al crear la raza",
         };
 
-      // Retornamos el tipo de producto creado
       return {
         error: false,
         code: 201,
@@ -88,16 +104,20 @@ class RazaService {
         data: razaCreada,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Actualiza una raza existente.
+   * @param {number} id - ID de la raza a actualizar
+   * @param {Object} raza - Nuevos datos de la raza
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async updateRaza(id, raza) {
     try {
-      // Llamamos el método consultar por ID
+      // Validamos que la raza exista
       const existente = await this.objRaza.getById(id);
-      // Validamos si el tipo de producto existe
       if (!existente) {
         return {
           error: true,
@@ -106,9 +126,9 @@ class RazaService {
         };
       }
 
-      // Llamamos el método actualizar
+      // Actualizamos la raza
       const razaActualizada = await this.objRaza.update(id, raza);
-      // Validamos si no se pudo actualizar el tipo de producto
+
       if (razaActualizada === null)
         return {
           error: true,
@@ -116,7 +136,6 @@ class RazaService {
           message: "Error al actualizar la raza",
         };
 
-      // Retornamos el tipo de producto actualizado
       return {
         error: false,
         code: 200,
@@ -124,19 +143,23 @@ class RazaService {
         data: razaActualizada,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Elimina una raza de la base de datos.
+   * @param {number} id - ID de la raza a eliminar
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message}
+   */
   static async deleteRaza(id) {
     try {
+      // Validamos que la raza exista
       const razas = await this.getRazaById(id);
-      // Validamos si el tipo de producto existe
       if (razas.error) return razas;
 
+      // Validamos si hay mascotas asociadas a la raza antes de eliminar
       const mascotasAsociadas = await MascotaService.getAllMascotasByRazaId(id);
-      // Validamos si el tipo de producto existe
       if (!mascotasAsociadas.error)
         return {
           error: true,
@@ -144,9 +167,8 @@ class RazaService {
           message: "Error al eliminar la raza, tiene mascotas asociadas",
         };
 
-      // Llamamos el método eliminar
+      // Eliminamos la raza
       const razaEliminada = await this.objRaza.delete(id);
-      // Validamos si no se pudo eliminar el tipo de producto
       if (!razaEliminada)
         return {
           error: true,
@@ -154,23 +176,25 @@ class RazaService {
           message: "Error al eliminar la raza",
         };
 
-      // Retornamos el tipo de producto eliminado
       return {
         error: false,
         code: 200,
         message: "Raza eliminada correctamente",
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
 
+  /**
+   * Obtiene todas las razas asociadas a una especie específica.
+   * @param {number} especie_id - ID de la especie
+   * @returns {Promise<Object>} Objeto con estructura {error, code, message, data}
+   */
   static async getAllRazasByEspecieId(especie_id) {
     try {
-      // Llamamos el método consultar por ID
       const raza = await this.objRaza.getAllByEspecieId(especie_id);
-      // Validamos si no hay raza
+
       if (!raza || raza.length === 0)
         return {
           error: true,
@@ -178,7 +202,6 @@ class RazaService {
           message: "Razas de especie no encontradas",
         };
 
-      // Retornamos la raza obtenida
       return {
         error: false,
         code: 200,
@@ -186,7 +209,6 @@ class RazaService {
         data: raza,
       };
     } catch (error) {
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }

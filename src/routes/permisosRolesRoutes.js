@@ -1,5 +1,4 @@
 import express from "express";
-
 import {
   validarPermisoRol,
   validarPermisoRolParcial,
@@ -9,21 +8,21 @@ import PermisoRolController from "../controllers/PermisoRolController.js";
 
 const router = express.Router();
 
-// Obtener todos los tipos de documentos
+// Obtener todos los permisos-roles
 router.get(
   "/",
   authorize("permiso-rol.read"),
   PermisoRolController.getAllPermisosRoles
 );
 
-// Obtener un tipo de documento por ID
+// Obtener un permiso-rol por ID
 router.get(
   "/:id",
   authorize("permiso-rol.read"),
   PermisoRolController.getPermisoRolById
 );
 
-// Crear un nuevo tipo de documento
+// Crear un permiso-rol
 router.post(
   "/",
   authorize("permiso-rol.create"),
@@ -31,7 +30,7 @@ router.post(
   PermisoRolController.createPermisoRol
 );
 
-// Actualizar un tipo de documento
+// Actualizar un permiso-rol
 router.put(
   "/:id",
   authorize("permiso-rol.update"),
@@ -39,7 +38,7 @@ router.put(
   PermisoRolController.updatePermisoRol
 );
 
-// Actualizar un tipo de documento parcialmente
+// Actualizar parcialmente un permiso-rol
 router.patch(
   "/:id",
   authorize("permiso-rol.update"),
@@ -47,7 +46,7 @@ router.patch(
   PermisoRolController.updatePermisoRol
 );
 
-// Eliminar un tipo de documento
+// Eliminar un permiso-rol
 router.delete(
   "/:id",
   authorize("permiso-rol.delete"),

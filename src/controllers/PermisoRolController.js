@@ -1,16 +1,28 @@
 import { ResponseProvider } from "../providers/ResponseProvider.js";
 import PermisoRolService from "../services/PermisoRolService.js";
 
+/**
+ * Controlador para las rutas de "permisos por rol".
+ * Maneja la comunicación entre Express y PermisoRolService,
+ * y unifica las respuestas HTTP mediante ResponseProvider.
+ */
 class PermisoRolController {
-  // Obtener todos los tipos de documentos
+  /**
+   * Obtiene todos los permisos asociados a roles.
+   * Ruta: GET /permisos-roles
+   *
+   * @param {import('express').Request}  req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static getAllPermisosRoles = async (req, res) => {
     try {
       const response = await PermisoRolService.getAllPermisosRoles();
-      // Validamos si no hay tipos de documentos
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -18,21 +30,28 @@ class PermisoRolController {
         response.code
       );
     } catch (error) {
+      console.error("getAllPermisosRoles error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Obtener un tipo de documento por su ID
+  /**
+   * Obtiene un permiso-rol por su ID.
+   * Ruta: GET /permisos-roles/:id
+   *
+   * @param {import('express').Request}  req  - req.params.id
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static getPermisoRolById = async (req, res) => {
     const { id } = req.params;
     try {
-      // Llamamos al servicio para obtener el tipo de documento por su ID
       const response = await PermisoRolService.getPermisoRolById(id);
-      // Validamos si no hay tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -40,25 +59,28 @@ class PermisoRolController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`getPermisoRolById error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Crear un nuevo tipo de documento
+  /**
+   * Crea un nuevo permiso para un rol.
+   * Ruta: POST /permisos-roles
+   *
+   * @param {import('express').Request}  req  - req.body contiene datos de permiso-rol
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static createPermisoRol = async (req, res) => {
     const permisoRol = req.body;
     try {
-      // Llamamos el método crear del modelo
-      const response = await PermisoRolService.createPermisoRol(
-        permisoRol
-      );
-      // Validamos que la respuesta no tenga error
+      const response = await PermisoRolService.createPermisoRol(permisoRol);
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento creado
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -66,28 +88,29 @@ class PermisoRolController {
         201
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error("createPermisoRol error:", error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Actualizar un tipo de documento
+  /**
+   * Actualiza un permiso-rol existente por su ID.
+   * Ruta: PUT /permisos-roles/:id
+   *
+   * @param {import('express').Request}  req  - req.params.id y req.body con datos a actualizar
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static updatePermisoRol = async (req, res) => {
     const { id } = req.params;
     const permisoRol = req.body;
     try {
-      // Llamamos al método actualizar del modelo
-      const response = await PermisoRolService.updatePermisoRol(
-        id,
-        permisoRol
-      );
-      // Validamos que la respuesta no tenga error
+      const response = await PermisoRolService.updatePermisoRol(id, permisoRol);
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
 
-      // Retornamos el tipo de documento actualizado
       return ResponseProvider.success(
         res,
         response.data,
@@ -95,23 +118,28 @@ class PermisoRolController {
         200
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`updatePermisoRol error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
-  // Eliminar un tipo de documento
+  /**
+   * Elimina un permiso-rol por su ID.
+   * Ruta: DELETE /permisos-roles/:id
+   *
+   * @param {import('express').Request}  req  - req.params.id
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
   static deletePermisoRol = async (req, res) => {
     const { id } = req.params;
     try {
-      // Llamamos al servicio para eliminar el tipo de documento por su ID
       const response = await PermisoRolService.deletePermisoRol(id);
-      // Validamos si no se pudo eliminar el tipo de documento
+
       if (response.error) {
-        // Llamamos el provider para centralizar los mensajes de respuesta
         return ResponseProvider.error(res, response.message, response.code);
       }
-      // Retornamos el tipo de documento eliminado
+
       return ResponseProvider.success(
         res,
         response.data,
@@ -119,7 +147,7 @@ class PermisoRolController {
         response.code
       );
     } catch (error) {
-      // Llamamos el provider para centralizar los mensajes de respuesta
+      console.error(`deletePermisoRol error (id=${id}):`, error);
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
