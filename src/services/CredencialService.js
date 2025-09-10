@@ -209,7 +209,7 @@ class CredencialService {
       // Buscamos credencial vinculada a un usuario específico
       const credencial = await this.objCredencial.getByUsuarioId(usuario_id);
 
-      if (!credencial || credencial.length === 0)
+      if (!credencial)
         return {
           error: true,
           code: 404,
@@ -221,7 +221,7 @@ class CredencialService {
         error: false,
         code: 200,
         message: "Credencial obtenida correctamente",
-        data: credencial[0],
+        data: credencial,
       };
     } catch (error) {
       return { error: true, code: 500, message: error.message };

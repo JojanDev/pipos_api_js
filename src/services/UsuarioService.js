@@ -4,7 +4,6 @@ import RolUsuario from "../models/RolUsuario.js";
 
 class UsuarioService {
   static objUsuario = new Usuario();
-  static objTipoDocumentoService = new TipoDocumentoService();
   static objRolUsuario = new RolUsuario();
 
   /**
@@ -65,7 +64,7 @@ class UsuarioService {
   static async createUsuario(usuario) {
     try {
       const tipoDocumentoExistente =
-        await this.objTipoDocumentoService.getTipoDocumentoById(
+        await TipoDocumentoService.getTipoDocumentoById(
           usuario.tipo_documento_id
         );
       if (tipoDocumentoExistente.error) return tipoDocumentoExistente;
